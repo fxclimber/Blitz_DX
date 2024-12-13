@@ -67,6 +67,7 @@ void UEngineCore::LoadContents(std::string_view _DllName)
 
 void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 {
+
 	UEngineDebug::LeakCheck();
 
 	WindowInit(_Instance);
