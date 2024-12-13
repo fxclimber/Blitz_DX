@@ -3,6 +3,8 @@
 #include <string>
 #include <functional>
 
+#include "EngineDefine.h"
+
 // FVector로 통일하겠습니다.
 // FVector xy
 // FVector3D xyz
@@ -87,18 +89,18 @@ public:
 	};
 
 
-	FVector()
+	ENGINEAPI FVector()
 		: X(0.0f), Y(0.0f), Z(0.0f), W(1.0f)
 	{
 
 	}
 
-	FVector(float _X, float _Y) : X(_X), Y(_Y), Z(0.0f), W(1.0f)
+	ENGINEAPI FVector(float _X, float _Y) : X(_X), Y(_Y), Z(0.0f), W(1.0f)
 	{
 
 	}
 
-	FVector(float _X, float _Y, float _Z) : X(_X), Y(_Y), Z(_Z), W(1.0f)
+	ENGINEAPI FVector(float _X, float _Y, float _Z) : X(_X), Y(_Y), Z(_Z), W(1.0f)
 	{
 
 	}
@@ -379,8 +381,9 @@ public:
 		return Result;
 	}
 
-	FVector operator*(const class FMatrix& _Matrix) const;
-	FVector& operator*=(const class FMatrix& _Matrix);
+	// 선언과 구현이 분리된 녀석들만 붙여줘면 된다.
+	ENGINEAPI FVector operator*(const class FMatrix& _Matrix) const;
+	ENGINEAPI FVector& operator*=(const class FMatrix& _Matrix);
 
 	FVector& operator-=(const FVector& _Other)
 	{
@@ -649,7 +652,7 @@ public:
 	}
 
 	// 여기서 왼손 오른 손 좌표계도 바꿀수 있습니다.
-	
+
 	// _Widht 너비와 <= 윈도우 크기 넣는게 일반적
 	// _Height 높의 화면을
 	// 
@@ -665,7 +668,7 @@ public:
 		// 250 * (2 / 1000);
 		// 크기를 바꾸는 행렬이다 
 		// 직교는 더더욱 
-		
+
 		//                      11      1      
 		float fRange = 1.0f / (_Far - _Near);
 
@@ -705,10 +708,10 @@ public:
 
 		// / z를 해야하니까.
 		// / z를 하기 전까지의 값은 추출해 낼수 있다.
-		
+
 		Arr2D[2][3] = 1.0f;
 		Arr2D[3][3] = 0.0f;
-		
+
 		// x * 1.0f / (tanf(DivFov) * ScreenRatio) / z
 		Arr2D[0][0] = 1.0f / (tanf(DivFov) * ScreenRatio);
 		// y * 1.0f / (tanf(DivFov) * ScreenRatio)
@@ -730,7 +733,7 @@ public:
 
 	// 위치와 크기 양쪽영향을 주는 행렬이다.
 	// 그것조차도 내마음대로 정할수 있어.
-	
+
 	//                 1280          720        640           360            누가 앞에 나오고 누가 뒤에 나올거냐
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
 	{
