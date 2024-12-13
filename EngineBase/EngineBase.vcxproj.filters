@@ -4,11 +4,40 @@
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="PreCompile.cpp" />
     <ClCompile Include="EngineDebug.cpp" />
+    <ClCompile Include="EngineDirectory.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineFile.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePath.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSerializer.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="EngineDefine.h" />
     <ClInclude Include="EngineDebug.h" />
+    <ClInclude Include="EngineDirectory.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineFile.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePath.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSerializer.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="IO">
+      <UniqueIdentifier>{e4df57bd-58cb-4276-85e7-ff35de369bb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

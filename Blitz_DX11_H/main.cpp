@@ -10,6 +10,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE _hInstance,
 	_In_ LPWSTR    _lpCmdLine,
 	_In_ int       _nCmdShow)
 {
-	UEngineCore::EngineStart(_hInstance);
+	// 동적로딩을 위해 "컨텐츠.dll"이름을 넣을것 
+	UEngineCore::EngineStart(_hInstance, "EngineContents.dll");
 	return 0;
 }

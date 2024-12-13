@@ -11,12 +11,15 @@
 #include <EngineBase/EngineMath.h>
 
 
+// 정신 잘 붙
+
+// 설명 :
 class UEngineWindow
 {
 public:
 	ENGINEAPI static void EngineWindowInit(HINSTANCE _Instance);
 	ENGINEAPI static void CreateWindowClass(const WNDCLASSEXA& _Class);
-	ENGINEAPI static int WindowMessageLoop(std::function<void()> _StartFunction, std::function<void()> _FrameFunction);
+	ENGINEAPI static int WindowMessageLoop(std::function<void()> _StartFunction, std::function<void()> _FrameFunction, std::function<void()> _EndFunction = nullptr);
 
 	// constrcuter destructer
 	ENGINEAPI UEngineWindow();
@@ -41,14 +44,21 @@ public:
 		SetWindowTextA(WindowHandle, Text.data());
 	}
 
-	void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
+	ENGINEAPI void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
 
 	FVector GetMousePos();
+
+	void ApplicationOff()
+	{
+		LoopActive = false;
+	}
 
 protected:
 
 private:
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	static HINSTANCE hInstance;
+	static bool LoopActive;
 	static std::map<std::string, WNDCLASSEXA> WindowClasss;
 
 	FVector WindowSize;
