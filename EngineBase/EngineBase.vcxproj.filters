@@ -16,6 +16,9 @@
     <ClCompile Include="EngineSerializer.cpp">
       <Filter>IO</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -34,10 +37,19 @@
     <ClInclude Include="EngineSerializer.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">
       <UniqueIdentifier>{e4df57bd-58cb-4276-85e7-ff35de369bb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{23c0df57-f9f3-404c-97dd-a32b4fe94779}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
