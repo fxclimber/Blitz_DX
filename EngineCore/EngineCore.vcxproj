@@ -150,6 +150,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorComponent.h" />
     <ClInclude Include="EngineCore.h" />
+    <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="Level.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="ActorComponent.cpp" />
     <ClCompile Include="EngineCore.cpp" />
+    <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Pawn.cpp" />

@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineBase/EngineDefine.h>
 #include <EnginePlatform/EngineWindow.h>
+#include "EngineGraphicDevice.h"
 #include "IContentsCore.h"
 #include "Level.h"
 #include <memory>
@@ -37,6 +38,7 @@ public:
 protected:
 
 private:
+	ENGINEAPI static UEngineGraphicDevice Device;
 	static UEngineWindow MainWindow;
 	static HMODULE ContentsDLL;
 	static std::shared_ptr<IContentsCore> Core;
