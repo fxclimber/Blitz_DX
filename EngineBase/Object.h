@@ -19,6 +19,12 @@ public:
 	UObject& operator=(const UObject& _Other) = delete;
 	UObject& operator=(UObject&& _Other) noexcept = delete;
 
+	template<typename ChildPtrType>
+	std::shared_ptr<ChildPtrType> GetThis()
+	{
+		return std::dynamic_pointer_cast<ChildPtrType>(shared_from_this());
+	}
+
 	std::string GetName() const
 	{
 		return Name;
@@ -113,9 +119,21 @@ public:
 		IsDebugValue = !IsDebugValue;
 	}
 
+	int GetOrder()
+	{
+		return Order;
+	}
+
+	virtual void SetOrder(int _Order)
+	{
+		Order = _Order;
+	}
+
 protected:
 
 private:
+	int Order = 0;
+
 	bool IsDestroyValue = false;
 	bool IsActiveValue = true;
 

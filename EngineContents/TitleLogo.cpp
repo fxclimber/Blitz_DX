@@ -1,20 +1,23 @@
 #include "PreCompile.h"
 #include "TitleLogo.h"
+#include <EngineCore/Renderer.h>
 
-TitleLogo::TitleLogo()
+ATitleLogo::ATitleLogo()
+{
+	// 랜더러를 만든다.
+	std::shared_ptr<URenderer> NewRenderer = CreateDefaultSubObject<URenderer>();
+}
+
+ATitleLogo::~ATitleLogo()
 {
 }
 
-TitleLogo::~TitleLogo()
+void ATitleLogo::BeginPlay()
 {
+	AActor::BeginPlay();
 }
 
-void TitleLogo::BeginPlay()
+void ATitleLogo::Tick(float _DeltaTime)
 {
-
-}
-
-void TitleLogo::Tick(float _DeltaTime)
-{
-
+	AActor::Tick(_DeltaTime);
 }

@@ -1,9 +1,14 @@
 #include "PreCompile.h"
 #include "TitleGameMode.h"
+#include "TitleLogo.h"
 
 ATitleGameMode::ATitleGameMode()
 {
-	// GetWorld()->
+	GetWorld()->SpawnActor<ATitleLogo>();
+
+
+
+
 }
 
 ATitleGameMode::~ATitleGameMode()

@@ -2,18 +2,18 @@
 #include <EngineCore/Actor.h>
 
 // Ό³Έν :
-class TitleLogo : public AActor
+class ATitleLogo : public AActor
 {
 public:
 	// constrcuter destructer
-	TitleLogo();
-	~TitleLogo();
+	ATitleLogo();
+	~ATitleLogo();
 
 	// delete Function
-	TitleLogo(const TitleLogo& _Other) = delete;
-	TitleLogo(TitleLogo&& _Other) noexcept = delete;
-	TitleLogo& operator=(const TitleLogo& _Other) = delete;
-	TitleLogo& operator=(TitleLogo&& _Other) noexcept = delete;
+	ATitleLogo(const ATitleLogo& _Other) = delete;
+	ATitleLogo(ATitleLogo&& _Other) noexcept = delete;
+	ATitleLogo& operator=(const ATitleLogo& _Other) = delete;
+	ATitleLogo& operator=(ATitleLogo&& _Other) noexcept = delete;
 
 protected:
 	void BeginPlay() override;

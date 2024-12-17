@@ -24,6 +24,7 @@
     <ClInclude Include="GameMode.h">
       <Filter>Object\Actor</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="GameMode.cpp">
       <Filter>Object\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
