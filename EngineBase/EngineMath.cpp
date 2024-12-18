@@ -19,10 +19,14 @@ const FVector FVector::DOWN = { 0.0f, -1.0f };
 const FVector FVector::FORWARD = { 0.0f, 0.0f, 1.0f };
 const FVector FVector::BACK = { 0.0f, 0.0f , -1.0f };
 
+// const FVector FVector::BLUE = {0.0f, 0.0f, 1.0f, 1.0f};
+
+
 const FIntPoint FIntPoint::LEFT = { -1, 0 };
 const FIntPoint FIntPoint::RIGHT = { 1, 0 };
 const FIntPoint FIntPoint::UP = { 0, -1 };
 const FIntPoint FIntPoint::DOWN = { 0, 1 };
+
 
 
 const UColor UColor::WHITE = { 255, 255, 255, 0 };
@@ -92,22 +96,22 @@ bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Righ
 bool FTransform::RectToRect(const FTransform& _Left, const FTransform& _Right)
 {
 
-	if (_Left.CenterLeft() > _Right.CenterRight())
+	if (_Left.ZAxisCenterLeft() > _Right.ZAxisCenterRight())
 	{
 		return false;
 	}
 
-	if (_Left.CenterRight() < _Right.CenterLeft())
+	if (_Left.ZAxisCenterRight() < _Right.ZAxisCenterLeft())
 	{
 		return false;
 	}
 
-	if (_Left.CenterTop() > _Right.CenterBottom())
+	if (_Left.ZAxisCenterTop() > _Right.ZAxisCenterBottom())
 	{
 		return false;
 	}
 
-	if (_Left.CenterBottom() < _Right.CenterTop())
+	if (_Left.ZAxisCenterBottom() < _Right.ZAxisCenterTop())
 	{
 		return false;
 	}
@@ -141,10 +145,10 @@ bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
 	// 쓰레드에서는 못쓴다.
 	FVector ArrPoint[4];
 
-	ArrPoint[0] = _Right.CenterLeftTop();
-	ArrPoint[1] = _Right.CenterLeftBottom();
-	ArrPoint[2] = _Right.CenterRightTop();
-	ArrPoint[3] = _Right.CenterRightBottom();
+	ArrPoint[0] = _Right.ZAxisCenterLeftTop();
+	ArrPoint[1] = _Right.ZAxisCenterLeftBottom();
+	ArrPoint[2] = _Right.ZAxisCenterRightTop();
+	ArrPoint[3] = _Right.ZAxisCenterRightBottom();
 
 	FTransform PointCirCle;
 	PointCirCle.Scale = _Left.Scale;
@@ -210,7 +214,6 @@ FVector& FVector::operator*=(const FMatrix& _Matrix)
 	this->Y = Copy.X * _Matrix.Arr2D[0][1] + Copy.Y * _Matrix.Arr2D[1][1] + Copy.Z * _Matrix.Arr2D[2][1] + Copy.W * _Matrix.Arr2D[3][1];
 	this->Z = Copy.X * _Matrix.Arr2D[0][2] + Copy.Y * _Matrix.Arr2D[1][2] + Copy.Z * _Matrix.Arr2D[2][2] + Copy.W * _Matrix.Arr2D[3][2];
 	this->W = Copy.X * _Matrix.Arr2D[0][3] + Copy.Y * _Matrix.Arr2D[1][3] + Copy.Z * _Matrix.Arr2D[2][3] + Copy.W * _Matrix.Arr2D[3][3];
-
 
 	return *this;
 }

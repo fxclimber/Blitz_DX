@@ -46,20 +46,32 @@ public:
 
 	ENGINEAPI void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
 
-	FVector GetMousePos();
+	ENGINEAPI FVector GetMousePos();
 
-	void ApplicationOff()
+	ENGINEAPI static void ApplicationOff()
 	{
 		LoopActive = false;
+	}
+
+	ENGINEAPI HWND GetWindowHandle() const
+	{
+		return WindowHandle;
 	}
 
 protected:
 
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static HINSTANCE hInstance;
-	static bool LoopActive;
-	static std::map<std::string, WNDCLASSEXA> WindowClasss;
+
+	// static HINSTANCE hInstance; 있을거야
+	// 진짜는 cpp안에 있어.
+
+	ENGINEAPI static HINSTANCE hInstance;
+
+	// 헤더쪽에서 초기화하는 방법
+	inline static bool LoopActive = true;
+
+	ENGINEAPI static std::map<std::string, WNDCLASSEXA> WindowClasss;
 
 	FVector WindowSize;
 	HWND WindowHandle = nullptr;

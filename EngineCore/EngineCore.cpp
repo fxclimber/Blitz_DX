@@ -171,7 +171,7 @@ void UEngineCore::EngineFrame()
 void UEngineCore::EngineEnd()
 {
 	// 리소스 정리도 여기서 할겁니다.
-
+	Device.Release();
 	LevelMap.clear();
 	UEngineDebug::EndConsole();
 }

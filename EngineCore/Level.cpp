@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "Actor.h"
 #include "Renderer.h"
+#include "EngineCore.h"
 
 ULevel::ULevel()
 {
@@ -50,14 +51,7 @@ void ULevel::Tick(float _DeltaTime)
 
 void ULevel::Render(float _DeltaTime)
 {
-	// map안에
-	// class Map
-	// {
-	//     class MapNode
-	//     {
-	//     }
-	// }
-	// pair
+	UEngineCore::Device.RenderStart();
 
 	// Ranged for를 돌릴때는 복사가 일어나므로
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
@@ -69,6 +63,8 @@ void ULevel::Render(float _DeltaTime)
 			Renderer->Render(_DeltaTime);
 		}
 	}
+
+	UEngineCore::Device.RenderEnd();
 }
 
 

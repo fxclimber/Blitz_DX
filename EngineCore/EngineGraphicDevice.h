@@ -43,7 +43,14 @@ public:
 	void CreateBackBuffer(const UEngineWindow& _Window);
 
 	// Adapter 그래픽카드의 정보를 가지고 있는 인터페이스
-	void GetHighPerFormanceAdapter();
+	// 다이렉트 x 디바이스가 되죠.
+	IDXGIAdapter* GetHighPerFormanceAdapter();
+
+	void Release();
+
+	void RenderStart();
+
+	void RenderEnd();
 
 protected:
 
@@ -61,5 +68,17 @@ private:
 
 	// 랜더링 그려라 관련
 	ID3D11DeviceContext* Context = nullptr;
+
+	// 다이렉트 x에서는 백버퍼를 스왑 체인이라고 부르고
+	// 내가 교체나 
+	IDXGISwapChain* SwapChain = nullptr;
+
+	IDXGIAdapter* MainAdapter = nullptr;
+
+	ID3D11Texture2D* DXBackBufferTexture = nullptr;
+	ID3D11RenderTargetView* RTV = nullptr;
+
+	//FVector ClearColor = FVector::BLUE;
+
 };
 
