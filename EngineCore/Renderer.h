@@ -1,7 +1,17 @@
 #pragma once
 #include "SceneComponent.h"
 
-// Ό³Έν :
+struct EngineVertex
+{
+public:
+	FVector Pos;
+	FVector Color;
+	// FVector UV;
+	// FVector AnimationRatio;
+};
+
+
+
 class URenderer : public USceneComponent
 {
 	friend class ULevel;
