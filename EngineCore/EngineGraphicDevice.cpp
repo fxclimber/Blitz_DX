@@ -346,6 +346,7 @@ void UEngineGraphicDevice::RenderStart()
 void UEngineGraphicDevice::RenderEnd()
 {
     // 내가 지정한 hwnd에 다이렉트 랜더링 결과를 출력해라.
+    // 
     HRESULT Result = SwapChain->Present(0, 0);
 
     //             디바이스가 랜더링 도중 삭제          디바이스가 리셋되었을경우

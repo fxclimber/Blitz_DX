@@ -52,6 +52,17 @@ public:
 
 	void RenderEnd();
 
+	ENGINEAPI ID3D11Device* GetDevice()
+	{
+		return Device;
+	}
+
+	ENGINEAPI ID3D11DeviceContext* GetContext()
+	{
+		return Context;
+	}
+
+
 protected:
 
 private:
