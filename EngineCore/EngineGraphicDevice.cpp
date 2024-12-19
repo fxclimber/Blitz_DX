@@ -12,35 +12,12 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 
 void UEngineGraphicDevice::Release()
 {
-    if (nullptr != RTV)
-    {
-        RTV->Release();
-        RTV = nullptr;
-    }
-
-    if (nullptr != DXBackBufferTexture)
-    {
-        DXBackBufferTexture->Release();
-        DXBackBufferTexture = nullptr;
-    }
-
-    if (nullptr != SwapChain)
-    {
-        SwapChain->Release();
-        SwapChain = nullptr;
-    }
-
-    if (nullptr != Context)
-    {
-        Context->Release();
-        Context = nullptr;
-    }
-
-    if (nullptr != Device)
-    {
-        Device->Release();
-        Device = nullptr;
-    }
+    MainAdapter = nullptr;
+    DXBackBufferTexture = nullptr;
+    RTV = nullptr;
+    SwapChain = nullptr;
+    Context = nullptr;
+    Device = nullptr;
 }
 
 IDXGIAdapter* UEngineGraphicDevice::GetHighPerFormanceAdapter()
@@ -176,7 +153,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
     // _COM_Outptr_opt_ ID3D11DeviceContext** ppImmediateContext
 
     HRESULT Result = D3D11CreateDevice(
-        MainAdapter,
+        MainAdapter.Get(),
         D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,
         nullptr, // 특정 단계를 내가 짠 코드로 대체하겠다.
         iFlag,
@@ -292,8 +269,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // DXGI_SWAP_CHAIN_DESC* pDesc,
     // IDXGISwapChain** ppSwapChain
 
-    pF->CreateSwapChain(Device, &ScInfo, &SwapChain);
-
+    pF->CreateSwapChain(Device.Get(), &ScInfo, &SwapChain);
     pF->Release();
     MainAdapter->Release();
 
@@ -311,12 +287,16 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
     // SwapChain내부에 id3d11texture2d*들고 있다.
     // DXBackBufferTexture => 는 BITMAP입니다.
-    DXBackBufferTexture = nullptr;
+
+    ID3D11Texture2D* TexPtr = nullptr;
+
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>
-        (&DXBackBufferTexture)))
+        (&TexPtr)))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
     };
+
+    DXBackBufferTexture = TexPtr;
 
     // id3d11texture2d* 이녀석 만으로는 할수 있는게 많이 없습니다.
     // 애는 이미지의 2차원 데이터를 나타낼뿐 수정권한은 없기 때문입니다.
@@ -325,7 +305,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // 텍스처에서 만들어내야 합니다.
 
     //                             HBITMAP                       HDC
-    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture, nullptr, &RTV))
+    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
     {
         MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
     }
@@ -340,7 +320,7 @@ void UEngineGraphicDevice::RenderStart()
     ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
 
     // 이미지 파란색으로 채색해줘.
-    Context->ClearRenderTargetView(RTV, ClearColor.Arr1D);
+    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
 }
 
 void UEngineGraphicDevice::RenderEnd()

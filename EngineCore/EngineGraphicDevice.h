@@ -1,7 +1,7 @@
 #pragma once
 // 기본적으로 지원해주기 때문
 // windowsdk에 포함되어 있고 windowsdk 폴더는 여러분들 설정중 디렉토리에 자동포함되어 있습니다.
-
+#include <wrl.h>
 #include <d3d11_4.h> // directx 11 버전4용 헤더
 #include <d3dcompiler.h> // 쉐이더 컴파일러용 인터페이스 쉐이더는 추후 설명
 #include <EnginePlatform/EngineWindow.h>
@@ -54,12 +54,12 @@ public:
 
 	ENGINEAPI ID3D11Device* GetDevice()
 	{
-		return Device;
+		return Device.Get();
 	}
 
 	ENGINEAPI ID3D11DeviceContext* GetContext()
 	{
-		return Context;
+		return Context.Get();
 	}
 
 
@@ -75,19 +75,19 @@ private:
 
 	// 메모리 로드해라 관련
 	// 그래픽카드에한테 그림 저장좀 해달라고 할수 있습니다.
-	ID3D11Device* Device = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> Device = nullptr;
 
 	// 랜더링 그려라 관련
-	ID3D11DeviceContext* Context = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context = nullptr;
 
 	// 다이렉트 x에서는 백버퍼를 스왑 체인이라고 부르고
 	// 내가 교체나 
-	IDXGISwapChain* SwapChain = nullptr;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain = nullptr;
 
-	IDXGIAdapter* MainAdapter = nullptr;
+	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
 
-	ID3D11Texture2D* DXBackBufferTexture = nullptr;
-	ID3D11RenderTargetView* RTV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 
 	//FVector ClearColor = FVector::BLUE;
 
