@@ -8,9 +8,9 @@ URenderer::URenderer()
 
 URenderer::~URenderer()
 {
-	VertexBuffer->Release();
-	ShaderCodeBlob->Release();
-	ErrorCodeBlob->Release();
+	VertexBuffer = nullptr;
+	ShaderCodeBlob = nullptr;
+	ErrorCodeBlob = nullptr;
 }
 
 void URenderer::SetOrder(int _Order)
@@ -129,24 +129,78 @@ void URenderer::InputAssembler1Setting()
 	// 버텍스 하나의 크기는 VertexSize
 	// Offset부터 버텍스를 사용하겠다.
 	UEngineCore::Device.GetContext()->IASetVertexBuffers(0, 1, &VertexBuffer, &VertexSize, &Offset);
+	UEngineCore::Device.GetContext()->IASetInputLayout(InputLayOut.Get());
+}
+
+void URenderer::InputAssembler1LayOut()
+{
+	//const D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
+	//UINT NumElements,
+	//const void* pShaderBytecodeWithInputSignature, <= 쉐이더 중간 컴파일 코드 넣어달라는 겁니다
+	//SIZE_T BytecodeLength,
+	//ID3D11InputLayout** ppInputLayout
+
+	std::vector<D3D11_INPUT_ELEMENT_DESC> InputLayOutData;
+
+
+	{
+		D3D11_INPUT_ELEMENT_DESC Desc;
+		Desc.SemanticName = "POSITION";
+		Desc.InputSlot = 0;
+		Desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		Desc.AlignedByteOffset = 0;
+		Desc.InputSlotClass = D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA;
+
+		// 인스턴싱을 설명할때 이야기 하겠습니다.
+		Desc.SemanticIndex = 0;
+		Desc.InstanceDataStepRate = 0;
+		InputLayOutData.push_back(Desc);
+	}
+
+	{
+		D3D11_INPUT_ELEMENT_DESC Desc;
+		Desc.SemanticName = "COLOR";
+		Desc.InputSlot = 0;
+		Desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		Desc.AlignedByteOffset = 16;
+		Desc.InputSlotClass = D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA;
+
+		// 인스턴싱을 설명할때 이야기 하겠습니다.
+		Desc.SemanticIndex = 0;
+		Desc.InstanceDataStepRate = 0;
+		InputLayOutData.push_back(Desc);
+	}
+
+
+
+	// 쉐이더에서 어떤 인풋레이아웃을 사용하는지 알려줘.
+	HRESULT Result = UEngineCore::Device.GetDevice()->CreateInputLayout(
+		&InputLayOutData[0],
+		InputLayOutData.size(),
+		ShaderCodeBlob->GetBufferPointer(),
+		ShaderCodeBlob->GetBufferSize(),
+		&InputLayOut);
+
+	if (S_OK != Result)
+	{
+		MSGASSERT("인풋 레이아웃 생성에 실패했습니다");
+	}
+
 }
 
 
 void URenderer::VertexShaderInit()
 {
-	// FX파일까지 찾아가야 한다.
 	UEngineDirectory CurDir;
 	CurDir.MoveParentToDirectory("EngineShader");
 	UEngineFile File = CurDir.GetFile("EngineSpriteShader.fx");
 
 
-	// wchar_t*
-
 	std::string Path = File.GetPathToString();
 
 	std::wstring WPath = UEngineString::AnsiToUnicode(Path);
 
-	// 쉐이더 코드를 그냥 문자열로 만들어서 
+	// 쉐이더 코드를 그냥 문자열로 만들어서 컴파일 할수도 있다.
 	//std::string ShaderCode = "struct EngineVertex \	{ \		float4 COLOR : COLOR; \		float4 OSITION : POSITION; \	}; \	struct VertexShaderOutPut \	{ \		float4 SVPOSITION : V_POSITION; \		float4 COLOR : COLOR; \	}; \	VertexShaderOutPut VertexToWorldEngineVertex _Vertex) \	{ \		VertexShaderOutPut OutPut; \		utPut.SVPOSITION = _Vertex.POSITION; \		OutPut.COLOR = _Vertex.COLOR; \
 	//	return OutPut; \	} 
 	// D3DCompile()
@@ -207,10 +261,18 @@ void URenderer::VertexShaderInit()
 		MSGASSERT("버텍스 쉐이더 생성에 실패했습니다.");
 	}
 
+	InputAssembler1LayOut();
 }
 
 void URenderer::VertexShaderSetting()
 {
-	// 
-	UEngineCore::Device.GetContext()->VSSetShader(VertexShader, nullptr, 0);
+	UEngineCore::Device.GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
+}
+
+void URenderer::InputAssembler2Init()
+{
+
+}
+void URenderer::InputAssembler2Setting()
+{
 }
