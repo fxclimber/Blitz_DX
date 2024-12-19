@@ -9,8 +9,9 @@ URenderer::URenderer()
 URenderer::~URenderer()
 {
 	VertexBuffer = nullptr;
-	ShaderCodeBlob = nullptr;
-	ErrorCodeBlob = nullptr;
+	VSShaderCodeBlob = nullptr;
+	VSErrorCodeBlob = nullptr;
+
 }
 
 void URenderer::SetOrder(int _Order)
@@ -39,23 +40,21 @@ ENGINEAPI void URenderer::BeginPlay()
 
 	InputAssembler1Init();
 	VertexShaderInit();
+	InputAssembler2Init();
+	RasterizerInit();
+	PixelShaderInit();
 }
 
 void URenderer::Render(float _DeltaTime)
 {
 	InputAssembler1Setting();
 	VertexShaderSetting();
-
-	// 버텍스 버퍼라는걸 세팅한다.
-	// UEngineCore::Device.GetContext()->IASetVertexBuffers();
-
-	// 레스터라이저를 세팅한다.
-	// UEngineCore::Device.GetContext()->RSSetState();
-
-	// 그린다 전에 세팅이건 뭐건 리소스건 어떤 순서로 하건 아무런 의미도 없다.
-	// 이거 한번 호출이 드로우콜 1번이다.
-	// UEngineCore::Device.GetContext()->Draw()
-
+	InputAssembler2Setting();
+	RasterizerSetting();
+	PixelShaderSetting();
+	OutPutMergeSetting();
+	// 인덱스 버퍼를 통해서 그리겠다.
+	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
 
 }
 
@@ -66,14 +65,15 @@ void URenderer::InputAssembler1Init()
 	// 버텍스 버퍼를 그래픽카드에게 만들어 달라고 요청
 	// CPU
 	std::vector<EngineVertex> Vertexs;
-	Vertexs.resize(6);
+	Vertexs.resize(4);
 
-	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.5f), {} };
-	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.5f), {} };
-	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.5f), {} };
-	Vertexs[3] = EngineVertex{ FVector(0.5f, 0.5f, -0.5f), {} };
-	Vertexs[4] = EngineVertex{ FVector(0.5f, -0.5f, -0.5f), {} };
-	Vertexs[5] = EngineVertex{ FVector(-0.5f, -0.5f, -0.5f), {} };
+	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {} };
+	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {} };
+	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {} };
+	Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {} };
+	// 0   1
+	// 
+	// 2   3
 
 
 	D3D11_BUFFER_DESC BufferInfo = { 0 };
@@ -128,7 +128,13 @@ void URenderer::InputAssembler1Setting()
 	// 0번슬롯부터 1개 사용하겠다.
 	// 버텍스 하나의 크기는 VertexSize
 	// Offset부터 버텍스를 사용하겠다.
-	UEngineCore::Device.GetContext()->IASetVertexBuffers(0, 1, &VertexBuffer, &VertexSize, &Offset);
+
+
+
+	ID3D11Buffer* ArrBuffer[1];
+	ArrBuffer[0] = VertexBuffer.Get();
+
+	UEngineCore::Device.GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
 	UEngineCore::Device.GetContext()->IASetInputLayout(InputLayOut.Get());
 }
 
@@ -176,9 +182,9 @@ void URenderer::InputAssembler1LayOut()
 	// 쉐이더에서 어떤 인풋레이아웃을 사용하는지 알려줘.
 	HRESULT Result = UEngineCore::Device.GetDevice()->CreateInputLayout(
 		&InputLayOutData[0],
-		InputLayOutData.size(),
-		ShaderCodeBlob->GetBufferPointer(),
-		ShaderCodeBlob->GetBufferSize(),
+		static_cast<unsigned int>(InputLayOutData.size()),
+		VSShaderCodeBlob->GetBufferPointer(),
+		VSShaderCodeBlob->GetBufferSize(),
 		&InputLayOut);
 
 	if (S_OK != Result)
@@ -238,20 +244,20 @@ void URenderer::VertexShaderInit()
 		version.c_str(),
 		Flag0,
 		Flag1,
-		&ShaderCodeBlob,
-		&ErrorCodeBlob
+		&VSShaderCodeBlob,
+		&VSErrorCodeBlob
 	);
 
-	if (nullptr == ShaderCodeBlob)
+	if (nullptr == VSShaderCodeBlob)
 	{
-		std::string ErrString = reinterpret_cast<char*>(ErrorCodeBlob->GetBufferPointer());
+		std::string ErrString = reinterpret_cast<char*>(VSErrorCodeBlob->GetBufferPointer());
 		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
 		return;
 	}
 
 	HRESULT Result = UEngineCore::Device.GetDevice()->CreateVertexShader(
-		ShaderCodeBlob->GetBufferPointer(),
-		ShaderCodeBlob->GetBufferSize(),
+		VSShaderCodeBlob->GetBufferPointer(),
+		VSShaderCodeBlob->GetBufferSize(),
 		nullptr,
 		&VertexShader
 	);
@@ -269,10 +275,150 @@ void URenderer::VertexShaderSetting()
 	UEngineCore::Device.GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
 }
 
+void URenderer::RasterizerInit()
+{
+	D3D11_RASTERIZER_DESC Desc = {};
+
+	// FXAA 느려 다이렉트가 직접 만든것들은 다 느려요.
+	// Desc.AntialiasedLineEnable = true;
+	// Desc.DepthClipEnable = true;
+
+	// Face컬링 
+	// None이면 시계방향 반시계방향 다 출력
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+
+	// 면에 색깔이 보인다.
+	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	// 면에 뼈대만 보인다.
+	// Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+
+	UEngineCore::Device.GetDevice()->CreateRasterizerState(&Desc, RasterizerState.GetAddressOf());
+
+	ViewPortInfo.Height = 720.0f;
+	ViewPortInfo.Width = 1280.0f;
+	ViewPortInfo.TopLeftX = 0.0f;
+	ViewPortInfo.TopLeftY = 0.0f;
+	ViewPortInfo.MinDepth = 0.0f;
+	ViewPortInfo.MaxDepth = 1.0f;
+}
+
+
+void URenderer::RasterizerSetting()
+{
+	UEngineCore::Device.GetContext()->RSSetViewports(1, &ViewPortInfo);
+	UEngineCore::Device.GetContext()->RSSetState(RasterizerState.Get());
+}
+
 void URenderer::InputAssembler2Init()
 {
+	std::vector<unsigned int> Indexs;
 
+	Indexs.push_back(0);
+	Indexs.push_back(1);
+	Indexs.push_back(2);
+
+	Indexs.push_back(1);
+	Indexs.push_back(3);
+	Indexs.push_back(2);
+
+
+	D3D11_BUFFER_DESC BufferInfo = { 0 };
+	BufferInfo.ByteWidth = sizeof(unsigned int) * static_cast<int>(Indexs.size());
+	BufferInfo.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	BufferInfo.CPUAccessFlags = 0;
+	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
+	D3D11_SUBRESOURCE_DATA Data;
+	Data.pSysMem = &Indexs[0];
+	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
+	{
+		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
+		return;
+	}
 }
+
 void URenderer::InputAssembler2Setting()
 {
+	int Offset = 0;
+
+	// DXGI_FORMAT_R8_UINT; <= 옛날에는 아꼈다.
+	// DXGI_FORMAT_R16_UINT; <= 옛날에는 아꼈다.
+	UEngineCore::Device.GetContext()->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, Offset);
+
+	UEngineCore::Device.GetContext()->IASetPrimitiveTopology(Topology);
+}
+
+
+
+
+
+void URenderer::PixelShaderInit()
+{
+	UEngineDirectory CurDir;
+	CurDir.MoveParentToDirectory("EngineShader");
+	UEngineFile File = CurDir.GetFile("EngineSpriteShader.fx");
+
+
+	std::string Path = File.GetPathToString();
+
+	std::wstring WPath = UEngineString::AnsiToUnicode(Path);
+
+	// 버전을 만든다.
+	std::string version = "ps_5_0";
+
+	int Flag0 = 0;
+	int Flag1 = 0;
+
+#ifdef _DEBUG
+	Flag0 = D3D10_SHADER_DEBUG;
+#endif
+
+	Flag0 |= D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
+
+	D3DCompileFromFile(
+		WPath.c_str(),
+		nullptr, // Define TEST 등으로 전처리기를 넣을수.
+		nullptr,
+		"PixelToWorld",
+		version.c_str(),
+		Flag0,
+		Flag1,
+		&PSShaderCodeBlob,
+		&PSErrorCodeBlob
+	);
+
+	if (nullptr == PSShaderCodeBlob)
+	{
+		std::string ErrString = reinterpret_cast<char*>(PSErrorCodeBlob->GetBufferPointer());
+		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
+		return;
+	}
+
+	HRESULT Result = UEngineCore::Device.GetDevice()->CreatePixelShader(
+		PSShaderCodeBlob->GetBufferPointer(),
+		PSShaderCodeBlob->GetBufferSize(),
+		nullptr,
+		&PixelShader
+	);
+
+	if (S_OK != Result)
+	{
+		MSGASSERT("픽셀 쉐이더 생성에 실패했습니다.");
+	}
+}
+
+void URenderer::PixelShaderSetting()
+{
+	UEngineCore::Device.GetContext()->PSSetShader(PixelShader.Get(), nullptr, 0);
+}
+
+void URenderer::OutPutMergeSetting()
+{
+	// 배열 넣어줄수 있다. 
+	// 0번이면 sv_target0
+	ID3D11RenderTargetView* RTV = UEngineCore::Device.GetRTV();
+
+	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
+	ArrRtv[0] = RTV; // SV_Target0
+
+	UEngineCore::Device.GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 }
