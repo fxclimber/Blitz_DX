@@ -37,14 +37,17 @@ public:
 
 	ENGINEAPI static UEngineGraphicDevice Device;
 
+	ENGINEAPI static FVector GetScreenScale();
+
 protected:
 
 private:
 	// 데이터영역에 있죠? => 언제 삭제될까요?
 	// 릭체크는 
-	static UEngineWindow MainWindow;
+	ENGINEAPI static UEngineWindow MainWindow;
 	static HMODULE ContentsDLL;
 	static std::shared_ptr<IContentsCore> Core;
+	static UEngineInitData Data;
 
 	static void WindowInit(HINSTANCE _Instance);
 	static void LoadContents(std::string_view _DllName);

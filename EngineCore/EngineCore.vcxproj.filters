@@ -12,12 +12,6 @@
     <ClInclude Include="ActorComponent.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Pawn.h">
       <Filter>Object\Actor</Filter>
     </ClInclude>
@@ -27,6 +21,21 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="EngineGraphicDevice.h">
       <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCamera.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
+      <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,12 +47,6 @@
     <ClCompile Include="ActorComponent.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="Pawn.cpp">
       <Filter>Object\Actor</Filter>
     </ClCompile>
@@ -53,6 +56,18 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp">
       <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraActor.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCamera.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,5 +86,30 @@
     <Filter Include="Graphic">
       <UniqueIdentifier>{4cdba11e-bd14-4112-ad28-f7090a248963}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{57453cca-633f-4959-a114-fb00e4268b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{8ddb793b-1b53-4fa4-b2f0-c562aec52e5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex">
+      <UniqueIdentifier>{59a0e4cd-de4d-403d-b41b-29bdcfb29fe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex\Debug">
+      <UniqueIdentifier>{7510adc3-d966-4137-83ef-55a4e13c67ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex\Inc">
+      <UniqueIdentifier>{e91677c4-5769-4685-9459-2b04fed8e68d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl">
+      <Filter>ThirdParty\DirectxTex\Inc</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex.lib">
+      <Filter>ThirdParty\DirectxTex\Debug</Filter>
+    </Library>
   </ItemGroup>
 </Project>

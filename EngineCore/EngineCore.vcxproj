@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorComponent.h" />
+    <ClInclude Include="CameraActor.h" />
+    <ClInclude Include="EngineCamera.h" />
     <ClInclude Include="EngineCore.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="GameMode.h" />
@@ -158,10 +160,13 @@
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="CameraActor.cpp" />
+    <ClCompile Include="EngineCamera.cpp" />
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="GameMode.cpp" />
@@ -173,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

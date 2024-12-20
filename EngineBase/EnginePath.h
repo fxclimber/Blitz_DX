@@ -29,7 +29,7 @@ public:
 	std::string GetDirectoryName();
 
 	// »Æ¿Â¿⁄
-	std::string GetExtension();
+	ENGINEAPI std::string GetExtension();
 
 
 	ENGINEAPI bool MoveParentToDirectory(std::string_view _Path);

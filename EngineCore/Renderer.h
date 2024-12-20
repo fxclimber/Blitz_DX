@@ -4,13 +4,14 @@
 struct EngineVertex
 {
 	float4 POSITION;
+	float4 TEXCOORD; // UV값이라고 불리는 존재로 텍스처가 매핑되는 비율을 지정해줍니다.
 	float4 COLOR;
 };
 
 // 설명 :
 class URenderer : public USceneComponent
 {
-	friend class ULevel;
+	friend class UEngineCamera;
 
 public:
 	// constrcuter destructer
@@ -29,9 +30,18 @@ protected:
 	ENGINEAPI void BeginPlay() override;
 
 private:
-	virtual void Render(float _DeltaTime);
+	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture2D = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
+	void ShaderResInit();
+	void ShaderResSetting();
+
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
 	void InputAssembler1Init();
@@ -68,6 +78,7 @@ public:
 	void PixelShaderSetting();
 
 	void OutPutMergeSetting();
+
 
 };
 
