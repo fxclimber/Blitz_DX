@@ -59,5 +59,7 @@ SamplerState ImageSampler : register(s0);
 float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	
-    return ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+	// ImageTexture.Load({0,0));
+    float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+    return Color;
 }

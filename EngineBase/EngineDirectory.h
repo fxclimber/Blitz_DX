@@ -22,9 +22,9 @@ public:
 	//UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
 
 	// 시간이 너무 없다고 안만듬. 나중에 만들어야지.
-	std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
+	ENGINEAPI std::vector<class UEngineFile> GetAllFile(bool _IsRecursive, std::vector<std::string> _Exts);
 
-	std::vector<class UEngineDirectory> GetAllDirectory();
+	ENGINEAPI std::vector<class UEngineDirectory> GetAllDirectory();
 
 	ENGINEAPI UEngineFile GetFile(std::string_view _FileName);
 
