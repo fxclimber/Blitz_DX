@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineBase/EngineDefine.h>
+#include <EngineBase/EngineTimer.h>
 #include <EnginePlatform/EngineWindow.h>
 #include "EngineGraphicDevice.h"
 #include "IContentsCore.h"
@@ -36,6 +37,7 @@ public:
 	ENGINEAPI static void OpenLevel(std::string_view _Name);
 
 	ENGINEAPI static UEngineGraphicDevice Device;
+	ENGINEAPI static UEngineWindow MainWindow;
 
 	ENGINEAPI static FVector GetScreenScale();
 
@@ -44,10 +46,11 @@ protected:
 private:
 	// 데이터영역에 있죠? => 언제 삭제될까요?
 	// 릭체크는 
-	ENGINEAPI static UEngineWindow MainWindow;
 	static HMODULE ContentsDLL;
 	static std::shared_ptr<IContentsCore> Core;
 	static UEngineInitData Data;
+
+	static UEngineTimer Timer;
 
 	static void WindowInit(HINSTANCE _Instance);
 	static void LoadContents(std::string_view _DllName);

@@ -49,6 +49,32 @@
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
     <ClInclude Include="EngineSprite.h" />
+    <ClInclude Include="EngineGUI.h" />
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGUIWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -93,6 +119,26 @@
       <Filter>Object\Component\Render</Filter>
     </ClCompile>
     <ClCompile Include="EngineSprite.cpp" />
+    <ClCompile Include="EngineGUI.cpp" />
+    <ClCompile Include="imgui.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>ThirdParty\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGUIWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -136,6 +182,9 @@
     </Filter>
     <Filter Include="ThirdParty\DirectxTex\Release">
       <UniqueIdentifier>{a17892b3-902b-488d-8fec-88453d73353e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\IMGUI">
+      <UniqueIdentifier>{089b2a0d-4f52-4857-be59-085670e2c40f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

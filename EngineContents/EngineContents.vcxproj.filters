@@ -4,14 +4,30 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="ContentsCore.h" />
-    <ClInclude Include="TitleGameMode.h" />
-    <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TitleLogo.h">
+      <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
-    <ClCompile Include="TitleGameMode.cpp" />
-    <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TitleLogo.cpp">
+      <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGameMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Title">
+      <UniqueIdentifier>{8207952c-5ef9-4824-9400-0bdd632a6047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameMode">
+      <UniqueIdentifier>{5b668b73-3ff9-4e73-b990-772422d08e7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

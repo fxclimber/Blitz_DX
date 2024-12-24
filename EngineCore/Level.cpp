@@ -5,6 +5,7 @@
 #include "EngineCore.h"
 #include "EngineCamera.h"
 #include "CameraActor.h"
+#include "EngineGUI.h"
 
 // 플레이어 Renderer
 
@@ -83,6 +84,15 @@ void ULevel::Render(float _DeltaTime)
 		Camera.second->Tick(_DeltaTime);
 		Camera.second->CameraComponent->Render(_DeltaTime);
 	}
+
+	if (true == UEngineWindow::IsApplicationOn())
+	{
+		UEngineGUI::GUIRender();
+
+		// IMGUI가 랜더링을하면서 
+
+	}
+
 
 
 	UEngineCore::Device.RenderEnd();

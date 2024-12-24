@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="EngineDebug.cpp" />
     <ClCompile Include="EngineDirectory.cpp">
       <Filter>IO</Filter>
     </ClCompile>
@@ -19,13 +17,21 @@
     <ClCompile Include="Object.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="EngineString.cpp" />
+    <ClCompile Include="EngineDebug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTimer.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineString.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EngineMath.h" />
     <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="EngineDefine.h" />
-    <ClInclude Include="EngineDebug.h" />
     <ClInclude Include="EngineDirectory.h">
       <Filter>IO</Filter>
     </ClInclude>
@@ -41,7 +47,21 @@
     <ClInclude Include="Object.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="EngineString.h" />
+    <ClInclude Include="EngineDebug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDefine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMath.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTimer.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineString.h">
+      <Filter>String</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">
@@ -49,6 +69,21 @@
     </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{23c0df57-f9f3-404c-97dd-a32b4fe94779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{1f0707f5-c952-4d91-9cd5-87dacd31a9b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{904afbad-6d30-4643-b8f2-146d0a8876eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{f2f20c63-4179-4162-81a4-a5ae4ec0cb76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{72439312-c3c8-45b5-87aa-90e7b92b9ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="String">
+      <UniqueIdentifier>{9a773e48-0c87-4ebe-a56f-59e806519261}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@ public:
 	ENGINEAPI static void CreateWindowClass(const WNDCLASSEXA& _Class);
 	ENGINEAPI static int WindowMessageLoop(std::function<void()> _StartFunction, std::function<void()> _FrameFunction, std::function<void()> _EndFunction = nullptr);
 
+
 	// constrcuter destructer
 	ENGINEAPI UEngineWindow();
 	ENGINEAPI ~UEngineWindow();
@@ -53,14 +54,25 @@ public:
 		LoopActive = false;
 	}
 
+	ENGINEAPI static bool IsApplicationOn()
+	{
+		return LoopActive;
+	}
+
+
 	ENGINEAPI HWND GetWindowHandle() const
 	{
 		return WindowHandle;
 	}
 
+	ENGINEAPI static  void SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> _CustomProc);
+
+
+
 protected:
 
 private:
+	ENGINEAPI static std::function<bool(HWND, UINT, WPARAM, LPARAM)> CustomProc;
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	// static HINSTANCE hInstance; 있을거야
