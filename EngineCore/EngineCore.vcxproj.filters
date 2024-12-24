@@ -48,33 +48,39 @@
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
-    <ClInclude Include="EngineSprite.h" />
-    <ClInclude Include="EngineGUI.h" />
     <ClInclude Include="imstb_truetype.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imgui.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_win32.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imgui_internal.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imstb_rectpack.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imstb_textedit.h">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="EngineGUIWindow.h" />
+    <ClInclude Include="EngineGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGUIWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -118,27 +124,33 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Object\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="EngineSprite.cpp" />
-    <ClCompile Include="EngineGUI.cpp" />
     <ClCompile Include="imgui.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imgui_draw.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imgui_tables.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
-      <Filter>ThirdParty\IMGUI</Filter>
+      <Filter>GUI\IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="EngineGUIWindow.cpp" />
+    <ClCompile Include="EngineGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGUIWindow.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -183,7 +195,10 @@
     <Filter Include="ThirdParty\DirectxTex\Release">
       <UniqueIdentifier>{a17892b3-902b-488d-8fec-88453d73353e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\IMGUI">
+    <Filter Include="GUI">
+      <UniqueIdentifier>{95239bc4-3395-4640-864d-3a84a3fc36f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\IMGUI">
       <UniqueIdentifier>{089b2a0d-4f52-4857-be59-085670e2c40f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
