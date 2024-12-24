@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneComponent.h"
+#include "EngineSprite.h"
 
 struct EngineVertex
 {
@@ -7,6 +8,8 @@ struct EngineVertex
 	float4 TEXCOORD; // UV값이라고 불리는 존재로 텍스처가 매핑되는 비율을 지정해줍니다.
 	float4 COLOR;
 };
+
+
 
 // 설명 :
 class URenderer : public USceneComponent
@@ -28,6 +31,8 @@ public:
 
 	void SetTexture(std::string_view _Value);
 
+	ENGINEAPI void SetSpriteData(size_t _Index);
+
 protected:
 	ENGINEAPI void BeginPlay() override;
 
@@ -35,10 +40,13 @@ private:
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
-	std::shared_ptr<class UEngineTexture> Texture = nullptr;
+	FSpriteData SpriteData;
+
+	std::shared_ptr<class UEngineSprite> Sprite = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr; // 샘플러 스테이트
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr; // 상수버퍼
+	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr; // 스프라이트용 상수버퍼
 	void ShaderResInit();
 	void ShaderResSetting();
 

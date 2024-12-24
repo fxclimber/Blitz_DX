@@ -33,10 +33,12 @@ public:
 	void Write(const void* _Ptr, size_t _Size);
 	void Read(void* _Ptr, size_t _Size);
 
-	void FileOpen(const char* _Mode);
+	ENGINEAPI void FileOpen(const char* _Mode);
 	void Close();
 
 	int GetFileSize();
+
+	ENGINEAPI std::string GetAllFileText();
 
 	// 기능 클래스 랩핑
 private:

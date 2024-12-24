@@ -48,6 +48,7 @@
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
+    <ClInclude Include="EngineSprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Object\Component\Render</Filter>
     </ClCompile>
+    <ClCompile Include="EngineSprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">

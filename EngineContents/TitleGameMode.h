@@ -20,6 +20,6 @@ public:
 protected:
 
 private:
-
+	std::shared_ptr<class ATitleLogo> Logo;
 };
 

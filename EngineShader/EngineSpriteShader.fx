@@ -32,6 +32,13 @@ cbuffer FTransform : register(b0)
     float4x4 WVP;
 };
 
+// 상수버퍼는 아무것도 세팅해주지 않으면 기본값이 0으로 채워집니다.
+cbuffer FSpriteData : register(b1)
+{
+    float4 CuttingPos;
+    float4 CuttingSize;
+};
+
 // 버텍스쉐이더를 다 만들었다.
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 {
@@ -44,8 +51,18 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
     VertexShaderOutPut OutPut;
 	// _Vertex 0.5, 0.5
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-    OutPut.UV = _Vertex.UV;
-	//OutPut.SVPOSITION *= Projection;
+	
+	// 00 10 => 0.3 0.3  0.7 0.3
+	// 01 11 => 0.3 0.7  0.7 0.7
+	
+	// CuttingPos 0.3 0.3
+	// CuttingSize 0.4 0.4 
+	
+    OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
+    OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
+	
+	
+	
     OutPut.COLOR = _Vertex.COLOR;
     return OutPut;
 }

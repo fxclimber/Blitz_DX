@@ -15,6 +15,23 @@ UEngineTexture::~UEngineTexture()
 {
 }
 
+std::shared_ptr<UEngineTexture> UEngineTexture::Load(std::string_view _Name, std::string_view _Path)
+{
+	std::string UpperName = ToUpperName(_Name);
+
+	if (true == Contains(UpperName))
+	{
+		MSGASSERT("이미 로드한 텍스처를 도 로드하려고 했습니다." + UpperName);
+		return nullptr;
+	}
+
+	std::shared_ptr<UEngineTexture> NewRes = std::make_shared<UEngineTexture>();
+	PushRes<UEngineTexture>(NewRes, _Name, _Path);
+	NewRes->ResLoad();
+
+	return NewRes;
+}
+
 void UEngineTexture::ResLoad()
 {
 	UEngineFile File = Path;
@@ -24,8 +41,6 @@ void UEngineTexture::ResLoad()
 	std::wstring wLoadPath = UEngineString::AnsiToUnicode(Str.c_str());
 	std::string UpperExt = UEngineString::ToUpper(Ext.c_str());
 
-	DirectX::TexMetadata Metadata;
-	DirectX::ScratchImage ImageData;
 
 	if (UpperExt == ".DDS")
 	{
@@ -63,4 +78,7 @@ void UEngineTexture::ResLoad()
 		MSGASSERT(UpperExt + "쉐이더 리소스 뷰 생성에 실패했습니다..");
 		return;
 	}
+
+	Size.X = static_cast<float>(Metadata.width);
+	Size.Y = static_cast<float>(Metadata.height);
 }

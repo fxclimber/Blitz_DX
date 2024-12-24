@@ -6,11 +6,11 @@ ATitleLogo::ATitleLogo()
 {
 	// 랜더러를 만든다.
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetSprite("Player.png");
+	LogoRenderer->SetSprite("Player.png", 0);
 
 
-	SetActorRelativeScale3D({ 200.0f, 100.0f, 1.0f });
-	SetActorLocation({ 200.0f, 100.0f, 1.0f });
+	SetActorRelativeScale3D({ 600.0f, 600.0f, 1.0f });
+	// SetActorLocation({ 200.0f, 100.0f, 1.0f });
 }
 
 ATitleLogo::~ATitleLogo()
