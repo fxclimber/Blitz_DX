@@ -53,20 +53,7 @@ public:
 
 		// 내가 그냥 ActorComponent
 		// 내가 그냥 SceneComponent
-
-
-
-		if (std::is_base_of_v<USceneComponent, ComponentType>)
-		{
-			// 기하구조에 편입되어야 한다.
-			if (nullptr != RootComponent)
-			{
-				MSGASSERT("아직 기하구조를 만들지 않았습니다.");
-			}
-
-			RootComponent = NewCom;
-		}
-		else if (std::is_base_of_v<UActorComponent, ComponentType>)
+		if (std::is_base_of_v<UActorComponent, ComponentType>)
 		{
 			ActorComponentList.push_back(NewCom);
 		}
@@ -113,14 +100,33 @@ public:
 		RootComponent->AddLocation(_Value);
 	}
 
+	void SetActorRotation(const FVector& _Value)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->SetRotation(_Value);
+	}
+
+	void AddActorRotation(const FVector& _Value)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->AddRotation(_Value);
+	}
+
 protected:
+	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 
 private:
 	// 초기화 하면 안됩니다.
 	// 스폰액터 방식이 변경되었으니까.
 	ULevel* World;
-
-	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 
 	std::list<std::shared_ptr<class UActorComponent>> ActorComponentList;
 };

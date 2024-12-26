@@ -9,7 +9,7 @@
 #pragma comment(lib, "EngineCore.lib")
 
 // 이녀석은 정적로딩으로 사용하지 않겠다.
-// #pragma comment(lib, "EngineContents.lib")
+// #pragma comment(lib, "EngineContents.lib")6
 
 // 예전에는 Level먼저 만들고
 // 컨테츠에 가서 레벨을 Create하는 식으로 갔다.

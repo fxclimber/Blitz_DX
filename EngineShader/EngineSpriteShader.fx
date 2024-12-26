@@ -26,6 +26,8 @@ cbuffer FTransform : register(b0)
     float4x4 ScaleMat;
     float4x4 RotationMat;
     float4x4 LocationMat;
+    float4x4 RevoleMat;
+    float4x4 ParentMat;
     float4x4 World;
     float4x4 View;
     float4x4 Projection;

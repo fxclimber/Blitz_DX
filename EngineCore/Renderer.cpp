@@ -41,6 +41,7 @@ void URenderer::SetOrder(int _Order)
 
 ENGINEAPI void URenderer::BeginPlay()
 {
+	USceneComponent::BeginPlay();
 	SetOrder(0);
 
 	// 기본적인 랜더링 파이프라인을 익히기 위한 

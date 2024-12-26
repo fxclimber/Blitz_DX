@@ -253,5 +253,7 @@ void FTransform::TransformUpdate()
 	RotationMat.RotationDeg(Rotation);
 	LocationMat.Position(Location);
 
-	World = ScaleMat * RotationMat * LocationMat;
+	//      크         자             이            공           부
+	World = ScaleMat * RotationMat * LocationMat * RevolveMat * ParentMat;
+
 }

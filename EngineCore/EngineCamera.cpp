@@ -16,6 +16,7 @@ void UEngineCamera::BeginPlay()
 
 UEngineCamera::~UEngineCamera()
 {
+	Renderers.clear();
 }
 
 void UEngineCamera::Tick(float _DetlaTime)
