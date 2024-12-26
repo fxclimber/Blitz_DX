@@ -6,18 +6,21 @@
 ATitleLogo::ATitleLogo()
 {
 	// 랜더러를 만든다.
-	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetSprite("Player.png", 0);
-	LogoRenderer->SetRelativeScale3D({ 50, 50, 1.0f });
-	RootComponent = LogoRenderer;
+	//LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	//LogoRenderer->SetSprite("Player.png", 0);
+	//LogoRenderer->SetRelativeScale3D({ 50, 50, 1.0f });
+	//RootComponent = LogoRenderer;
 
-	std::shared_ptr<class USpriteRenderer> Child = CreateDefaultSubObject<USpriteRenderer>();
-	Child->SetSprite("Player.png", 2);
-	Child->SetLocation({ 2.0f, 0.0f, 0.0f });
-	Child->SetupAttachment(RootComponent);
+	//std::shared_ptr<class USpriteRenderer> Child = CreateDefaultSubObject<USpriteRenderer>();
+	//Child->SetSprite("Player.png", 2);
+	//Child->SetLocation({ 2.0f, 0.0f, 0.0f });
+	//Child->SetupAttachment(RootComponent);
 
 	//Child->SetRelativeScale3D({50, 50});
-
+	std::shared_ptr<class URenderBlitz> cube1 = CreateDefaultSubObject<URenderBlitz>();
+	RootComponent = cube1;
+	cube1->SetRelativeScale3D({1,1,1});
+	cube1->SetLocation({20,20,0});
 
 	// Child->SetLocation({});
 

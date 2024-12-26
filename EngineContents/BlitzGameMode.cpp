@@ -1,11 +1,12 @@
 #include "PreCompile.h"
-#include "TitleGameMode.h"
+#include "BlitzGameMode.h"
 #include "TitleLogo.h"
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/imgui.h>
+#include "BlitzPlayer.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -14,34 +15,32 @@ public:
 	{
 		ImGui::Button("WindowButton");
 		ImGui::SameLine(); // 한간 띄기
-		ImGui::Text("test");
+		ImGui::Text("Blitz");
 
 	}
 };
 
-ATitleGameMode::ATitleGameMode()
+ABlitzGameMode::ABlitzGameMode()
 {
 	{
-		Logo = GetWorld()->SpawnActor<ATitleLogo>();
-		Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
+		BlitzPlayer = GetWorld()->SpawnActor<ABlitzPlayer>();
+		BlitzPlayer->SetActorLocation({ 100.0f, 100.0f, 0.0f });
 	}
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 
-	UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+	//UEngineGUI::CreateGUIWindow<TestWindow>("Blitz");
 }
 
-ATitleGameMode::~ATitleGameMode()
-{
 
-}
-
-void ATitleGameMode::Tick(float _DeltaTime)
+void ABlitzGameMode::Tick(float _DeltaTime)
 {
 	// 부모 호출
 	AActor::Tick(_DeltaTime);
 
+}
 
-
+ABlitzGameMode::~ABlitzGameMode()
+{
 }

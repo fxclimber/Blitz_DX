@@ -1,32 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="TitleLogo.h">
-      <Filter>Title</Filter>
+      <Filter>Jo\Title</Filter>
     </ClInclude>
     <ClInclude Include="TitleGameMode.h">
-      <Filter>GameMode</Filter>
+      <Filter>Jo\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="BlitzPlayer.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
+    <ClInclude Include="BlitzGameMode.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsCore.h">
+      <Filter>Jo</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Jo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="TitleLogo.cpp">
-      <Filter>Title</Filter>
+      <Filter>Jo\Title</Filter>
     </ClCompile>
     <ClCompile Include="TitleGameMode.cpp">
-      <Filter>GameMode</Filter>
+      <Filter>Jo\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzGameMode.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzPlayer.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore.cpp">
+      <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Jo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Title">
+    <Filter Include="Blitz">
+      <UniqueIdentifier>{99dd8cf9-ee7a-40af-97c4-7d6e344bc6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jo">
+      <UniqueIdentifier>{fa33cf36-1f68-448b-935d-c9953c9e168a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jo\Title">
       <UniqueIdentifier>{8207952c-5ef9-4824-9400-0bdd632a6047}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameMode">
+    <Filter Include="Jo\GameMode">
       <UniqueIdentifier>{5b668b73-3ff9-4e73-b990-772422d08e7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

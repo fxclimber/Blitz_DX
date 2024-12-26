@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="EngineSpriteShader.fx" />
+    <FxCompile Include="SimpleColorShader.hlsl" />
   </ItemGroup>
 </Project>
