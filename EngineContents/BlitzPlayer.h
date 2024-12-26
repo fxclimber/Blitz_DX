@@ -9,7 +9,7 @@ public:
 
 	std::shared_ptr<class URenderBlitz> GetRenderer()
 	{
-		return RenderBlitzForTest;
+		return RenderBlitz;
 	}
 
 protected:
@@ -17,7 +17,8 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::shared_ptr<class URenderBlitz> RenderBlitzForTest;
+	std::shared_ptr<class URenderBlitz> RenderBlitz;
+	std::shared_ptr<class USpriteRenderer> Child;
 
 };
 

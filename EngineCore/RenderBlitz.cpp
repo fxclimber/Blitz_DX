@@ -15,16 +15,6 @@ URenderBlitz::~URenderBlitz()
 	VSErrorCodeBlob = nullptr;
 }
 
-void URenderBlitz::SetOrder(int _Order)
-{
-	int PrevOrder = GetOrder();
-	UObject::SetOrder(_Order);
-	ULevel* Level = GetActor()->GetWorld();
-
-	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
-	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
-}
-
 void URenderBlitz::SetTexture(std::string_view _Value)
 {
 	std::string UpperName = UEngineString::ToUpper(_Value);
@@ -36,10 +26,14 @@ void URenderBlitz::SetTexture(std::string_view _Value)
 		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
 	}
 }
-
-ENGINEAPI void URenderBlitz::SetSpriteData(size_t _Index)
+void URenderBlitz::SetOrder(int _Order)
 {
-	SpriteData = Sprite->GetSpriteData(_Index);
+	int PrevOrder = GetOrder();
+	UObject::SetOrder(_Order);
+	ULevel* Level = GetActor()->GetWorld();
+
+	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
+	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
 ENGINEAPI void URenderBlitz::BeginPlay()
@@ -55,28 +49,6 @@ ENGINEAPI void URenderBlitz::BeginPlay()
 	ShaderResInit();
 }
 
-void URenderBlitz::Render(UEngineCamera* _Camera, float _DeltaTime)
-{
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-
-	FTransform& RendererTrans = GetTransformRef();
-
-	// 랜더러는 월드 뷰 프로젝트를 다 세팅받았고
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
-
-	ShaderResSetting();
-	InputAssembler1Setting();
-	VertexShaderSetting();
-	InputAssembler2Setting();
-	RasterizerSetting();
-	PixelShaderSetting();
-	OutPutMergeSetting();
-	// 인덱스 버퍼를 통해서 그리겠다.
-	UEngineCore::Device.GetContext()->DrawIndexed(36, 0, 0);
-}
 
 void URenderBlitz::ShaderResInit()
 {
@@ -121,6 +93,11 @@ void URenderBlitz::ShaderResInit()
 	UEngineCore::Device.GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
 }
 
+ENGINEAPI void URenderBlitz::SetSpriteData(size_t _Index)
+{
+	SpriteData = Sprite->GetSpriteData(_Index);
+}
+
 void URenderBlitz::ShaderResSetting()
 {
 		{
@@ -161,29 +138,72 @@ void URenderBlitz::ShaderResSetting()
 		UEngineCore::Device.GetContext()->PSSetSamplers(0, 1, ArrSMP);	
 }
 
+void URenderBlitz::Render(UEngineCamera* _Camera, float _DeltaTime)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+
+	FTransform& RendererTrans = GetTransformRef();
+
+	// 랜더러는 월드 뷰 프로젝트를 다 세팅받았고
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+	ShaderResSetting();
+	InputAssembler1Setting();
+	VertexShaderSetting();
+	InputAssembler2Setting();
+	RasterizerSetting();
+	PixelShaderSetting();
+	OutPutMergeSetting();
+	// 인덱스 버퍼를 통해서 그리겠다.
+	UEngineCore::Device.GetContext()->DrawIndexed(36, 0, 0);
+}
+
+
+
 void URenderBlitz::InputAssembler1Init()
 {
 	std::vector<EngineVertex> Vertexs;
 
 	// 정점 데이터 (중복 제거)
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 0.0f, 50.0f), {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} }); // 0
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 0.0f, 50.0f), {0.5f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} }); // 1
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 0.0f, 0.0f), {1.0f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} }); // 2
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 0.0f, 0.0f), {0.5f, 0.5f}, {1.0f, 1.0f, 0.0f, 1.0f} }); // 3
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 0.0f, 50.0f), {0.0f, 1.0f}, {1.0f, 0.0f, 1.0f, 1.0f} }); // 4
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 0.0f, -50.0f), {1.0f, 0.0f}, {0.5f, 0.5f, 0.5f, 1.0f} }); // 5
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 0.0f, 0.0f), {0.0f, 0.5f}, {0.8f, 0.3f, 0.1f, 1.0f} }); // 6
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 0.0f, -50.0f), {0.5f, 0.0f}, {0.2f, 0.6f, 0.9f, 1.0f} }); // 7
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 0.0f, -50.0f), {0.0f, 0.0f}, {0.9f, 0.1f, 0.4f, 1.0f} }); // 8
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 100.0f, 0.0f), {1.0f, 0.5f}, {0.3f, 0.7f, 0.3f, 1.0f} }); // 9
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 100.0f, 50.0f), {0.5f, 1.0f}, {0.7f, 0.2f, 0.5f, 1.0f} }); // 10
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 100.0f, 50.0f), {1.0f, 1.0f}, {0.4f, 0.4f, 0.4f, 1.0f} }); // 11
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 100.0f, 0.0f), {0.5f, 0.5f}, {0.8f, 0.8f, 0.0f, 1.0f} }); // 12
-	Vertexs.push_back(EngineVertex{ FVector(50.0f, 100.0f, -50.0f), {1.0f, 0.0f}, {0.1f, 0.9f, 0.7f, 1.0f} }); // 13
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 100.0f, 50.0f), {0.0f, 1.0f}, {0.6f, 0.3f, 0.7f, 1.0f} }); // 14
-	Vertexs.push_back(EngineVertex{ FVector(0.0f, 100.0f, -50.0f), {0.5f, 0.0f}, {0.3f, 0.9f, 0.1f, 1.0f} }); // 15
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 100.0f, 0.0f), {0.0f, 0.5f}, {0.7f, 0.8f, 0.2f, 1.0f} }); // 16
-	Vertexs.push_back(EngineVertex{ FVector(-50.0f, 100.0f, -50.0f), {0.0f, 0.0f}, {0.9f, 0.4f, 0.1f, 1.0f} }); // 17
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, -0.5000f, 0.5000f), {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} }); // 0
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, -0.5000f, 0.5000f), {0.5f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} }); // 1
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, -0.5000f, 0.0000f), {1.0f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} }); // 2
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, -0.5000f, 0.0000f), {0.5f, 0.5f}, {1.0f, 1.0f, 0.0f, 1.0f} }); // 3
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, 0.5000f), {0.0f, 1.0f}, {1.0f, 0.0f, 1.0f, 1.0f} }); // 4
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, -0.5000f, -0.5000f), {1.0f, 0.0f}, {0.5f, 0.5f, 0.5f, 1.0f} }); // 5
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, 0.0000f), {0.0f, 0.5f}, {0.8f, 0.3f, 0.1f, 1.0f} }); // 6
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, -0.5000f, -0.5000f), {0.5f, 0.0f}, {0.2f, 0.6f, 0.9f, 1.0f} }); // 7
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, -0.5000f), {0.0f, 0.0f}, {0.9f, 0.1f, 0.4f, 1.0f} }); // 8
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, 0.5000f, 0.0000f), {1.0f, 0.5f}, {0.3f, 0.7f, 0.3f, 1.0f} }); // 9
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, 0.5000f, 0.5000f), {0.5f, 1.0f}, {0.7f, 0.2f, 0.5f, 1.0f} }); // 10
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, 0.5000f, 0.5000f), {1.0f, 1.0f}, {0.4f, 0.4f, 0.4f, 1.0f} }); // 11
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, 0.5000f, 0.0000f), {0.5f, 0.5f}, {0.8f, 0.8f, 0.0f, 1.0f} }); // 12
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, 0.5000f, -0.5000f), {1.0f, 0.0f}, {0.1f, 0.9f, 0.7f, 1.0f} }); // 13
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, 0.5000f, 0.5000f), {0.0f, 1.0f}, {0.6f, 0.3f, 0.7f, 1.0f} }); // 14
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, 0.5000f, -0.5000f), {0.5f, 0.0f}, {0.3f, 0.9f, 0.1f, 1.0f} }); // 15
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, 0.5000f, 0.0000f), {0.0f, 0.5f}, {0.7f, 0.8f, 0.2f, 1.0f} }); // 16
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, 0.5000f, -0.5000f), {0.0f, 0.0f}, {0.9f, 0.4f, 0.1f, 1.0f} }); // 17
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, -0.0000f, 0.5000f), {1.0f, 1.0f}, {0.3f, 0.7f, 0.3f, 1.0f} }); // 18
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, -0.5000f, 0.5000f), {0.5f, 1.0f}, {0.7f, 0.2f, 0.5f, 1.0f} }); // 19
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, -0.5000f, 0.5000f), {1.0f, 1.0f}, {0.4f, 0.4f, 0.4f, 1.0f} }); // 20
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, -0.0000f, 0.5000f), {0.5f, 0.5f}, {0.8f, 0.8f, 0.0f, 1.0f} }); // 21
+	Vertexs.push_back(EngineVertex{ FVector(0.5000f, 0.5000f, 0.5000f), {1.0f, 1.0f}, {0.1f, 0.9f, 0.7f, 1.0f} }); // 22
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, 0.5000f), {0.0f, 1.0f}, {0.6f, 0.3f, 0.7f, 1.0f} }); // 23
+	Vertexs.push_back(EngineVertex{ FVector(0.0000f, 0.5000f, 0.5000f), {0.5f, 0.0f}, {0.3f, 0.9f, 0.1f, 1.0f} }); // 24
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.0000f, 0.5000f), {0.0f, 0.5f}, {0.7f, 0.8f, 0.2f, 1.0f} }); // 25
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, 0.0000f), {0.0f, 0.0f}, {0.9f, 0.4f, 0.1f, 1.0f} }); // 26
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.5000f, 0.5000f), {0.0f, 1.0f}, {0.3f, 0.7f, 0.3f, 1.0f} }); // 27
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, -0.0000f, 0.0000f), {0.5f, 0.5f}, {0.8f, 0.2f, 0.5f, 1.0f} }); // 28
+	Vertexs.push_back(EngineVertex{ FVector(-0.5000f, 0.5000f, 0.5000f), {0.0f, 0.5f}, {0.6f, 0.3f, 0.7f, 1.0f} }); // 29
+
+
+
+
+
+
 
 	D3D11_BUFFER_DESC BufferInfo = { 0 };
 

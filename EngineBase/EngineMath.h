@@ -70,6 +70,30 @@ public:
 	}
 };
 
+class FQuat
+{
+public:
+	union
+	{
+		struct
+		{
+			float X;
+			float Y;
+			float Z;
+			float W;
+		};
+
+		float Arr2D[1][4];
+		float Arr1D[4];
+		// 다이렉트 simd 연산 전용 벡터.
+		DirectX::XMVECTOR DirectVector;
+
+	};
+
+	class FVector QuaternionToEulerDeg() const;
+	class FVector QuaternionToEulerRad() const;
+};
+
 class FVector
 {
 public:
@@ -499,6 +523,13 @@ public:
 		return Stream;
 	}
 
+	FQuat DegAngleToQuaternion()
+	{
+		FQuat Result;
+		Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
+		return Result;
+	}
+
 };
 
 using float4 = FVector;
@@ -588,9 +619,23 @@ public:
 		RotationRad(_Angle * UEngineMath::D2R);
 	}
 
+
+
 	void RotationRad(const FVector& _Angle)
 	{
 		DirectMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(_Angle.DirectVector);
+		// 쿼터니온을 기반으로한 행렬은 치명적인 문제가 많았다.
+
+		// 짐벌락 현상 축이 겹치면서 덜덜덜덜덜 떨리는 현상등도 생겼고.
+		// 만들어진 행렬 3축의 각도를 계산하는 순서에 따라서 오류가 나거나 안나는 등의 문제도 생겼습니다.
+		// 그래서 짐벌락 축오류부터 수학자들이 이 오류를 해결하기 위해서 복소수 기반의 실수부와 허수부의 조합으로
+		// 이루어진 1x4 행렬을 만들어냈다.
+		// 복호화가 힘들어요.  30도, 50도, 80도 => 쿼터니온 , 0.12312, 0.323, -0.312f, 0.1312
+		// 각도 => 쿼터니온으로 쉽니다.
+		// 쿼터니온에서 => 각도로 빼는게 힘듭니다. 부정확합니다.
+		// 하지만 회전축의 오류가 해결되어있기 때문에 그냥 각도로 회전행렬을 만드는것보다.
+		// 퀀터니온으로 만드는 것을 좀더 추천합니다.
+
 	}
 
 
@@ -605,7 +650,6 @@ public:
 				Arr2D[x][y] = Swap;
 			}
 		}
-
 	}
 
 	// View행렬의 인자입니다.
@@ -690,6 +734,21 @@ public:
 		Arr2D[2][2] = cosf(_Angle);
 	}
 
+	FMatrix InverseReturn()
+	{
+		FMatrix Result;
+
+		Result.DirectMatrix = DirectX::XMMatrixInverse(nullptr, DirectMatrix);
+
+		return Result;
+	}
+
+	void Decompose(FVector& _Scale, FQuat& _RotQuaternion, FVector& _Pos)
+	{
+		// 회전쪽을 보면 이제 쿼터니온을 설명받아야 하는데.
+		DirectX::XMMatrixDecompose(&_Scale.DirectVector, &_RotQuaternion.DirectVector, &_Pos.DirectVector, DirectMatrix);
+	}
+
 	void RotationZDeg(float _Angle)
 	{
 		RotationZRad(_Angle * UEngineMath::D2R);
@@ -728,15 +787,29 @@ struct FTransform
 	// transformupdate는 
 	// 아래의 값들을 다 적용해서
 	// WVP를 만들어내는 함수이다.
+	// 변환용 벨류
 	float4 Scale;
 	float4 Rotation;
 	float4 Location;
+
+	// 릴리에티브 로컬
+	float4 RelativeScale;
+	float4 RelativeRotation;
+	FQuat RelativeQuat;
+	float4 RelativeLocation;
+
+	// 월드
+	float4 WorldScale;
+	float4 WorldRotation;
+	FQuat WorldQuat;
+	float4 WorldLocation;
 
 	float4x4 ScaleMat;
 	float4x4 RotationMat;
 	float4x4 LocationMat;
 	float4x4 RevolveMat;
 	float4x4 ParentMat;
+	float4x4 LocalWorld;
 	float4x4 World;
 	float4x4 View;
 	float4x4 Projection;
@@ -748,8 +821,13 @@ struct FTransform
 
 	}
 
+
 public:
-	ENGINEAPI void TransformUpdate();
+	ENGINEAPI void TransformUpdate(bool _IsAbsolut = false);
+
+	// 역분해 크기 회전 위치를 뜯어내는 함수
+
+	ENGINEAPI void Decompose();
 
 private:
 	friend class CollisionFunctionInit;

@@ -1,17 +1,25 @@
 #include "PreCompile.h"
 #include "BlitzPlayer.h"
-//#include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/RenderBlitz.h>
-
+#include <EngineCore/DefaultSceneComponent.h>
 
 ABlitzPlayer::ABlitzPlayer()
 {
-	std::shared_ptr<class URenderBlitz> cube = CreateDefaultSubObject<URenderBlitz>();
-	RootComponent = cube;
-	cube->SetRelativeScale3D({ 1,1,1.f });
-	cube->SetLocation({ 20,20,10 });
+	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
+	RootComponent = Default;
 
+	//std::shared_ptr<class URenderBlitz> cube = CreateDefaultSubObject<URenderBlitz>();
+	RenderBlitz = CreateDefaultSubObject<URenderBlitz>();
+	RenderBlitz->SetupAttachment(RootComponent);
+	RenderBlitz->SetRelativeScale3D({ 120.0F, 120.0F, 120.0f });
+
+	Child = CreateDefaultSubObject<USpriteRenderer>();
+	Child->SetSprite("Player.png", 2);
+	Child->SetRelativeLocation({100.f,0.0f,0.0f});
+	Child->SetScale3D({ 50.f,50.f,1.0f });
+	Child->SetupAttachment(RootComponent);
 }
 
 ABlitzPlayer::~ABlitzPlayer()
@@ -29,21 +37,22 @@ void ABlitzPlayer::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('A'))
 	{
-		AddActorLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
+		
+		AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 	if (UEngineInput::IsPress('D'))
 	{
-		AddActorLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
+		AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('W'))
 	{
-		AddActorLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
-		AddActorLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('Q'))

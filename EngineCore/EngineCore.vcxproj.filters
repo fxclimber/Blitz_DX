@@ -82,6 +82,7 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="RenderBlitz.h" />
+    <ClInclude Include="DefaultSceneComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -153,6 +154,7 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="RenderBlitz.cpp" />
+    <ClCompile Include="DefaultSceneComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">

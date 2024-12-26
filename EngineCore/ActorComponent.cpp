@@ -13,3 +13,4 @@ class AActor* UActorComponent::GetActor()
 {
 	return Actor;
 }
+

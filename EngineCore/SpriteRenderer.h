@@ -1,7 +1,5 @@
 #pragma once
 #include "Renderer.h"
-#include "RenderBlitz.h"
-
 
 // Ό³Έν :
 class USpriteRenderer : public URenderer
