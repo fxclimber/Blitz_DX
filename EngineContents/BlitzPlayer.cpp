@@ -13,13 +13,13 @@ ABlitzPlayer::ABlitzPlayer()
 	//std::shared_ptr<class URenderBlitz> cube = CreateDefaultSubObject<URenderBlitz>();
 	RenderBlitz = CreateDefaultSubObject<URenderBlitz>();
 	RenderBlitz->SetupAttachment(RootComponent);
-	RenderBlitz->SetRelativeScale3D({ 120.0F, 120.0F, 120.0f });
+	RenderBlitz->SetRelativeScale3D({ 50.0f,50.f, 1.0f });
 
-	Child = CreateDefaultSubObject<USpriteRenderer>();
-	Child->SetSprite("Player.png", 2);
-	Child->SetRelativeLocation({100.f,0.0f,0.0f});
-	Child->SetScale3D({ 50.f,50.f,1.0f });
-	Child->SetupAttachment(RootComponent);
+	//Child = CreateDefaultSubObject<USpriteRenderer>();
+	//Child->SetSprite("Player.png", 2);
+	//Child->SetRelativeLocation({100.f,0.0f,0.0f});
+	//Child->SetScale3D({ 50.f,50.f,1.0f });
+	//Child->SetupAttachment(RootComponent);
 }
 
 ABlitzPlayer::~ABlitzPlayer()

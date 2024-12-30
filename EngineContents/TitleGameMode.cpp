@@ -12,9 +12,9 @@ class TestWindow : public UEngineGUIWindow
 public:
 	void OnGUI() override
 	{
-		ImGui::Button("WindowButton");
-		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
-		ImGui::Text("test");
+		//ImGui::Button("WindowButton");
+		//ImGui::SameLine(); // ÇÑ°£ ¶ç±â
+		//ImGui::Text("test");
 
 	}
 };
@@ -29,7 +29,7 @@ ATitleGameMode::ATitleGameMode()
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 
-	UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 }
 
 ATitleGameMode::~ATitleGameMode()
