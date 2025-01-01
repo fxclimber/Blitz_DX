@@ -8,9 +8,9 @@ public:
 	ABlitzPlayerCube();
 	~ABlitzPlayerCube();
 
-	std::shared_ptr<class USpriteRenderer> GetRenderer()
+	std::shared_ptr<class USpriteRenderer> GetTestSprite()
 	{
-		return LogoRenderer;
+		return TestSprite;
 	}
 
 protected:
@@ -18,7 +18,7 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::shared_ptr<class USpriteRenderer> LogoRenderer;
-	std::shared_ptr<class USpriteRenderer> Child;
+	std::shared_ptr<class USpriteRenderer> TestSprite;
+	std::shared_ptr<class USpriteRenderer> TestSpriteChild;
 };
 

@@ -54,7 +54,7 @@ void UBlitzCore::EngineStart(UEngineInitData& _Data)
 
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ABlitGameMode_Intro, ABlitzPlayerCube>("Intro");
+	UEngineCore::CreateLevel<ABlitGameMode_Intro, APawn>("Intro");
 	UEngineCore::OpenLevel("Intro");
 
 }

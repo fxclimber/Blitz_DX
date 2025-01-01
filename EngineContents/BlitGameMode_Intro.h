@@ -1,11 +1,9 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// Ό³Έν :
 class ABlitGameMode_Intro : public AActor
 {
 public:
-	// constrcuter destructer
 	ABlitGameMode_Intro();
 	~ABlitGameMode_Intro();
 
@@ -15,5 +13,6 @@ protected:
 
 private:
 	std::shared_ptr<class ABlitzPlayerCube> PlayerCube;
+	std::shared_ptr<ACameraActor> Camera;
 };
 
