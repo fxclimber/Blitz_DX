@@ -12,7 +12,7 @@ public:
 	UEngineResources() {
 
 	}
-	~UEngineResources() {
+	~UEngineResources()	{
 
 	}
 

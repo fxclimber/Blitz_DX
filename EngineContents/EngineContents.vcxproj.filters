@@ -8,16 +8,13 @@
     <ClInclude Include="TitleGameMode.h">
       <Filter>Jo\GameMode</Filter>
     </ClInclude>
-    <ClInclude Include="BlitzPlayer.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BlitzGameMode.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsCore.h">
       <Filter>Jo</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Jo</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRenderer.h">
       <Filter>Jo</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,16 +26,13 @@
     <ClCompile Include="TitleGameMode.cpp">
       <Filter>Jo\GameMode</Filter>
     </ClCompile>
-    <ClCompile Include="BlitzGameMode.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BlitzPlayer.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
       <Filter>Jo</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRenderer.cpp">
       <Filter>Jo</Filter>
     </ClCompile>
   </ItemGroup>

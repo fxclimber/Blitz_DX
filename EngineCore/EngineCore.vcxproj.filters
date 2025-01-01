@@ -6,71 +6,74 @@
     <ClInclude Include="IContentsCore.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="SceneComponent.h">
-      <Filter>Object\Component</Filter>
+    <ClInclude Include="Level.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Pawn.h">
-      <Filter>Object\Actor</Filter>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Pawn.h">
       <Filter>Object\Actor</Filter>
     </ClInclude>
     <ClInclude Include="EngineGraphicDevice.h">
       <Filter>Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Object\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Object\Actor</Filter>
+    <ClInclude Include="EngineCamera.h">
+      <Filter>Object\Render</Filter>
     </ClInclude>
     <ClInclude Include="CameraActor.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineCamera.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineTexture.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineResources.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Object\Component\Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Object\Component\Render</Filter>
+      <Filter>Object\Render</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
-    <ClInclude Include="imstb_truetype.h">
-      <Filter>GUI\IMGUI</Filter>
+    <ClInclude Include="Renderer.h">
+      <Filter>Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Object\Component\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTexture.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineResources.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imgui.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_win32.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imgui_internal.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imstb_rectpack.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="imstb_textedit.h">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
     <ClInclude Include="EngineGUI.h">
       <Filter>GUI</Filter>
@@ -78,71 +81,90 @@
     <ClInclude Include="EngineGUIWindow.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="EngineSprite.h">
-      <Filter>Resource</Filter>
+    <ClInclude Include="DefaultSceneComponent.h">
+      <Filter>Object\Component\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="RenderBlitz.h" />
-    <ClInclude Include="DefaultSceneComponent.h" />
+    <ClInclude Include="RenderUnit.h">
+      <Filter>Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertex.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBlend.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="SceneComponent.cpp">
-      <Filter>Object\Component</Filter>
+    <ClCompile Include="Level.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Pawn.cpp">
-      <Filter>Object\Actor</Filter>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Pawn.cpp">
       <Filter>Object\Actor</Filter>
     </ClCompile>
     <ClCompile Include="EngineGraphicDevice.cpp">
       <Filter>Graphic</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp">
-      <Filter>Object\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Object\Actor</Filter>
+    <ClCompile Include="EngineCamera.cpp">
+      <Filter>Object\Render</Filter>
     </ClCompile>
     <ClCompile Include="CameraActor.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineCamera.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineTexture.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineResources.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Object\Component\Contents</Filter>
+      <Filter>Object\Render</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Object\Component\Render</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Object\Component\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTexture.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineResources.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
     <ClCompile Include="imgui.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="imgui_draw.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="imgui_tables.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
-      <Filter>GUI\IMGUI</Filter>
+      <Filter>GUI\IMGUI\Cpp</Filter>
     </ClCompile>
     <ClCompile Include="EngineGUI.cpp">
       <Filter>GUI</Filter>
@@ -150,73 +172,98 @@
     <ClCompile Include="EngineGUIWindow.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="EngineSprite.cpp">
-      <Filter>Resource</Filter>
+    <ClCompile Include="DefaultSceneComponent.cpp">
+      <Filter>Object\Component\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="RenderBlitz.cpp" />
-    <ClCompile Include="DefaultSceneComponent.cpp" />
+    <ClCompile Include="RenderUnit.cpp">
+      <Filter>Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineBlend.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
-      <UniqueIdentifier>{668899aa-52ba-45e7-912c-1cda8f50c9e7}</UniqueIdentifier>
+      <UniqueIdentifier>{dbbc7d85-8a99-4d04-941c-12190193cbcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{7804f68d-5a6b-41af-b1db-5c8cc65d0713}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object">
-      <UniqueIdentifier>{f95a3560-9daf-4e38-82d3-a546ae25d39e}</UniqueIdentifier>
+      <UniqueIdentifier>{2f9cec39-ffc5-42e7-951f-4e4aa54ba953}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Component">
-      <UniqueIdentifier>{0b71c68f-8da4-4365-9294-2138a1551799}</UniqueIdentifier>
+      <UniqueIdentifier>{f035e895-31ab-4451-8f6a-d30bbf373292}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Actor">
-      <UniqueIdentifier>{3dce4654-9dea-4faa-96c1-6a9780d83397}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphic">
-      <UniqueIdentifier>{4cdba11e-bd14-4112-ad28-f7090a248963}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render">
-      <UniqueIdentifier>{57453cca-633f-4959-a114-fb00e4268b55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty">
-      <UniqueIdentifier>{8ddb793b-1b53-4fa4-b2f0-c562aec52e5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\DirectxTex">
-      <UniqueIdentifier>{59a0e4cd-de4d-403d-b41b-29bdcfb29fe7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\DirectxTex\Debug">
-      <UniqueIdentifier>{7510adc3-d966-4137-83ef-55a4e13c67ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\DirectxTex\Inc">
-      <UniqueIdentifier>{e91677c4-5769-4685-9459-2b04fed8e68d}</UniqueIdentifier>
+      <UniqueIdentifier>{c0338f66-8d0f-4f97-9480-66043fb96908}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Component\Contents">
-      <UniqueIdentifier>{2a6f9d22-3ae1-4000-964d-2b6a97ed97bd}</UniqueIdentifier>
+      <UniqueIdentifier>{e1de5f16-b413-48ce-b221-15697df9fca2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource">
-      <UniqueIdentifier>{5dc46d7e-0326-472d-becf-5a5df4142687}</UniqueIdentifier>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{27490627-d4db-4c0e-a2da-2174f676fcfc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\Render">
-      <UniqueIdentifier>{d7745a91-40bc-41b5-9db6-af6e71a9e6f4}</UniqueIdentifier>
+    <Filter Include="Object\Render">
+      <UniqueIdentifier>{af84143f-11d7-4986-8f8e-8fc5f9e2d1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{e8bfa200-d0ff-4a17-a578-4a80296c2dde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex">
+      <UniqueIdentifier>{0c5bd5bf-498a-4dab-a201-ff16debaa548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex\Debug">
+      <UniqueIdentifier>{55e0d781-660a-4e13-86ee-ba97cb353ee0}</UniqueIdentifier>
     </Filter>
     <Filter Include="ThirdParty\DirectxTex\Release">
-      <UniqueIdentifier>{a17892b3-902b-488d-8fec-88453d73353e}</UniqueIdentifier>
+      <UniqueIdentifier>{f72ab297-5ee5-4741-b71b-64586fdb61f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectxTex\Inc">
+      <UniqueIdentifier>{d1bd3c2b-8961-4c00-8bcb-40a1bbf7ca96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Render">
+      <UniqueIdentifier>{aa5a291e-74e1-4e3c-92c0-50f7993217ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{ebec57cc-b8c0-4c24-acd2-77ceefe6e653}</UniqueIdentifier>
     </Filter>
     <Filter Include="GUI">
-      <UniqueIdentifier>{95239bc4-3395-4640-864d-3a84a3fc36f5}</UniqueIdentifier>
+      <UniqueIdentifier>{79ac1fd3-2f94-4836-b190-cf3498acfe7e}</UniqueIdentifier>
     </Filter>
     <Filter Include="GUI\IMGUI">
-      <UniqueIdentifier>{089b2a0d-4f52-4857-be59-085670e2c40f}</UniqueIdentifier>
+      <UniqueIdentifier>{1d62a489-38dd-4c37-97de-ba3d82f9c718}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
-      <Filter>ThirdParty\DirectxTex\Debug</Filter>
-    </Library>
-    <Library Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
-      <Filter>ThirdParty\DirectxTex\Release</Filter>
-    </Library>
+    <Filter Include="GUI\IMGUI\Header">
+      <UniqueIdentifier>{31bae5f0-0761-47ef-a8ef-3c333e450b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\IMGUI\Cpp">
+      <UniqueIdentifier>{f962fe96-8076-4d29-bdff-bd07125781ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl">
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
+      <Filter>ThirdParty\DirectxTex\Debug</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
+      <Filter>ThirdParty\DirectxTex\Release</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

@@ -36,11 +36,13 @@ public:
 
 	ENGINEAPI static void OpenLevel(std::string_view _Name);
 
-	ENGINEAPI static UEngineGraphicDevice Device;
 	ENGINEAPI static UEngineWindow MainWindow;
 
 	ENGINEAPI static FVector GetScreenScale();
 
+	ENGINEAPI static UEngineGraphicDevice& GetDevice();
+
+	ENGINEAPI static UEngineGraphicDevice Device;
 protected:
 
 private:

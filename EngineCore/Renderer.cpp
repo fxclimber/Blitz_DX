@@ -3,6 +3,9 @@
 #include <EngineBase/EngineString.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineTexture.h>
+#include <EngineCore/Mesh.h>
+#include "EngineVertex.h"
+#include "EngineBlend.h"
 
 URenderer::URenderer()
 {
@@ -10,26 +13,30 @@ URenderer::URenderer()
 
 URenderer::~URenderer()
 {
-	VertexBuffer = nullptr;
-	VSShaderCodeBlob = nullptr;
-	VSErrorCodeBlob = nullptr;
 
 }
 
 void URenderer::SetTexture(std::string_view _Value)
 {
-	std::string UpperName = UEngineString::ToUpper(_Value);
+	Texture = UEngineTexture::Find<UEngineTexture>(_Value).get();
 
-	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName);
-
-	if (nullptr == Sprite)
+	if (nullptr == Texture)
 	{
-		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
+		MSGASSERT("존재하지 않는 텍스처를 세팅하려고 했습니다.");
 	}
+}
+
+void URenderer::SetTexture(UEngineTexture* _Texture)
+{
+	Texture = _Texture;
 }
 
 void URenderer::SetOrder(int _Order)
 {
+	if (0 != GetOrder() && _Order == GetOrder())
+	{
+		return;
+	}
 	int PrevOrder = GetOrder();
 	UObject::SetOrder(_Order);
 	ULevel* Level = GetActor()->GetWorld();
@@ -42,14 +49,14 @@ void URenderer::SetOrder(int _Order)
 ENGINEAPI void URenderer::BeginPlay()
 {
 	USceneComponent::BeginPlay();
-	SetOrder(0);
+	SetOrder(GetOrder());
 
 	// 기본적인 랜더링 파이프라인을 익히기 위한 
 	// 모든 기본 코드들을 다 쳐볼 생각입니다.
 
-	InputAssembler1Init();
+	//InputAssembler1Init();
 	VertexShaderInit();
-	InputAssembler2Init();
+	// InputAssembler2Init();
 	RasterizerInit();
 	PixelShaderInit();
 	ShaderResInit();
@@ -65,7 +72,7 @@ void URenderer::ShaderResInit()
 		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, TransformConstBuffer.GetAddressOf()))
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
 		{
 			MSGASSERT("상수버퍼 생성에 실패했습니다..");
 			return;
@@ -74,21 +81,36 @@ void URenderer::ShaderResInit()
 
 	{
 		D3D11_BUFFER_DESC BufferInfo = { 0 };
-		BufferInfo.ByteWidth = sizeof(FSpriteData);
+		BufferInfo.ByteWidth = sizeof(FUVValue);
 		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, SpriteConstBuffer.GetAddressOf()))
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &UVValue))
 		{
 			MSGASSERT("상수버퍼 생성에 실패했습니다..");
 			return;
 		}
 	}
 
-	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT };
-	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER; // 0~1사이만 유효
-	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER; // y
+
+	{
+		D3D11_BUFFER_DESC BufferInfo = { 0 };
+		BufferInfo.ByteWidth = sizeof(FSpriteData);
+		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
+		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
+
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &SpriteConstBuffer))
+		{
+			MSGASSERT("상수버퍼 생성에 실패했습니다..");
+			return;
+		}
+	}
+
+	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT};
+	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // 0~1사이만 유효
+	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // y
 	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP; // z // 3중 
 
 	SampInfo.BorderColor[0] = 0.0f;
@@ -101,7 +123,7 @@ void URenderer::ShaderResInit()
 	// SampInfo.MaxLOD = 0.0f;
 	// SampInfo.MinLOD = 0.0f;
 
-	UEngineCore::Device.GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
+	UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
 }
 
 void URenderer::ShaderResSetting()
@@ -111,7 +133,7 @@ void URenderer::ShaderResSetting()
 		D3D11_MAPPED_SUBRESOURCE Data = {};
 		// 이 데이터를 사용하는 랜더링 랜더링 잠깐 정지
 		// 잠깐 그래픽카드야 멈 그래픽카드에 있는 상수버퍼 수정해야 해.
-		UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+		UEngineCore::GetDevice().GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
 		// Data.pData 그래픽카드와 연결된 주소값.
 		if (nullptr == Data.pData)
@@ -119,18 +141,37 @@ void URenderer::ShaderResSetting()
 			MSGASSERT("그래픽카드가 수정을 거부했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
-		UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+		UEngineCore::GetDevice().GetContext()->Unmap(TransformConstBuffer.Get(), 0);
 
 		// 같은 상수버퍼를 
 		ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
-		UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
 	}
 
 	{
 		D3D11_MAPPED_SUBRESOURCE Data = {};
 		// 이 데이터를 사용하는 랜더링 랜더링 잠깐 정지
 		// 잠깐 그래픽카드야 멈 그래픽카드에 있는 상수버퍼 수정해야 해.
-		UEngineCore::Device.GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+		UEngineCore::GetDevice().GetContext()->Map(UVValue.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+
+		// Data.pData 그래픽카드와 연결된 주소값.
+		if (nullptr == Data.pData)
+		{
+			MSGASSERT("그래픽카드가 수정을 거부했습니다.");
+		}
+		memcpy_s(Data.pData, sizeof(FUVValue), &UVValueData, sizeof(FUVValue));
+		UEngineCore::GetDevice().GetContext()->Unmap(UVValue.Get(), 0);
+
+		// 같은 상수버퍼를 
+		ID3D11Buffer* ArrPtr[16] = { UVValue.Get() };
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(2, 1, ArrPtr);
+	}
+
+	{
+		D3D11_MAPPED_SUBRESOURCE Data = {};
+		// 이 데이터를 사용하는 랜더링 랜더링 잠깐 정지
+		// 잠깐 그래픽카드야 멈 그래픽카드에 있는 상수버퍼 수정해야 해.
+		UEngineCore::GetDevice().GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
 		// Data.pData 그래픽카드와 연결된 주소값.
 		if (nullptr == Data.pData)
@@ -138,21 +179,21 @@ void URenderer::ShaderResSetting()
 			MSGASSERT("그래픽카드가 수정을 거부했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FSpriteData), &SpriteData, sizeof(FSpriteData));
-		UEngineCore::Device.GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
+		UEngineCore::GetDevice().GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
 
 		// 같은 상수버퍼를 
 		ID3D11Buffer* ArrPtr[16] = { SpriteConstBuffer.Get() };
-		UEngineCore::Device.GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
 	}
 
 
+	
 
-
-	ID3D11ShaderResourceView* ArrSRV[16] = { Sprite->GetSRV() };
-	UEngineCore::Device.GetContext()->PSSetShaderResources(0, 1, ArrSRV);
+	ID3D11ShaderResourceView* ArrSRV[16] = { Texture->GetSRV() };
+	UEngineCore::GetDevice().GetContext()->PSSetShaderResources(0, 1, ArrSRV);
 
 	ID3D11SamplerState* ArrSMP[16] = { SamplerState.Get() };
-	UEngineCore::Device.GetContext()->PSSetSamplers(0, 1, ArrSMP);
+	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, ArrSMP);
 }
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
@@ -167,7 +208,13 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 
 	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
 
-
+	
+	if (nullptr == Mesh)
+	{
+		MSGASSERT("매쉬가 세팅되지 않아서 랜더링을 할수 없습니다.");
+		return;
+	}
+	
 
 
 	ShaderResSetting();
@@ -177,59 +224,51 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	RasterizerSetting();
 	PixelShaderSetting();
 	OutPutMergeSetting();
+
 	// 인덱스 버퍼를 통해서 그리겠다.
-	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
+	UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
 
 }
 
 
-
-void URenderer::InputAssembler1Init()
-{
-	std::vector<EngineVertex> Vertexs;
-	Vertexs.resize(4);
-
-	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
-	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
-	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
-	Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
-
-	D3D11_BUFFER_DESC BufferInfo = { 0 };
-
-	BufferInfo.ByteWidth = sizeof(EngineVertex) * static_cast<int>(Vertexs.size());
-	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	BufferInfo.CPUAccessFlags = 0;
-	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
-
-	D3D11_SUBRESOURCE_DATA Data; // 초기값 넣어주는 용도의 구조체
-	Data.pSysMem = &Vertexs[0];
-
-	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, VertexBuffer.GetAddressOf()))
-	{
-		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
-		return;
-	}
-}
+//
+//void URenderer::InputAssembler1Init()
+//{
+//	std::vector<EngineVertex> Vertexs;
+//	Vertexs.resize(4);
+//
+//	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+//	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+//	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
+//	Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
+//
+//	D3D11_BUFFER_DESC BufferInfo = {0};
+//
+//	BufferInfo.ByteWidth = sizeof(EngineVertex) * static_cast<int>(Vertexs.size());
+//	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+//	BufferInfo.CPUAccessFlags = 0;
+//	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
+//
+//	D3D11_SUBRESOURCE_DATA Data; // 초기값 넣어주는 용도의 구조체
+//	Data.pSysMem = &Vertexs[0];
+//
+//	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, VertexBuffer.GetAddressOf()))
+//	{
+//		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
+//		return;
+//	}
+//}
 
 void URenderer::InputAssembler1Setting()
 {
-	UINT VertexSize = sizeof(EngineVertex);
-	// 이 버텍스 버퍼가 10개짜리인데 3번째 버텍스 부터 세팅해줘.
-	UINT Offset = 0;
-
-	// 한번에 여러개의 버텍스 버퍼를 세팅할수 있다.
-	// 버텍스버퍼포인터 1차원 배열을 넣어주는데.
-	// 0번슬롯부터 1개 사용하겠다.
-	// 버텍스 하나의 크기는 VertexSize
-	// Offset부터 버텍스를 사용하겠다.
-
-
-
-	ID3D11Buffer* ArrBuffer[1];
-	ArrBuffer[0] = VertexBuffer.Get();
-
-	UEngineCore::Device.GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
-	UEngineCore::Device.GetContext()->IASetInputLayout(InputLayOut.Get());
+	Mesh->GetVertexBuffer()->Setting();
+	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
+	//UINT VertexSize = sizeof(EngineVertex);
+	//// 이 버텍스 버퍼가 10개짜리인데 3번째 버텍스 부터 세팅해줘.
+	//UINT Offset = 0;
+	//ID3D11Buffer* ArrBuffer[1];
+	//ArrBuffer[0] = VertexBuffer.Get();
+	//UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
 }
 
 void URenderer::InputAssembler1LayOut()
@@ -283,7 +322,7 @@ void URenderer::InputAssembler1LayOut()
 
 
 	// 쉐이더에서 어떤 인풋레이아웃을 사용하는지 알려줘.
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreateInputLayout(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreateInputLayout(
 		&InputLayOutData[0],
 		static_cast<unsigned int>(InputLayOutData.size()),
 		VSShaderCodeBlob->GetBufferPointer(),
@@ -337,12 +376,12 @@ void URenderer::VertexShaderInit()
 		return;
 	}
 
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreateVertexShader(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreateVertexShader(
 		VSShaderCodeBlob->GetBufferPointer(),
 		VSShaderCodeBlob->GetBufferSize(),
 		nullptr,
 		&VertexShader
-	);
+		);
 
 	if (S_OK != Result)
 	{
@@ -354,7 +393,7 @@ void URenderer::VertexShaderInit()
 
 void URenderer::VertexShaderSetting()
 {
-	UEngineCore::Device.GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
+	UEngineCore::GetDevice().GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
 }
 
 void URenderer::RasterizerInit()
@@ -362,10 +401,12 @@ void URenderer::RasterizerInit()
 	D3D11_RASTERIZER_DESC Desc = {};
 	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-	UEngineCore::Device.GetDevice()->CreateRasterizerState(&Desc, RasterizerState.GetAddressOf());
+	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, &RasterizerState);
 
-	ViewPortInfo.Width = 1280.0f;
-	ViewPortInfo.Height = 720.0f;
+	
+
+	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
+	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
 	ViewPortInfo.TopLeftX = 0.0f;
 	ViewPortInfo.TopLeftY = 0.0f;
 	ViewPortInfo.MinDepth = 0.0f;
@@ -375,46 +416,48 @@ void URenderer::RasterizerInit()
 
 void URenderer::RasterizerSetting()
 {
-	UEngineCore::Device.GetContext()->RSSetViewports(1, &ViewPortInfo);
-	UEngineCore::Device.GetContext()->RSSetState(RasterizerState.Get());
+	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
+	UEngineCore::GetDevice().GetContext()->RSSetState(RasterizerState.Get());
 }
 
-void URenderer::InputAssembler2Init()
-{
-	std::vector<unsigned int> Indexs;
-
-	Indexs.push_back(0);
-	Indexs.push_back(1);
-	Indexs.push_back(2);
-
-	Indexs.push_back(1);
-	Indexs.push_back(3);
-	Indexs.push_back(2);
-
-
-	D3D11_BUFFER_DESC BufferInfo = { 0 };
-	BufferInfo.ByteWidth = sizeof(unsigned int) * static_cast<int>(Indexs.size());
-	BufferInfo.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	BufferInfo.CPUAccessFlags = 0;
-	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
-	D3D11_SUBRESOURCE_DATA Data;
-	Data.pSysMem = &Indexs[0];
-	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
-	{
-		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
-		return;
-	}
-}
+//void URenderer::InputAssembler2Init()
+//{
+//	std::vector<unsigned int> Indexs;
+//
+//	Indexs.push_back(0);
+//	Indexs.push_back(1);
+//	Indexs.push_back(2);
+//
+//	Indexs.push_back(1);
+//	Indexs.push_back(3);
+//	Indexs.push_back(2);
+//
+//
+//	D3D11_BUFFER_DESC BufferInfo = { 0 };
+//	BufferInfo.ByteWidth = sizeof(unsigned int) * static_cast<int>(Indexs.size());
+//	BufferInfo.BindFlags = D3D11_BIND_INDEX_BUFFER;
+//	BufferInfo.CPUAccessFlags = 0;
+//	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
+//	D3D11_SUBRESOURCE_DATA Data;
+//	Data.pSysMem = &Indexs[0];
+//	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
+//	{
+//		MSGASSERT("인덱스 버퍼 생성에 실패했습니다.");
+//		return;
+//	}
+//}
 
 void URenderer::InputAssembler2Setting()
 {
-	int Offset = 0;
 
-	// DXGI_FORMAT_R8_UINT; <= 옛날에는 아꼈다.
-	// DXGI_FORMAT_R16_UINT; <= 옛날에는 아꼈다.
-	UEngineCore::Device.GetContext()->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, Offset);
+	Mesh->GetIndexBuffer()->Setting();
 
-	UEngineCore::Device.GetContext()->IASetPrimitiveTopology(Topology);
+	// int Offset = 0;
+	//// DXGI_FORMAT_R8_UINT; <= 옛날에는 아꼈다.
+	//// DXGI_FORMAT_R16_UINT; <= 옛날에는 아꼈다.
+	//UEngineCore::GetDevice().GetContext()->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, Offset);
+
+	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
 }
 
 
@@ -459,7 +502,7 @@ void URenderer::PixelShaderInit()
 		return;
 	}
 
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreatePixelShader(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreatePixelShader(
 		PSShaderCodeBlob->GetBufferPointer(),
 		PSShaderCodeBlob->GetBufferSize(),
 		nullptr,
@@ -474,22 +517,56 @@ void URenderer::PixelShaderInit()
 
 void URenderer::PixelShaderSetting()
 {
-	UEngineCore::Device.GetContext()->PSSetShader(PixelShader.Get(), nullptr, 0);
+	UEngineCore::GetDevice().GetContext()->PSSetShader(PixelShader.Get(), nullptr, 0);
 }
 
 void URenderer::OutPutMergeSetting()
 {
+	if (nullptr != Blend)
+	{
+		Blend->Setting();
+	}
+
 	// 배열 넣어줄수 있다. 
 	// 0번이면 sv_target0
-	ID3D11RenderTargetView* RTV = UEngineCore::Device.GetRTV();
+	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
 
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
 	ArrRtv[0] = RTV; // SV_Target0
 
-	UEngineCore::Device.GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
+	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 }
 
-void URenderer::SetSpriteData(size_t _Index)
+void URenderer::SetSpriteData(UEngineSprite* _Sprite, size_t _Index)
 {
-	SpriteData = Sprite->GetSpriteData(_Index);
+	SpriteData = _Sprite->GetSpriteData(_Index);
+}
+
+void URenderer::AddUVPlusValue(float4 _Value)
+{
+	UVValueData.PlusUVValue += _Value;
+}
+
+void URenderer::SetMesh(std::string_view _Name)
+{
+	std::shared_ptr<UMesh> FindMesh = UMesh::Find<UMesh>(_Name);
+
+	Mesh = FindMesh.get();
+
+	if (nullptr == Mesh)
+	{
+		MSGASSERT("존재하지 않는 매쉬를 세팅할수 없습니다.\n");
+	}
+}
+
+void URenderer::SetBlend(std::string_view _Name)
+{
+	std::shared_ptr<UEngineBlend> FindBlend = UEngineBlend::Find<UEngineBlend>(_Name);
+
+	Blend = FindBlend.get();
+
+	if (nullptr == Blend)
+	{
+		MSGASSERT("존재하지 않는 Blend를 세팅할수 없습니다.\n");
+	}
 }

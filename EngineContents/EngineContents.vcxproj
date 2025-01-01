@@ -147,18 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BlitzGameMode.h" />
-    <ClInclude Include="BlitzPlayer.h" />
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BlitzGameMode.cpp" />
-    <ClCompile Include="BlitzPlayer.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

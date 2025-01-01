@@ -1,17 +1,15 @@
 #pragma once
 #include "SceneComponent.h"
 #include "EngineSprite.h"
+#include "RenderUnit.h"
 
-struct EngineVertex
+struct FUVValue 
 {
-	float4 POSITION;
-	float4 TEXCOORD; // UV값이라고 불리는 존재로 텍스처가 매핑되는 비율을 지정해줍니다.
-	float4 COLOR;
+	float4 PlusUVValue;
 };
 
-
-
-// 설명 :
+// 설명 : 어떤 랜더링이든 할수 잇는 구조로 만들겠다.
+// 랜더링이란 랜더러만 하는게 아닙니다. 3D
 class URenderer : public USceneComponent
 {
 	friend class UEngineCamera;
@@ -27,32 +25,42 @@ public:
 	URenderer& operator=(const URenderer& _Other) = delete;
 	URenderer& operator=(URenderer&& _Other) noexcept = delete;
 
-	void SetOrder(int _Order) override;
+	ENGINEAPI void SetOrder(int _Order) override;
+ 
+	ENGINEAPI void SetTexture(std::string_view _Value);
 
-	void SetTexture(std::string_view _Value);
+	ENGINEAPI void SetTexture(UEngineTexture* _Value);
 
-	ENGINEAPI void SetSpriteData(size_t _Index);
+	ENGINEAPI void SetSpriteData(UEngineSprite* _Sprite, size_t _Index);
 
-protected:
+	ENGINEAPI void AddUVPlusValue(float4 _Value);
+
+	ENGINEAPI void SetMesh(std::string_view _Name);
+
+	ENGINEAPI void SetBlend(std::string_view _Name);
+
 	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 private:
-	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
+	class UMesh* Mesh = nullptr;
+	class UEngineBlend* Blend = nullptr;
+
 	FSpriteData SpriteData;
-
-	std::shared_ptr<class UEngineSprite> Sprite = nullptr;
-
+	FUVValue UVValueData;
+	UEngineTexture* Texture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr; // 샘플러 스테이트
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr; // 상수버퍼
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr; // 스프라이트용 상수버퍼
+	Microsoft::WRL::ComPtr<ID3D11Buffer> UVValue = nullptr; // 상수버퍼
 	void ShaderResInit();
 	void ShaderResSetting();
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
+	// Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
-	void InputAssembler1Init();
+	// void InputAssembler1Init();
 	void InputAssembler1Setting();
 	void InputAssembler1LayOut();
 
@@ -67,10 +75,10 @@ public:
 	void VertexShaderSetting();
 
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
+	// Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
 	// 삼각형을 면으로 생각하고 그려주세요.
 	D3D11_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	void InputAssembler2Init();
+	// void InputAssembler2Init();
 	void InputAssembler2Setting();
 
 	D3D11_VIEWPORT ViewPortInfo;
@@ -86,5 +94,7 @@ public:
 	void PixelShaderSetting();
 
 	void OutPutMergeSetting();
+
+	std::vector<URenderUnit> Units;
 };
 

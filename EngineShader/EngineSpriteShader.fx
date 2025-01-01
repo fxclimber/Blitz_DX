@@ -25,6 +25,7 @@ cbuffer FTransform : register(b0)
 	// 변환용 벨류
     float4 Scale;
     float4 Rotation;
+    float4 Qut;
     float4 Location;
 
 	// 릴리에티브 로컬
@@ -56,35 +57,56 @@ cbuffer FSpriteData : register(b1)
 {
     float4 CuttingPos;
     float4 CuttingSize;
+    float4 Pivot; // 0.5 0.0f
+};
+
+cbuffer FUVValue : register(b2)
+{
+    float4 PlusUVValue;
 };
 
 // 버텍스쉐이더를 다 만들었다.
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 {
-	// CPU에서 계산한 값을 쉐이더에게 넘기는 방법을 알아야 하는데
-	// 상수버퍼라고 부릅니다.
-	// 그중에서 가장 기본적인 것은 상수버퍼를 
-	
-	// float4x4 WVP;
-	
     VertexShaderOutPut OutPut;
-	// _Vertex 0.5, 0.5
+    
+    // SVPOSITION 초기화
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-	
-	// 00 10 => 0.3 0.3  0.7 0.3
-	// 01 11 => 0.3 0.7  0.7 0.7
-	
-	// CuttingPos 0.3 0.3
-	// CuttingSize 0.4 0.4 
-	
+
+    // UV 초기화
     OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
     OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
-	
-	
-	
+    OutPut.UV.z = 0.0f; // UV.z 초기화
+    OutPut.UV.w = 1.0f; // UV.w 초기화
+    OutPut.UV.x += PlusUVValue.x;
+    OutPut.UV.y += PlusUVValue.y;
+
+    // COLOR 초기화
     OutPut.COLOR = _Vertex.COLOR;
+
     return OutPut;
 }
+
+
+// 상수버퍼는 아무것도 세팅해주지 않으면 기본값이 0으로 채워집니다.
+cbuffer MatColor : register(b1)
+{
+    float4 Albedo;
+};
+
+
+struct OutTargetColor
+{
+    float4 Target0 : SV_Target0; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target1 : SV_Target1; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target2 : SV_Target2; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target3 : SV_Target3; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target4 : SV_Target4; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target5 : SV_Target5; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target6 : SV_Target6; // 뷰포트행렬이 곱해지는 포지션입니다.
+    float4 Target7 : SV_Target7; // 뷰포트행렬이 곱해지는 포지션입니다.
+};
+
 
 // 텍스처 1장과 
 Texture2D ImageTexture : register(t0);
@@ -98,4 +120,6 @@ float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 	// ImageTexture.Load({0,0));
     float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
     return Color;
-}
+	
+	// return float4(1.0f, 0.0f, 0.0f, 1.0f);
+};

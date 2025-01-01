@@ -88,7 +88,7 @@ private:
 		void EventCheck();
 
 		void KeyCheck(float _DeltaTime);
-		
+
 	};
 
 	ENGINEAPI static UEngineInput& GetInst();
@@ -173,7 +173,7 @@ public:
 		return GetInst().Keys[_KeyIndex].IsFree;
 	}
 
-	void BindAction(int _KeyIndex, KeyEvent _EventType,  std::function<void()> _Function);
+	void BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void()> _Function);
 
 protected:
 
@@ -182,7 +182,7 @@ private:
 	// static 값형 변수 선언하고 
 	// 지울필요 없다.
 	// static UEngineInput Inst;
-	
+
 	// 포인터형
 	// static UEngineInput* Inst;
 

@@ -61,7 +61,7 @@ CollisionFunctionInit Inst = CollisionFunctionInit();
 
 FVector FQuat::QuaternionToEulerDeg() const
 {
-	return QuaternionToEulerRad() * UEngineMath::PI2;
+	return QuaternionToEulerRad() * UEngineMath::R2D;
 }
 
 FVector FQuat::QuaternionToEulerRad() const
@@ -268,6 +268,11 @@ ENGINEAPI void FTransform::Decompose()
 	World.Decompose(WorldScale, WorldQuat, WorldLocation);
 
 	LocalWorld.Decompose(RelativeScale, RelativeQuat, RelativeLocation);
+
+	//Scale = RelativeScale;
+	//Quat = RelativeQuat;
+	//Rotation = RelativeQuat.QuaternionToEulerDeg();
+	//Location = RelativeLocation;
 }
 
 void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
@@ -290,13 +295,20 @@ void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 	{
 		World = CheckWorld;
 		LocalWorld = CheckWorld * ParentMat.InverseReturn();
+		// LocalWorld 나의 로컬값이라는 것.
 	}
 	else
 	{
 		//      크         자             이            공           부
 		LocalWorld = ScaleMat * RotationMat * LocationMat;
 		World = ScaleMat * RotationMat * LocationMat * RevolveMat * ParentMat;
+		// 나의 로컬은 알지만 부모가 아직 안곱해져서 부모를 굽해서 나의 월드 값을 찾아낸다.
+
+		// World.ArrVector[3]; => 
 	}
+
+	// 크자이 값을 역으로 다시 꺼내려고 하는 것.
+	Decompose();
 
 
 

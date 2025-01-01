@@ -8,6 +8,10 @@ class USceneComponent : public UActorComponent
 {
 	friend class AActor;
 
+	// Local 부모영향 받음
+	// World 안받음
+	// 아무것도 없음 안받음
+
 public:
 	// constrcuter destructer
 	USceneComponent();
@@ -25,7 +29,7 @@ public:
 		TransformUpdate();
 	}
 
-	void SetLocation(const FVector& _Value)
+	void SetWorldLocation(const FVector& _Value)
 	{
 		IsAbsolute = true;
 		Transform.Location = _Value;
@@ -67,6 +71,7 @@ public:
 		// 10 10 10
 		// 나는 무조건 이값에 해당하는 행렬이 되어야 한다는 뜻으로 
 		Transform.Scale = _Value;
+		Transform.Scale.W = 0.0f;
 		TransformUpdate();
 	}
 

@@ -6,13 +6,13 @@ class EngineDelegate
 {
 public:
 	// constrcuter destructer
-	EngineDelegate();
-	EngineDelegate(std::function<void()> _Function)
+	ENGINEAPI EngineDelegate();
+	ENGINEAPI EngineDelegate(std::function<void()> _Function)
 	{
 		Functions.push_back(_Function);
 	}
 
-	~EngineDelegate();
+	ENGINEAPI  ~EngineDelegate();
 
 	// delete Function
 	//EngineDelegate(const EngineDelegate& _Other) = delete;

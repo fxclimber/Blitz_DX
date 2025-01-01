@@ -50,7 +50,7 @@ private:
 	float Near = 1.0f;
 	float Far = 5000.0f;
 
-	FVector ProjectionScale = { 0.0f, 0.0f };
+	FVector ProjectionScale = {0.0f, 0.0f};
 
 	// 내가 바라보는 랜더러의 그룹은 카메라가 가진다.
 	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;

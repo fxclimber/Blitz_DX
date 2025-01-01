@@ -32,7 +32,7 @@ void UEngineResources::PushRes(std::shared_ptr<UEngineResources> _Res, const std
 
 	_Res->SetName(UpperName);
 	_Res->Path = _Path;
-	ResMap[_Info.data()].insert({ UpperName, _Res });
+	ResMap[_Info.data()].insert({UpperName, _Res });
 
 	return;
 }

@@ -24,7 +24,7 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 			IsFree = false;
 			IsUp = false;
 		}
-		else if(true == IsDown)
+		else if (true == IsDown)
 		{
 			// 한프레임을 지연시킨것.
 			FreeTime = 0.0f;
@@ -35,14 +35,15 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 		}
 
 		// B키가 눌렸다면
-	} else 
+	}
+	else
 	{
 		// 안누른 시간 누적되는데
 		if (true == IsFree)
 		{
 			FreeTime += _DeltaTime;
 		}
-		
+
 		// B키가 안눌렸다면
 		if (true == IsPress)
 		{

@@ -46,7 +46,7 @@ public:
 	// 다이렉트 x 디바이스가 되죠.
 	IDXGIAdapter* GetHighPerFormanceAdapter();
 
-	void Release();
+	ENGINEAPI void Release();
 
 	void RenderStart();
 
@@ -66,16 +66,18 @@ public:
 	{
 		return RTV.Get();
 	}
+
 protected:
 
 private:
+
 	// 그래픽디바이스
 	// 9에서는 그려라와 로드해라를 다했다.
 
 	// 11로 오면서 인터페이스를 2가지 부류로 분류했다.
 
 	// 절대 안지울 거니까.
-
+	
 	// 메모리 로드해라 관련
 	// 그래픽카드에한테 그림 저장좀 해달라고 할수 있습니다.
 	Microsoft::WRL::ComPtr<ID3D11Device> Device = nullptr;
@@ -93,6 +95,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 
 	//FVector ClearColor = FVector::BLUE;
+	ENGINEAPI void DefaultResourcesInit();
 
+	ENGINEAPI void MeshInit();
+	ENGINEAPI void BlendInit();
 };
 
