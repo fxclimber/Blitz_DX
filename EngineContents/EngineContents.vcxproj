@@ -147,6 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlitGameMode_Intro.h" />
+    <ClInclude Include="BlitzCore.h" />
+    <ClInclude Include="BlitzPlayerCube.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
@@ -155,6 +158,9 @@
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlitGameMode_Intro.cpp" />
+    <ClCompile Include="BlitzCore.cpp" />
+    <ClCompile Include="BlitzPlayerCube.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />

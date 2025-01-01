@@ -1,29 +1,26 @@
 #include "PreCompile.h"
-#include "ContentsCore.h"
+#include "BlitzCore.h"
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
-#include "TitleGameMode.h"
+#include "BlitGameMode_Intro.h"
+#include "BlitzPlayerCube.h"
 
 // #define은 그냥 무조건 복붙
-//CreateContentsCoreDefine(UContentsCore);
+CreateContentsCoreDefine(UBlitzCore);
 
-UContentsCore::UContentsCore()
+UBlitzCore::UBlitzCore()
 {
 }
 
-UContentsCore::~UContentsCore()
+UBlitzCore::~UBlitzCore()
 {
 }
 
-
-void UContentsCore::EngineStart(UEngineInitData& _Data)
+void UBlitzCore::EngineStart(UEngineInitData& _Data)
 {
-	// mainwindow는 아무나 건들면 안된다.
-	// 넌 컨텐츠잖아 엔진이 관리하는 윈도우라는게 존재하는지도 몰라야한다.
-
 	_Data.WindowPos = { 100, 100 };
-	_Data.WindowSize = { 1600, 900 };
+	_Data.WindowSize = { 900, 900 };
 
 	{
 		UEngineDirectory Dir;
@@ -57,17 +54,17 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
-	UEngineCore::OpenLevel("Titlelevel");
+	UEngineCore::CreateLevel<ABlitGameMode_Intro, ABlitzPlayerCube>("Intro");
+	UEngineCore::OpenLevel("Intro");
 
 }
 
-void UContentsCore::EngineTick(float _DeltaTime)
+void UBlitzCore::EngineTick(float _DeltaTime)
 {
 
 }
 
-void UContentsCore::EngineEnd()
+void UBlitzCore::EngineEnd()
 {
 
 }

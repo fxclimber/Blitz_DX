@@ -17,6 +17,15 @@
     <ClInclude Include="MyRenderer.h">
       <Filter>Jo</Filter>
     </ClInclude>
+    <ClInclude Include="BlitzCore.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
+    <ClInclude Include="BlitGameMode_Intro.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
+    <ClInclude Include="BlitzPlayerCube.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -34,6 +43,15 @@
     </ClCompile>
     <ClCompile Include="MyRenderer.cpp">
       <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzCore.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitGameMode_Intro.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzPlayerCube.cpp">
+      <Filter>Blitz</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
