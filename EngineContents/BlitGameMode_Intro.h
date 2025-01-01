@@ -13,6 +13,6 @@ protected:
 
 private:
 	std::shared_ptr<class ABlitzPlayerCube> PlayerCube;
-	std::shared_ptr<ACameraActor> Camera;
+	std::shared_ptr<class ACameraActor> Camera;
 };
 
