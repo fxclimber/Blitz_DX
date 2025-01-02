@@ -11,20 +11,20 @@
 class TestWindow : public UEngineGUIWindow
 {
 public:
-	void OnGUI() override
-	{
-		ImGui::Button("WindowButton");
-		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
-		ImGui::Text("test");
+	//void OnGUI() override
+	//{
+	//	ImGui::Button("WindowButton");
+	//	ImGui::SameLine(); // ÇÑ°£ ¶ç±â
+	//	ImGui::Text("test");
 
-	}
+	//}
 
 
 };
 
 ABlitGameMode_Intro::ABlitGameMode_Intro()
 {
-	UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 	{
 		PlayerCube = GetWorld()->SpawnActor<ABlitzPlayerCube>();
 		PlayerCube->SetActorRelativeScale3D({10,10,10});

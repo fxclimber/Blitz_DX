@@ -26,6 +26,9 @@
     <ClInclude Include="BlitzPlayerCube.h">
       <Filter>Blitz</Filter>
     </ClInclude>
+    <ClInclude Include="BlitzMeshGenerator.h">
+      <Filter>Blitz\R_D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -53,6 +56,9 @@
     <ClCompile Include="BlitzPlayerCube.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
+    <ClCompile Include="BlitzMeshGenerator.cpp">
+      <Filter>Blitz\R_D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -66,6 +72,9 @@
     </Filter>
     <Filter Include="Jo\GameMode">
       <UniqueIdentifier>{5b668b73-3ff9-4e73-b990-772422d08e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\R_D">
+      <UniqueIdentifier>{35dff143-5606-416b-a164-a712449d2a6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

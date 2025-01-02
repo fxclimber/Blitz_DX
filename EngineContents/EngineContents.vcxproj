@@ -24,6 +24,7 @@
     <ProjectGuid>{4705ac1b-4fe9-4c6a-b4a1-b8b1ab63d057}</ProjectGuid>
     <RootNamespace>EngineContents</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BlittzContents</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="BlitGameMode_Intro.h" />
     <ClInclude Include="BlitzCore.h" />
+    <ClInclude Include="BlitzMeshGenerator.h" />
     <ClInclude Include="BlitzPlayerCube.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="MyRenderer.h" />
@@ -160,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="BlitGameMode_Intro.cpp" />
     <ClCompile Include="BlitzCore.cpp" />
+    <ClCompile Include="BlitzMeshGenerator.cpp" />
     <ClCompile Include="BlitzPlayerCube.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
