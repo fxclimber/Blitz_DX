@@ -14,7 +14,7 @@ ATitleLogo::ATitleLogo()
 	// 랜더러를 만든다.
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	// LogoRenderer->SetSprite("Player.png");
-	LogoRenderer->SetTexture("BackGround.png");
+	// LogoRenderer->SetTexture("BackGround.png");
 
 	//LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
 	//{
@@ -70,6 +70,8 @@ void ATitleLogo::Tick(float _DeltaTime)
 
 	std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
 
+	UEngineCore::GetMainWindow().GetMousePos();
+
 	UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPos().ToString());
 
 
@@ -99,7 +101,7 @@ void ATitleLogo::Tick(float _DeltaTime)
 		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
 	}
 
-	LogoRenderer->AddUVPlusValue({ _DeltaTime, 0.0f, 0.0f, 1.0f });
+	// LogoRenderer->AddUVPlusValue({_DeltaTime, 0.0f, 0.0f, 1.0f});
 
 	if (UEngineInput::IsPress('E'))
 	{

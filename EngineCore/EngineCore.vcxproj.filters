@@ -84,9 +84,6 @@
     <ClInclude Include="DefaultSceneComponent.h">
       <Filter>Object\Component\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="RenderUnit.h">
-      <Filter>Object\Component\Render</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -102,6 +99,39 @@
     <ClInclude Include="EngineBlend.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="RenderUnit.h">
+      <Filter>Object\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineRasterizerState.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineShader.h">
+      <Filter>Resources\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineShaderResources.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertexShader.h">
+      <Filter>Resources\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePixelShader.h">
+      <Filter>Resources\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInputLayOutInfo.h" />
+    <ClInclude Include="EngineConstantBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDeviceBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineIndexBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertexBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMaterial.h" />
+    <ClInclude Include="EngineEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -175,9 +205,6 @@
     <ClCompile Include="DefaultSceneComponent.cpp">
       <Filter>Object\Component\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="RenderUnit.cpp">
-      <Filter>Object\Component\Render</Filter>
-    </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
@@ -191,6 +218,41 @@
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="EngineBlend.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderUnit.cpp">
+      <Filter>Object\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineRasterizerState.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineShader.cpp">
+      <Filter>Resources\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineShaderResources.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineVertexShader.cpp">
+      <Filter>Resources\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePixelShader.cpp">
+      <Filter>Resources\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineInputLayOutInfo.cpp" />
+    <ClCompile Include="EngineConstantBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDeviceBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineIndexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineVertexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMaterial.cpp" />
+    <ClCompile Include="EngineVertex.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,6 +313,12 @@
     </Filter>
     <Filter Include="GUI\IMGUI\Cpp">
       <UniqueIdentifier>{f962fe96-8076-4d29-bdff-bd07125781ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shader">
+      <UniqueIdentifier>{80069e76-54b3-4f1c-a353-852ebb0970d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{11f16af6-75d3-4466-ae4a-33427a2cf1f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

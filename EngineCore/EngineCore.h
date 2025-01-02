@@ -36,16 +36,19 @@ public:
 
 	ENGINEAPI static void OpenLevel(std::string_view _Name);
 
-	ENGINEAPI static UEngineWindow MainWindow;
 
 	ENGINEAPI static FVector GetScreenScale();
 
 	ENGINEAPI static UEngineGraphicDevice& GetDevice();
 
-	ENGINEAPI static UEngineGraphicDevice Device;
+	ENGINEAPI static UEngineWindow& GetMainWindow();
+
 protected:
 
 private:
+	ENGINEAPI static UEngineWindow MainWindow;
+
+	ENGINEAPI static UEngineGraphicDevice Device;
 	// 데이터영역에 있죠? => 언제 삭제될까요?
 	// 릭체크는 
 	static HMODULE ContentsDLL;

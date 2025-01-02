@@ -32,6 +32,17 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 ULevel::ULevel()
 {
 	SpawnCamera(0);
+
+	D3D11_VIEWPORT ViewPortInfo;
+
+	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
+	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
+	ViewPortInfo.TopLeftX = 0.0f;
+	ViewPortInfo.TopLeftY = 0.0f;
+	ViewPortInfo.MinDepth = 0.0f;
+	ViewPortInfo.MaxDepth = 1.0f;
+
+	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
 }
 
 ULevel::~ULevel()
@@ -58,7 +69,7 @@ void ULevel::Tick(float _DeltaTime)
 {
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
-	for ( ; StartIter != EndIter; )
+	for (; StartIter != EndIter; )
 	{
 		std::shared_ptr<AActor> CurActor = *StartIter;
 
@@ -88,7 +99,7 @@ void ULevel::Render(float _DeltaTime)
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
 		Camera.second->Tick(_DeltaTime);
-		Camera.second->CameraComponent->Render(_DeltaTime);
+		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 	}
 
 	if (true == UEngineWindow::IsApplicationOn())
@@ -96,9 +107,9 @@ void ULevel::Render(float _DeltaTime)
 		UEngineGUI::GUIRender();
 
 		// IMGUI가 랜더링을하면서 
-		
+
 	}
-	
+
 
 
 	UEngineCore::GetDevice().RenderEnd();
@@ -114,7 +125,7 @@ void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::share
 	}
 	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
 
-	Camera->CameraComponent->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
+	Camera->GetCameraComponent()->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
 }
 
 

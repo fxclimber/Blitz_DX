@@ -95,11 +95,13 @@ protected:
 
 
 private:
+	URenderUnit* MainUnit;
+
 	int CurIndex = 0;
 	float CurAnimationSpeed = 1.0f;
 
 	std::map<std::string, FrameAnimation> FrameAnimations;
-	FrameAnimation* CurAnimation = nullptr; 
+	FrameAnimation* CurAnimation = nullptr;
 	UEngineSprite* Sprite = nullptr;
 };
 

@@ -53,11 +53,13 @@ public:
 
 		// 내가 그냥 ActorComponent
 		// 내가 그냥 SceneComponent
-		if (std::is_base_of_v<UActorComponent, ComponentType>)
+		if (std::is_base_of_v<UActorComponent, ComponentType>
+			&& !std::is_base_of_v<USceneComponent, ComponentType>)
 		{
 			ActorComponentList.push_back(NewCom);
 		}
-		else
+		else if (!std::is_base_of_v<UActorComponent, ComponentType>
+			&& !std::is_base_of_v<USceneComponent, ComponentType>)
 		{
 			MSGASSERT("말도 안됨");
 		}

@@ -100,10 +100,10 @@ IDXGIAdapter* UEngineGraphicDevice::GetHighPerFormanceAdapter()
 
 void UEngineGraphicDevice::CreateDeviceAndContext()
 {
-	// 디바이스를 만들려면
-	// 디바이스 버전부터 정해줘야 합니다.
-	// 디바이스의 모드를 정해줘야 합니다
-    
+    // 디바이스를 만들려면
+    // 디바이스 버전부터 정해줘야 합니다.
+    // 디바이스의 모드를 정해줘야 합니다
+
     //IDXGIAdapter* pAdapter,
     // 그래픽장지 사양정보를 알려주세요.
     // nullptr 넣어주면 알아서 찾아.
@@ -128,17 +128,17 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
     iFlag = D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-    
+
     //D3D_DRIVER_TYPE DriverType,
     // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN 내가 넣어줬으니 그걸로 해
     // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE 니가 알아서 그래픽 카드 찾아줘.
     // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_SOFTWARE 그래픽카드 안쓸께.
     // 그래픽카드를 안쓰겠다.
-    
+
     //HMODULE Software, // 특정 단계용(랜더링 파이프라인의 일부를 내가 만든 코드로 교체하기 위한 dll 핸들)
-    
+
     //UINT Flags, // 옵션
-    
+
     //_In_reads_opt_(FeatureLevels) CONST D3D_FEATURE_LEVEL* pFeatureLevels,
     //UINT FeatureLevels,
     //UINT SDKVersion,
@@ -161,7 +161,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         0, // 내가 지정한 팩처레벨 개수
         D3D11_SDK_VERSION, // 현재 다이렉트x sdk 버전
         &Device,
-        &ResultLevel, 
+        &ResultLevel,
         &Context);
 
     if (nullptr == Device)
@@ -182,7 +182,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         return;
     }
 
-    if (ResultLevel != D3D_FEATURE_LEVEL_11_0 
+    if (ResultLevel != D3D_FEATURE_LEVEL_11_0
         && ResultLevel != D3D_FEATURE_LEVEL_11_1)
     {
         MSGASSERT("다이렉트 11버전을 지원하지 않는 그래픽카드 입니다.");
@@ -211,10 +211,10 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // 윈도우 크기로 만든게 관례에 가깝다.
     // 내가 원하는 크기로 만드는게 맞다.
     // 그런거 안끌어쓰고 직접 만드는 네이티브 다이렉트 x식 리소스는 이게 마지막
-	
+
     FVector Size = _Window.GetWindowSize();
 
-    DXGI_SWAP_CHAIN_DESC ScInfo = {0};
+    DXGI_SWAP_CHAIN_DESC ScInfo = { 0 };
 
     ScInfo.BufferCount = 2;
     ScInfo.BufferDesc.Width = Size.iX();
@@ -244,7 +244,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     ScInfo.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     // 진짜 기억안남 아예 
     ScInfo.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
- 
+
     // 용도
     // DXGI_USAGE_RENDER_TARGET_OUTPUT 화면에 그려지는 용도로 사용한다.
     //                   여기에 그릴수 있음                  쉐이더에서 데이터로도 사용할수 있음
@@ -296,7 +296,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
-        
+
     };
 
 

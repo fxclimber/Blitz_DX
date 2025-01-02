@@ -195,16 +195,28 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineConstantBuffer.h" />
     <ClInclude Include="EngineCore.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineDeviceBuffer.h" />
+    <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="EngineGraphicDevice.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineIndexBuffer.h" />
+    <ClInclude Include="EngineInputLayOutInfo.h" />
+    <ClInclude Include="EngineMaterial.h" />
+    <ClInclude Include="EnginePixelShader.h" />
+    <ClInclude Include="EngineRasterizerState.h" />
     <ClInclude Include="EngineResources.h" />
+    <ClInclude Include="EngineShader.h" />
+    <ClInclude Include="EngineShaderResources.h" />
     <ClInclude Include="EngineVertex.h" />
+    <ClInclude Include="EngineVertexBuffer.h" />
+    <ClInclude Include="EngineVertexShader.h" />
     <ClInclude Include="GameMode.h">
       <SubType>
       </SubType>
@@ -298,16 +310,28 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineConstantBuffer.cpp" />
     <ClCompile Include="EngineCore.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineDeviceBuffer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
+    <ClCompile Include="EngineIndexBuffer.cpp" />
+    <ClCompile Include="EngineInputLayOutInfo.cpp" />
+    <ClCompile Include="EngineMaterial.cpp" />
+    <ClCompile Include="EnginePixelShader.cpp" />
+    <ClCompile Include="EngineRasterizerState.cpp" />
     <ClCompile Include="EngineResources.cpp" />
+    <ClCompile Include="EngineShader.cpp" />
+    <ClCompile Include="EngineShaderResources.cpp" />
+    <ClCompile Include="EngineVertex.cpp" />
+    <ClCompile Include="EngineVertexBuffer.cpp" />
+    <ClCompile Include="EngineVertexShader.cpp" />
     <ClCompile Include="GameMode.cpp">
       <SubType>
       </SubType>

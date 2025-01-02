@@ -34,8 +34,8 @@ FVector ACameraActor::ScreenMousePosToWorldPosWithOutPos()
 
 FVector ACameraActor::ScreenMousePosToWorldPos()
 {
-	FVector Size = UEngineCore::MainWindow.GetWindowSize();
-	FVector MousePos = UEngineCore::MainWindow.GetMousePos();
+	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
+	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
 
 	float4x4 Mat;
 	Mat.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);

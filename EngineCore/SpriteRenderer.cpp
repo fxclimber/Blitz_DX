@@ -13,15 +13,16 @@ void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 {
 	Sprite = UEngineSprite::Find<UEngineSprite>(_Name).get();
 
-	URenderer::SetTexture(Sprite->GetTexture(_Index));
-	SetSpriteData(Sprite, _Index);
+	// URenderer::SetTexture(Sprite->GetTexture(_Index));
+	// SetSpriteData(Sprite, _Index);
 }
 
 void USpriteRenderer::BeginPlay()
 {
 	URenderer::BeginPlay();
+	CreateRenderUnit();
 	SetMesh("Rect");
-	SetBlend("AlphaBlend");
+	SetMaterial("SpriteMaterial");
 }
 
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)
@@ -42,8 +43,8 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	{
 		UEngineSprite* Sprite = CurAnimation->Sprite;
 
-		URenderer::SetTexture(Sprite->GetTexture(CurIndex));
-		URenderer::SetSpriteData(Sprite, CurIndex);
+		// URenderer::SetTexture(Sprite->GetTexture(CurIndex));
+		// URenderer::SetSpriteData(Sprite, CurIndex);
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);

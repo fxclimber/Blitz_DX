@@ -96,7 +96,7 @@ void ABlitzPlayerCube::Tick(float _DeltaTime)
 		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
 	}
 
-	TestSprite->AddUVPlusValue({ _DeltaTime, 0.0f, 0.0f, 1.0f });
+	//TestSprite->AddUVPlusValue({ _DeltaTime, 0.0f, 0.0f, 1.0f });
 
 	if (UEngineInput::IsPress('E'))
 	{

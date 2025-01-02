@@ -26,14 +26,14 @@ class ENGINEAPI  UEngineMath
 {
 public:
 	// 상수 정의
-	static const double DPI;
-	static const double DPI2;
+	static inline const double DPI = 3.14159265358979323846264338327950288419716939937510;
+	static inline const double DPI2 = DPI * 2.0;
 
-	static const float PI;
-	static const float PI2;
+	static inline const float PI = 3.14159265358979323846264f;
+	static inline const float PI2 = PI * 2.0f;
 
-	static const float D2R;
-	static const float R2D;
+	static inline const float D2R = UEngineMath::PI / 180.0f;
+	static inline const float R2D = 180.0f / UEngineMath::PI;
 
 	static float Sqrt(float _Value)
 	{
@@ -673,8 +673,6 @@ public:
 
 	void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
 	{
-		Identity();
-
 		Identity();
 		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
 	}
