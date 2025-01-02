@@ -78,8 +78,8 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
     OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
     OutPut.UV.z = 0.0f; // UV.z 초기화
     OutPut.UV.w = 1.0f; // UV.w 초기화
-    //OutPut.UV.x += PlusUVValue.x;
-    //OutPut.UV.y += PlusUVValue.y;
+    OutPut.UV.x += PlusUVValue.x;
+    OutPut.UV.y += PlusUVValue.y;
 
     // COLOR 초기화
     OutPut.COLOR = _Vertex.COLOR;
