@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "EngineGraphicDevice.h"
+#include "EngineTexture.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -204,6 +205,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
     // 디바이스가 초기화 되면 기본 리소스들을 만들기 시작할 것이다.
     // Box Rect Default 레스터라이저
     DefaultResourcesInit();
+
 }
 
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
@@ -213,6 +215,26 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // 그런거 안끌어쓰고 직접 만드는 네이티브 다이렉트 x식 리소스는 이게 마지막
 
     FVector Size = _Window.GetWindowSize();
+
+    D3D11_TEXTURE2D_DESC Desc = { 0 };
+    Desc.ArraySize = 1;
+    Desc.Width = Size.iX();
+    Desc.Height = Size.iY();
+    // 3바이트 실수 1바이트 정수를 스탠실 값이라고 합니다.
+    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+    Desc.SampleDesc.Count = 1;
+    Desc.SampleDesc.Quality = 0;
+
+    Desc.MipLevels = 1;
+    Desc.Usage = D3D11_USAGE_DEFAULT;
+    Desc.CPUAccessFlags = 0;
+    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
+
+    DepthTex = std::make_shared<UEngineTexture>();
+
+    DepthTex->ResCreate(Desc);
+
 
     DXGI_SWAP_CHAIN_DESC ScInfo = { 0 };
 

@@ -5,8 +5,8 @@ class UEngineInputLayOutInfo
 {
 public:
 	// constrcuter destructer
-	UEngineInputLayOutInfo();
-	~UEngineInputLayOutInfo();
+	ENGINEAPI UEngineInputLayOutInfo();
+	ENGINEAPI ~UEngineInputLayOutInfo();
 
 	// delete Function
 	UEngineInputLayOutInfo(const UEngineInputLayOutInfo& _Other) = delete;
@@ -15,7 +15,7 @@ public:
 	UEngineInputLayOutInfo& operator=(UEngineInputLayOutInfo&& _Other) noexcept = delete;
 
 
-	void AddInputLayout(
+	ENGINEAPI void AddInputLayout(
 		LPCSTR _SemanticName, // 내가 포지션이다 내가 컬러다. "POSITION"
 		DXGI_FORMAT _Format, // 내가 n바이트 짜리 정보다 자료형
 		D3D11_INPUT_CLASSIFICATION _InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA, // 버텍스 데이터가 인스턴싱 데이터다 라는걸 표현
@@ -25,7 +25,7 @@ public:
 		UINT _SemanticIndex = 0
 	);
 
-	UINT FormatSize(DXGI_FORMAT _Value);
+	ENGINEAPI UINT FormatSize(DXGI_FORMAT _Value);
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> InputLayOutData;
 

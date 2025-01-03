@@ -3,6 +3,7 @@
 
 UEnginePixelShader::UEnginePixelShader()
 {
+	ShaderType = EShaderType::PS;
 }
 
 UEnginePixelShader::~UEnginePixelShader()

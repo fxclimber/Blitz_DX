@@ -7,14 +7,53 @@
 #include "EngineBlend.h"
 #include "EngineShader.h"
 #include "EngineMaterial.h"
+#include "EngineTexture.h"
 
 void UEngineGraphicDevice::DefaultResourcesInit()
 {
-	ShaderInit();
+	TextureInit();
 	MeshInit();
 	BlendInit();
 	RasterizerStateInit();
+	ShaderInit();
 	MaterialInit();
+}
+
+void UEngineGraphicDevice::TextureInit()
+{
+
+	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT };
+	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // 0~1사이만 유효
+	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // y
+	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP; // z // 3중 
+
+	SampInfo.BorderColor[0] = 0.0f;
+	SampInfo.BorderColor[1] = 0.0f;
+	SampInfo.BorderColor[2] = 0.0f;
+	SampInfo.BorderColor[3] = 0.0f;
+
+	// SampInfo.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	// Lod라고 불리는 것은 z값이 얼마나 멀어지면 얼마나 대충 색깔 빼올거냐. 
+	// SampInfo.MaxLOD = 0.0f;
+	// SampInfo.MinLOD = 0.0f;
+
+	UEngineSampler::Create("WRAPSampler", SampInfo);
+
+
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("EngineShader"))
+		{
+			MSGASSERT("EngineShader 폴더를 찾지 못했습니다.");
+			return;
+		}
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
+		for (size_t i = 0; i < ImageFiles.size(); i++)
+		{
+			std::string FilePath = ImageFiles[i].GetPathToString();
+			UEngineTexture::Load(FilePath);
+		}
+	}
 }
 
 void UEngineGraphicDevice::ShaderInit()
@@ -127,7 +166,5 @@ void UEngineGraphicDevice::MaterialInit()
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("SpriteMaterial");
 		Mat->SetVertexShader("EngineSpriteShader.fx");
 		Mat->SetPixelShader("EngineSpriteShader.fx");
-		Mat->SetRasterizerState("EngineBase");
-		Mat->SetBlend("AlphaBlend");
 	}
 }

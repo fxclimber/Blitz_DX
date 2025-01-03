@@ -5,11 +5,17 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include "MyRenderer.h"
+#include "BlitzRenderer_v01.h"
 
 ABlitzPlayerCube::ABlitzPlayerCube()
 {
+	// root 역할의 디폴트컴포넌트 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
+
+	Renderer = CreateDefaultSubObject<BlitzRenderer_v01>();
+	Renderer->SetupAttachment(RootComponent);
+
 
 	// 스프라이트 렌더러 함수들 샘플 
 	TestSprite = CreateDefaultSubObject<USpriteRenderer>();
@@ -20,9 +26,9 @@ ABlitzPlayerCube::ABlitzPlayerCube()
 
 	{
 		//{// 아틀라스에서 애니 
-			TestSprite->SetSprite("Player.png",2);
-			TestSprite->CreateAnimation("Idle", "Player.png", 0, 70, 0.1f);
-			TestSprite->ChangeAnimation("Idle");
+			//TestSprite->SetSprite("Player.png",2);
+			//TestSprite->CreateAnimation("Idle", "Player.png", 0, 70, 0.1f);
+			//TestSprite->ChangeAnimation("Idle");
 		//}
 
 		{ // 폴더째 스프라이트 애니 

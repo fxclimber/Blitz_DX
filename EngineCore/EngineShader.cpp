@@ -18,7 +18,7 @@ void UEngineShader::ReflectionCompile(UEngineFile& _File)
 
 	_File.FileOpen("rt");
 	std::string ShaderCode = _File.GetAllFileText();
-	
+
 
 	{
 		size_t EntryIndex = ShaderCode.find("_VS(");
@@ -33,7 +33,7 @@ void UEngineShader::ReflectionCompile(UEngineFile& _File)
 				EntryName += "_VS";
 
 				UEngineVertexShader::Load(_File.GetPathToString(), EntryName);
-				
+
 			}
 		}
 	}
@@ -117,6 +117,9 @@ void UEngineShader::ShaderResCheck()
 
 			// 상수버퍼에 세팅을 위해서 각자가 가져야할 값들을 저장하기 위한 클래스를
 			UEngineConstantBufferRes NewRes;
+			NewRes.ShaderType = ShaderType;
+			NewRes.Name = UpperName;
+			NewRes.BindIndex = ResDesc.BindPoint;
 			NewRes.Res = Buffer;
 			NewRes.BufferSize = BufferInfo.Size;
 
@@ -125,13 +128,29 @@ void UEngineShader::ShaderResCheck()
 		}
 		case D3D_SIT_TEXTURE:
 		{
-			int a = 0;
+			std::shared_ptr<UEngineTexture> Res = UEngineTexture::Find<UEngineTexture>("NSBase.png");
+
+			UEngineTextureRes NewRes;
+			NewRes.ShaderType = ShaderType;
+			NewRes.Name = UpperName;
+			NewRes.BindIndex = ResDesc.BindPoint;
+			NewRes.Res = Res;
+
+			ShaderResources.CreateTextureRes(UpperName, NewRes);
 
 			break;
 		}
 		case D3D_SIT_SAMPLER:
 		{
-			int a = 0;
+			std::shared_ptr<UEngineSampler> Res = UEngineSampler::Find<UEngineSampler>("WRapSampler");
+
+			UEngineSamplerRes NewRes;
+			NewRes.ShaderType = ShaderType;
+			NewRes.Name = UpperName;
+			NewRes.BindIndex = ResDesc.BindPoint;
+			NewRes.Res = Res;
+
+			ShaderResources.CreateSamplerRes(UpperName, NewRes);
 
 			break;
 		}

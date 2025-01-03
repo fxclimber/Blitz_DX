@@ -3,11 +3,6 @@
 #include "EngineSprite.h"
 #include "RenderUnit.h"
 
-struct FUVValue
-{
-	float4 PlusUVValue;
-};
-
 // 설명 : 어떤 랜더링이든 할수 잇는 구조로 만들겠다.
 // 랜더링이란 랜더러만 하는게 아닙니다. 3D
 class URenderer : public USceneComponent
@@ -28,13 +23,10 @@ public:
 	ENGINEAPI void SetOrder(int _Order);
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
-
-	URenderUnit& GetRenderUnit(UINT  _Index);
-
-	URenderUnit& CreateRenderUnit();
-
-	void SetMesh(std::string_view _Name, UINT _Index = 0);
-	void SetMaterial(std::string_view _Name, UINT _Index = 0);
+	ENGINEAPI URenderUnit& GetRenderUnit(UINT  _Index = 0);
+	ENGINEAPI URenderUnit& CreateRenderUnit();
+	ENGINEAPI void SetMesh(std::string_view _Name, UINT _Index = 0);
+	ENGINEAPI void SetMaterial(std::string_view _Name, UINT _Index = 0);
 
 private:
 

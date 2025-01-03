@@ -1,5 +1,6 @@
 #pragma once
 #include "EngineResources.h"
+#include "EngineEnums.h"
 
 #include "ThirdParty/DirectxTex/Inc/DirectXTex.h"
 
@@ -38,6 +39,10 @@ public:
 		return Size;
 	}
 
+	void Setting(EShaderType _Type, UINT _BindIndex);
+
+	ENGINEAPI void ResCreate(const D3D11_TEXTURE2D_DESC& _Value);
+
 protected:
 
 private:
@@ -48,4 +53,7 @@ private:
 	DirectX::ScratchImage ImageData;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture2D = nullptr; // 로드한 텍스처
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr; // 텍스처를 쉐이더 세팅할수 있는권한
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr; // 텍스처를 쉐이더 세팅할수 있는권한
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DSV = nullptr; // 텍스처를 쉐이더 세팅할수 있는권한
+	D3D11_TEXTURE2D_DESC Desc;
 };

@@ -152,7 +152,9 @@
     <ClInclude Include="BlitzCore.h" />
     <ClInclude Include="BlitzMeshGenerator.h" />
     <ClInclude Include="BlitzPlayerCube.h" />
+    <ClInclude Include="BlitzRenderer_v01.h" />
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="MyCustomRenderer.h" />
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
@@ -164,7 +166,11 @@
     <ClCompile Include="BlitzCore.cpp" />
     <ClCompile Include="BlitzMeshGenerator.cpp" />
     <ClCompile Include="BlitzPlayerCube.cpp" />
+    <ClCompile Include="BlitzRenderer_v01.cpp" />
+    <ClCompile Include="BlitzResources.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="MyCustomRenderer.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp">

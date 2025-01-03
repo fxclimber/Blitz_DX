@@ -21,7 +21,7 @@ public:
 	UEngineShader& operator=(const UEngineShader& _Other) = delete;
 	UEngineShader& operator=(UEngineShader&& _Other) noexcept = delete;
 
-	static void ReflectionCompile(UEngineFile& _File);
+	ENGINEAPI static void ReflectionCompile(UEngineFile& _File);
 
 	UEngineShaderResources ShaderResources;
 
@@ -31,6 +31,7 @@ public:
 	};
 
 protected:
+	EShaderType ShaderType = EShaderType::MAX;
 	UINT VersionHigh = 5;
 	UINT VersionLow = 0;
 	Microsoft::WRL::ComPtr<ID3DBlob> ShaderCodeBlob = nullptr;

@@ -1,8 +1,6 @@
 #include "PreCompile.h"
 #include "EngineVertex.h"
 
-UEngineInputLayOutInfo FEngineVertex::Info;
-
 class EngineVertexInit
 {
 public:

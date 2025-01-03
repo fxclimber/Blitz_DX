@@ -13,6 +13,7 @@ protected:
 	void EngineEnd();
 
 private:
+	void MyGSetting();
 
 };
 

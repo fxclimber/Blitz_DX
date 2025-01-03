@@ -29,6 +29,12 @@
     <ClInclude Include="BlitzMeshGenerator.h">
       <Filter>Blitz\R_D</Filter>
     </ClInclude>
+    <ClInclude Include="MyCustomRenderer.h">
+      <Filter>Jo\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="BlitzRenderer_v01.h">
+      <Filter>Blitz\R_D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -59,6 +65,18 @@
     <ClCompile Include="BlitzMeshGenerator.cpp">
       <Filter>Blitz\R_D</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsCore_Resources.cpp">
+      <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCustomRenderer.cpp">
+      <Filter>Jo\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzRenderer_v01.cpp">
+      <Filter>Blitz\R_D</Filter>
+    </ClCompile>
+    <ClCompile Include="BlitzResources.cpp">
+      <Filter>Blitz\R_D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -75,6 +93,9 @@
     </Filter>
     <Filter Include="Blitz\R_D">
       <UniqueIdentifier>{35dff143-5606-416b-a164-a712449d2a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jo\Render">
+      <UniqueIdentifier>{a9de3d83-93ba-4562-a599-eaa8e979055e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

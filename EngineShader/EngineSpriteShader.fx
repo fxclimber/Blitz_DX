@@ -77,23 +77,16 @@ VertexShaderOutPut VertexToWorld_VS(EngineVertex _Vertex)
     VertexShaderOutPut OutPut;
 	
 	
-	// Pivot.x = '0.5f' => 0.0f
-	// Pivot.y = '0.0f' => 0.5f
-	
-	// Pivot.x = '0.5f' => 0.0f
-	// Pivot.y = '0.5f' => 0.0f
-	
-	//                     1.0f - 0.5           
     _Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
     _Vertex.POSITION.y += (1.0f - Pivot.y) - 0.5f;
 	
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
 	
+    OutPut.UV = _Vertex.UV;
     OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
     OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
     OutPut.UV.x += PlusUVValue.x;
     OutPut.UV.y += PlusUVValue.y;
-	
 	
     OutPut.COLOR = _Vertex.COLOR;
     return OutPut;
@@ -123,17 +116,16 @@ SamplerState ImageSampler : register(s0);
 // ex) 픽셀쉐이더에서는 0번 을 쓸수 있다.
 cbuffer ResultColor : register(b0)
 {
-    float4 Albedo;
+    float4 PlusColor;
+    float4 MulColor;
 };
-
 
 // 이미지를 샘플링해서 이미지를 보이게 만들고
 float4 PixelToWorld_PS(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	
-	// ImageTexture.Load({0,0));
-	//float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
-	//return Color;
-    return Albedo;
-	// return float4(1.0f, 0.0f, 0.0f, 1.0f);
+    float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+    Color += PlusColor;
+    Color *= MulColor;
+    return Color;
 };

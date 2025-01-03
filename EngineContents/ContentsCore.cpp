@@ -3,6 +3,8 @@
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
+#include <EngineCore/EngineShader.h>
+#include <EngineCore/EngineMaterial.h>
 #include "TitleGameMode.h"
 
 // #define은 그냥 무조건 복붙
@@ -24,6 +26,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	_Data.WindowPos = { 100, 100 };
 	_Data.WindowSize = { 1600, 900 };
+
+	MyGSetting();
+
 
 	{
 		UEngineDirectory Dir;

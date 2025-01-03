@@ -1,5 +1,7 @@
 #include "PreCompile.h"
 #include "RenderUnit.h"
+#include "EngineEnums.h"
+#include "Renderer.h"
 
 URenderUnit::URenderUnit()
 {
@@ -10,22 +12,7 @@ URenderUnit::~URenderUnit()
 }
 
 
-//	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT };
-//	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // 0~1사이만 유효
-//	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP; // y
-//	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP; // z // 3중 
-//
-//	SampInfo.BorderColor[0] = 0.0f;
-//	SampInfo.BorderColor[1] = 0.0f;
-//	SampInfo.BorderColor[2] = 0.0f;
-//	SampInfo.BorderColor[3] = 0.0f;
-//
-//	// SampInfo.ComparisonFunc = D3D11_COMPARISON_NEVER;
-//	// Lod라고 불리는 것은 z값이 얼마나 멀어지면 얼마나 대충 색깔 빼올거냐. 
-//	// SampInfo.MaxLOD = 0.0f;
-//	// SampInfo.MinLOD = 0.0f;
-//
-//	UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
+
 //}
 
 //void URenderer::ShaderResSetting()
@@ -462,6 +449,94 @@ URenderUnit::~URenderUnit()
 //	}
 //}
 
+void URenderUnit::MaterialResourcesCheck()
+{
+	if (nullptr == Material)
+	{
+		MSGASSERT("존재하지 않는 머티리얼의 리소스를 체크할 수 없습니다.");
+		return;
+	}
+
+	{
+		UEngineShaderResources& Vs = Material->GetVertexShader()->ShaderResources;
+		Resources[EShaderType::VS] = Material->GetVertexShader()->ShaderResources;
+	}
+
+	{
+		UEngineShaderResources& Ps = Material->GetPixelShader()->ShaderResources;
+		Resources[EShaderType::PS] = Material->GetPixelShader()->ShaderResources;
+	}
+
+	if (nullptr != ParentRenderer)
+	{
+		for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+		{
+			if (false == Resources.contains(i))
+			{
+				continue;
+			}
+
+			FTransform& Ref = ParentRenderer->GetTransformRef();
+			Resources[i].ConstantBufferLinkData("FTransform", Ref);
+		}
+
+	}
+}
+
+void URenderUnit::ConstantBufferLinkData(std::string_view _Name, void* _Data)
+{
+	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+	{
+		if (false == Resources.contains(i))
+		{
+			continue;
+		}
+
+		if (false == Resources[i].IsConstantBuffer(_Name))
+		{
+			continue;
+		}
+
+		Resources[i].ConstantBufferLinkData(_Name, _Data);
+	}
+}
+
+void URenderUnit::SetTexture(std::string_view _Name, std::string_view _ResName)
+{
+	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+	{
+		if (false == Resources.contains(i))
+		{
+			continue;
+		}
+
+		if (false == Resources[i].IsTexture(_Name))
+		{
+			continue;
+		}
+
+		Resources[i].TextureSetting(_Name, _ResName);
+	}
+}
+
+void URenderUnit::SetSampler(std::string_view _Name, std::string_view _ResName)
+{
+	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+	{
+		if (false == Resources.contains(i))
+		{
+			continue;
+		}
+
+		if (false == Resources[i].IsSampler(_Name))
+		{
+			continue;
+		}
+
+		Resources[i].SamplerSetting(_Name, _ResName);
+	}
+}
+
 void URenderUnit::SetMesh(std::string_view _Name)
 {
 	Mesh = UMesh::Find<UMesh>(_Name);
@@ -486,6 +561,10 @@ void URenderUnit::SetMaterial(std::string_view _Name)
 		MSGASSERT("존재하지 않는 머티리얼을를 세팅하려고 했습니다.");
 	}
 
+	MaterialResourcesCheck();
+
+	// UEngineConstantBufferRes Res;
+
 	if (nullptr != Mesh)
 	{
 		InputLayOutCreate();
@@ -503,6 +582,18 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 
 	//	ShaderResSetting();
 
+	//for (std::pair<EShaderType, UEngineShaderResources>& ShaderRes : Resources)
+	//{
+	//	UEngineShaderResources& Res = ShaderRes.second;
+	//	Res.Setting();
+	//}
+
+
+	for (std::pair<const EShaderType, UEngineShaderResources>& Pair : Resources)
+	{
+		Pair.second.Setting();
+	}
+
 	//	InputAssembler1Setting();
 	Mesh->GetVertexBuffer()->Setting();
 
@@ -515,8 +606,6 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 
 	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
 
-
-
 	//	RasterizerSetting();
 	Material->GetRasterizerState()->Setting();
 
@@ -524,14 +613,14 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 	Material->GetPixelShader()->Setting();
 
 	//	OutPutMergeSetting();
+	// 랜더타겟이라는 것을 바뀔겁니다.
 	Material->GetBlend()->Setting();
 	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
 	ArrRtv[0] = RTV; // SV_Target0
 	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 
-	// Draw call
-	// UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
+	UEngineCore::GetDevice().GetContext()->DrawIndexed(Mesh->GetIndexBuffer()->GetIndexCount(), 0, 0);
 }
 
 void URenderUnit::InputLayOutCreate()

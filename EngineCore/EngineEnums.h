@@ -18,4 +18,5 @@ enum class EShaderType : int8
 	GS,
 	PS,
 	CS,
+	MAX
 };

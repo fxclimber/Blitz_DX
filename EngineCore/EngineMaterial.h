@@ -18,8 +18,7 @@ public:
 	UEngineMaterial& operator=(const UEngineMaterial& _Other) = delete;
 	UEngineMaterial& operator=(UEngineMaterial&& _Other) noexcept = delete;
 
-	static std::shared_ptr<UEngineMaterial> Create(std::string_view _Name);
-
+	ENGINEAPI static std::shared_ptr<UEngineMaterial> Create(std::string_view _Name);
 
 	ENGINEAPI std::shared_ptr<UEngineVertexShader> GetVertexShader()
 	{
@@ -57,6 +56,6 @@ private:
 
 	D3D11_PRIMITIVE_TOPOLOGY TOPOLOGY = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	// UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
-	
+
 };
 

@@ -22,6 +22,7 @@ void UBlitzCore::EngineStart(UEngineInitData& _Data)
 	_Data.WindowPos = { 100, 100 };
 	_Data.WindowSize = { 900, 900 };
 
+	
 	{
 		UEngineDirectory Dir;
 		if (false == Dir.MoveParentToDirectory("ContentsResources"))
@@ -68,3 +69,4 @@ void UBlitzCore::EngineEnd()
 {
 
 }
+

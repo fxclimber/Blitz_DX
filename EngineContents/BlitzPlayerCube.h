@@ -4,7 +4,6 @@
 class ABlitzPlayerCube : public APawn
 {
 public:
-	// constrcuter destructer
 	ABlitzPlayerCube();
 	~ABlitzPlayerCube();
 
@@ -13,6 +12,7 @@ public:
 		return TestSprite;
 	}
 
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -20,5 +20,7 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> TestSprite;
 	std::shared_ptr<class USpriteRenderer> TestSpriteChild;
+
+	std::shared_ptr<class URenderer> Renderer;
 };
 

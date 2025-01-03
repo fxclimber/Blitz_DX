@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineCore/SpriteRenderer.h>
 
 // Ό³Έν :
 class ATitleLogo : public AActor
@@ -27,5 +28,9 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> LogoRenderer;
 	std::shared_ptr<class USpriteRenderer> Child;
+
+	std::shared_ptr<class URenderer> Renderer;
+
+
 };
 

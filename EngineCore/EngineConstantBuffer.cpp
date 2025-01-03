@@ -3,6 +3,11 @@
 
 std::map<int, std::map<std::string, std::shared_ptr<UEngineConstantBuffer>>> UEngineConstantBuffer::BufferMap;
 
+void UEngineConstantBuffer::Release()
+{
+	BufferMap.clear();
+}
+
 UEngineConstantBuffer::UEngineConstantBuffer()
 {
 }
@@ -13,6 +18,11 @@ UEngineConstantBuffer::~UEngineConstantBuffer()
 
 std::shared_ptr<UEngineConstantBuffer> UEngineConstantBuffer::CreateOrFind(UINT _Byte, const std::string_view& _Name)
 {
+	if (0 == _Byte)
+	{
+		MSGASSERT("0바이트 상수버퍼가 만들어지려고 했습니다.");
+	}
+
 	std::string UpperName = UEngineString::ToUpper(_Name);
 
 	if (true == BufferMap.contains(_Byte))
@@ -34,7 +44,6 @@ std::shared_ptr<UEngineConstantBuffer> UEngineConstantBuffer::CreateOrFind(UINT 
 void UEngineConstantBuffer::ResCreate(UINT _Byte)
 {
 	{
-		D3D11_BUFFER_DESC BufferInfo = { 0 };
 		BufferInfo.ByteWidth = _Byte;
 		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
@@ -67,13 +76,29 @@ void UEngineConstantBuffer::ChangeData(void* _Data, UINT _Size)
 	{
 		MSGASSERT("그래픽카드가 수정을 거부했습니다.");
 	}
-	memcpy_s(Data.pData, sizeof(FTransform), _Data, sizeof(FTransform));
+	memcpy_s(Data.pData, BufferInfo.ByteWidth, _Data, BufferInfo.ByteWidth);
 	UEngineCore::GetDevice().GetContext()->Unmap(Buffer.Get(), 0);
 }
 
-void UEngineConstantBuffer::Setting()
+void UEngineConstantBuffer::Setting(EShaderType _Type, UINT _BindIndex)
 {
 	// 같은 상수버퍼를 
-	ID3D11Buffer* ArrPtr[16] = { Buffer.Get() };
-	UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
+	ID3D11Buffer* ArrPtr[1] = { Buffer.Get() };
+
+	switch (_Type)
+	{
+	case EShaderType::VS:
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::PS:
+		UEngineCore::GetDevice().GetContext()->PSSetConstantBuffers(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::HS:
+	case EShaderType::DS:
+	case EShaderType::GS:
+	case EShaderType::CS:
+	default:
+		MSGASSERT("아직 존재하지 않는 쉐이더에 세팅하려고 했습니다.");
+		break;
+	}
 }

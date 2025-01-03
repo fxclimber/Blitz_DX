@@ -3,6 +3,8 @@
 
 UEngineMaterial::UEngineMaterial()
 {
+	SetRasterizerState("EngineBase");
+	SetBlend("AlphaBlend");
 }
 
 UEngineMaterial::~UEngineMaterial()
@@ -17,7 +19,7 @@ void UEngineMaterial::SetVertexShader(std::string_view _Name)
 
 	if (nullptr == VertexShader)
 	{
-		MSGASSERT("존재하지 않는 버텍스 쉐이더를 생성하려고 했습니다.");
+		MSGASSERT("존재하지 않는 버텍스 쉐이더를 세팅하려고.");
 	}
 }
 

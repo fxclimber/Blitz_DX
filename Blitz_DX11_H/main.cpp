@@ -20,6 +20,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE _hInstance,
 	_In_ int       _nCmdShow)
 {
 	// 동적 연결을 위한 "EngineContents" dll이름을 넣어줘야 한다.
-	UEngineCore::EngineStart(_hInstance, "EngineContents.dll");
+	UEngineCore::EngineStart(_hInstance, "BlittzContents.dll");
 	return 0;
 }
