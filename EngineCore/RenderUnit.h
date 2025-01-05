@@ -54,6 +54,6 @@ private:
 	// 자신만의 리소스를 가지고 있습니다.
 	std::map<EShaderType, UEngineShaderResources> Resources;
 
-	void InputLayOutCreate();
+	ENGINEAPI void InputLayOutCreate();
 };
 

@@ -1,19 +1,19 @@
 #pragma once
 #include <EngineCore/IContentsCore.h>
 
-class UBlitzCore : public IContentsCore
+class UBzCore : public IContentsCore
 {
 public:
-	UBlitzCore();
-	~UBlitzCore();
+	UBzCore();
+	~UBzCore();
 
 protected:
 	void EngineStart(UEngineInitData& _Data);
 	void EngineTick(float _DeltaTime);
 	void EngineEnd();
+	void ResourceSetting();
 
 private:
-	void MyGSetting();
 
 };
 

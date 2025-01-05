@@ -17,23 +17,20 @@
     <ClInclude Include="MyRenderer.h">
       <Filter>Jo</Filter>
     </ClInclude>
-    <ClInclude Include="BlitzCore.h">
+    <ClInclude Include="BzCore.h">
       <Filter>Blitz</Filter>
     </ClInclude>
-    <ClInclude Include="BlitGameMode_Intro.h">
+    <ClInclude Include="BzGameMode_Intro.h">
       <Filter>Blitz</Filter>
     </ClInclude>
-    <ClInclude Include="BlitzPlayerCube.h">
+    <ClInclude Include="BzPlayerCube.h">
       <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BlitzMeshGenerator.h">
-      <Filter>Blitz\R_D</Filter>
     </ClInclude>
     <ClInclude Include="MyCustomRenderer.h">
       <Filter>Jo\Render</Filter>
     </ClInclude>
-    <ClInclude Include="BlitzRenderer_v01.h">
-      <Filter>Blitz\R_D</Filter>
+    <ClInclude Include="BzRendererDefault.h">
+      <Filter>Blitz</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,17 +50,14 @@
     <ClCompile Include="MyRenderer.cpp">
       <Filter>Jo</Filter>
     </ClCompile>
-    <ClCompile Include="BlitzCore.cpp">
+    <ClCompile Include="BzCore.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
-    <ClCompile Include="BlitGameMode_Intro.cpp">
+    <ClCompile Include="BzGameMode_Intro.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
-    <ClCompile Include="BlitzPlayerCube.cpp">
+    <ClCompile Include="BzPlayerCube.cpp">
       <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BlitzMeshGenerator.cpp">
-      <Filter>Blitz\R_D</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore_Resources.cpp">
       <Filter>Jo</Filter>
@@ -71,11 +65,11 @@
     <ClCompile Include="MyCustomRenderer.cpp">
       <Filter>Jo\Render</Filter>
     </ClCompile>
-    <ClCompile Include="BlitzRenderer_v01.cpp">
-      <Filter>Blitz\R_D</Filter>
+    <ClCompile Include="BzResourceManager.cpp">
+      <Filter>Blitz</Filter>
     </ClCompile>
-    <ClCompile Include="BlitzResources.cpp">
-      <Filter>Blitz\R_D</Filter>
+    <ClCompile Include="BzRendererDefault.cpp">
+      <Filter>Blitz</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,9 +84,6 @@
     </Filter>
     <Filter Include="Jo\GameMode">
       <UniqueIdentifier>{5b668b73-3ff9-4e73-b990-772422d08e7a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Blitz\R_D">
-      <UniqueIdentifier>{35dff143-5606-416b-a164-a712449d2a6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Jo\Render">
       <UniqueIdentifier>{a9de3d83-93ba-4562-a599-eaa8e979055e}</UniqueIdentifier>

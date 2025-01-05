@@ -33,7 +33,7 @@ public:
 		bool Loop = true;
 		bool IsEnd = false;
 
-		void Reset()
+		ENGINEAPI void Reset()
 		{
 			CurIndex = 0;
 			CurTime = 0;

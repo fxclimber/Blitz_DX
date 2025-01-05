@@ -23,12 +23,12 @@ public:
 
 	ENGINEAPI static std::shared_ptr<UMesh> Create(std::string_view _Name, std::string_view _VertexBuffer, std::string_view _IndexBuffer);
 
-	std::shared_ptr<UEngineVertexBuffer> GetVertexBuffer()
+	ENGINEAPI std::shared_ptr<UEngineVertexBuffer> GetVertexBuffer()
 	{
 		return VertexBuffer;
 	}
 
-	std::shared_ptr<UEngineIndexBuffer> GetIndexBuffer()
+	ENGINEAPI std::shared_ptr<UEngineIndexBuffer> GetIndexBuffer()
 	{
 		return IndexBuffer;
 	}

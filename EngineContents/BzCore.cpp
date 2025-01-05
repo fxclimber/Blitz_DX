@@ -1,23 +1,23 @@
 #include "PreCompile.h"
-#include "BlitzCore.h"
+#include "BzCore.h"
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
-#include "BlitGameMode_Intro.h"
-#include "BlitzPlayerCube.h"
+#include "BzGameMode_Intro.h"
+#include "BzPlayerCube.h"
 
 // #define은 그냥 무조건 복붙
-CreateContentsCoreDefine(UBlitzCore);
+CreateContentsCoreDefine(UBzCore);
 
-UBlitzCore::UBlitzCore()
+UBzCore::UBzCore()
 {
 }
 
-UBlitzCore::~UBlitzCore()
+UBzCore::~UBzCore()
 {
 }
 
-void UBlitzCore::EngineStart(UEngineInitData& _Data)
+void UBzCore::EngineStart(UEngineInitData& _Data)
 {
 	_Data.WindowPos = { 100, 100 };
 	_Data.WindowSize = { 900, 900 };
@@ -55,17 +55,17 @@ void UBlitzCore::EngineStart(UEngineInitData& _Data)
 
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ABlitGameMode_Intro, APawn>("Intro");
+	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Intro");
 	UEngineCore::OpenLevel("Intro");
 
 }
 
-void UBlitzCore::EngineTick(float _DeltaTime)
+void UBzCore::EngineTick(float _DeltaTime)
 {
 
 }
 
-void UBlitzCore::EngineEnd()
+void UBzCore::EngineEnd()
 {
 
 }

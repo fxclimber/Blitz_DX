@@ -1,44 +1,72 @@
-// 정점 구조체 정의
-struct vertexShaderInput
+struct EngineVertex
 {
-    float4 POSITION : POSITION; // 위치 데이터
-    //float4 UV : TEXCOORD; // UV 데이터 (사용하지 않음)
-    float4 COLOR : COLOR; // 색상 데이터
+    float4 POSITION : POSITION;
+    float4 UV : TEXCOORD;
+    float4 COLOR : COLOR;
 };
-// 정점 셰이더 출력 구조체
-struct VertexShaderOutPut
+
+
+struct Input
 {
-    float4 SVPOSITION : SV_POSITION; // 클립 공간 위치
-    float4 COLOR : COLOR; // 색상 데이터
+    float4 SVPOSITION : SV_POSITION; 
+    float4 UV : TEXCOORD; 
+    float4 COLOR : COLOR;
 };
-// 상수 버퍼 정의
+
+Texture2D bz_texture0 : register(t0);
+SamplerState bz_sampler : register(s0);
+
+
+// 상수버퍼를 사용하겠다.
 cbuffer FTransform : register(b0)
 {
+
     float4 Scale;
     float4 Rotation;
+    float4 Qut;
     float4 Location;
+
+    float4 RelativeScale;
+    float4 RelativeRotation;
+    float4 RelativeQut;
+    float4 RelativeLocation;
+
+	// 월드
+    float4 WorldScale;
+    float4 WorldRotation;
+    float4 WorldQuat;
+    float4 WorldLocation;
+
     float4x4 ScaleMat;
     float4x4 RotationMat;
     float4x4 LocationMat;
-    float4x4 RevoleMat;
+    float4x4 RevolveMat;
     float4x4 ParentMat;
+    float4x4 LocalWorld;
     float4x4 World;
     float4x4 View;
     float4x4 Projection;
     float4x4 WVP;
 };
-// 수정된 정점 셰이더
-VertexShaderOutPut TestToVertex(vertexShaderInput _Vertex)
+
+Input Bz_VS(EngineVertex _Vertex)
 {
-    VertexShaderOutPut OutPut;
+    Input OutPut;
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-		
+    OutPut.UV = _Vertex.UV;
     OutPut.COLOR = _Vertex.COLOR;
     return OutPut;
 }
-// 픽셀 셰이더 정의
-float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
+
+cbuffer FBzColor : register(b0)
 {
-    //return _Vertex.COLOR;
-    return float4(1, 1, 0, 1);
-}
+    float4 Albedo;
+};
+
+float4 Bz_PS(Input _Vertex) : SV_Target0
+{
+	//return float4(0.3f, 0.6f, 0.2f, 1.0f);
+    //return Albedo;
+    return bz_texture0.Sample(bz_sampler, _Vertex.UV.xy);
+	
+};
