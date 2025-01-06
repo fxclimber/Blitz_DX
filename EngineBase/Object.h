@@ -36,7 +36,7 @@ public:
 	}
 
 	// 이름 지정할때 뭔가 하고 싶으면 오버라이드해.
-	virtual void SetName(std::string_view _Name)
+	ENGINEAPI virtual void SetName(std::string_view _Name)
 	{
 		Name = _Name.data();
 	}

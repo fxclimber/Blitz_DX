@@ -133,6 +133,8 @@
     <ClInclude Include="EngineMaterial.h" />
     <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="EngineSampler.h" />
+    <ClInclude Include="EngineDepthStencilState.h" />
+    <ClInclude Include="TimeEventComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -257,6 +259,8 @@
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="EngineSampler.cpp" />
+    <ClCompile Include="EngineDepthStencilState.cpp" />
+    <ClCompile Include="TimeEventComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">

@@ -34,6 +34,16 @@ public:
 		return SRV.Get();
 	}
 
+	ID3D11DepthStencilView* GetDSV()
+	{
+		return DSV.Get();
+	}
+
+	ID3D11RenderTargetView* GetRTV()
+	{
+		return RTV.Get();
+	}
+
 	FVector GetTextureSize()
 	{
 		return Size;

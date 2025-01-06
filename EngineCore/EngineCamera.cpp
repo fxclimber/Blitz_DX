@@ -4,7 +4,6 @@
 
 UEngineCamera::UEngineCamera()
 {
-
 }
 
 void UEngineCamera::BeginPlay()
@@ -43,11 +42,27 @@ void UEngineCamera::Render(float _DetlaTime)
 	{
 		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
 
+		if (true == RendererZSort[RenderGroup.first])
+		{
+			// 둘의 z값이 완전히 겹쳐있을때는 답이 없다.
+			// 크기 비교해서 크기가 더 작은쪽을 왼쪽으로 옮긴다.
+			RenderList.sort([](std::shared_ptr<URenderer>& _Left, std::shared_ptr<URenderer>& _Right)
+				{
+					return _Left->GetTransformRef().WorldLocation.Z > _Right->GetTransformRef().WorldLocation.Z;
+				});
+		}
+
+
 		for (std::shared_ptr<URenderer> Renderer : RenderList)
 		{
 			Renderer->Render(this, _DetlaTime);
 		}
 	}
+}
+
+void UEngineCamera::SetZSort(int _Order, bool _Value)
+{
+	RendererZSort[_Order] = _Value;
 }
 
 void UEngineCamera::ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)

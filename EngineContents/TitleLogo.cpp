@@ -4,6 +4,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/TimeEventComponent.h>
 #include "MyCustomRenderer.h"
 
 ATitleLogo::ATitleLogo()
@@ -12,27 +13,63 @@ ATitleLogo::ATitleLogo()
 	RootComponent = Default;
 
 
+	// 인벤토리
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
-	// 여러분들만의 랜더링을 하고 싶다면 2가지 방법이 있습니다.
+	TimeEventComponent->AddEvent(2.0f,
+		[](float _Delta, float _Acc)
+		{
+			UEngineDebug::OutPutString("Update" + std::to_string(_Acc));
+		},
+		[]()
+		{
+			UEngineDebug::OutPutString("Test");
+		}, true
+	);
 
-	Renderer = CreateDefaultSubObject<MyCustomRenderer>();
-	Renderer->SetupAttachment(RootComponent);
+	/*TimeEventComponent->AddEndEvent(2.0f, []()
+		{
+			UEngineDebug::OutPutString("Test");
+		}, true
+	);*/
 
-	// Renderer->SetMesh("Box");
-
-
-	Renderer->SetRelativeScale3D({ 100.0f, 100.0f, 100.0f });
-
+	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	// 랜더러를 만든다.
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	LogoRenderer->SetupAttachment(RootComponent);
 	LogoRenderer->SetAutoScaleRatio(5.0f);
 
-	LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
-	LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
-	LogoRenderer->ChangeAnimation("Move");
+	LogoRenderer->SetTexture("tevi_n_01.png", true, 5.0f);
+
+	//LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
+	//LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
+	//LogoRenderer->ChangeAnimation("Move");
 	// LogoRenderer->SetAutoScale(false);
+
+	// 여러분들만의 랜더링을 하고 싶다면 2가지 방법이 있습니다.
+
+	Renderer = CreateDefaultSubObject<MyCustomRenderer>();
+	Renderer->SetupAttachment(RootComponent);
+	Renderer->SetRelativeScale3D({ 100.0f, 100.0f, 1.0f });
+
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image");
+		UEngineFile ImageFiles = Dir.GetFile("BackGround.png");
+
+		// 편한 인터페이스로 안됩니다.
+		ColImage.Load(nullptr, ImageFiles.GetPathToString());
+	}
+
+	UColor Color = ColImage.GetColor(FIntPoint{ 3, 3 }, UColor(255, 255, 255, 255));
+
+	int a = 0;
 
 }
 
@@ -69,12 +106,16 @@ void ATitleLogo::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('W'))
 	{
-		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
+		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
+
+		// AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
-		AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
+
+		// AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('Q'))

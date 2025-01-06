@@ -54,6 +54,8 @@ public:
 		Type = _Type;
 	}
 
+	ENGINEAPI void SetZSort(int _Order, bool _Value);
+
 protected:
 
 
@@ -73,6 +75,8 @@ private:
 
 	// 내가 바라보는 랜더러의 그룹은 카메라가 가진다.
 	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
+	std::map<int, bool> RendererZSort;
+
 
 	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer);
 };

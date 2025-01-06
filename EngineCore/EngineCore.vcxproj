@@ -200,6 +200,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineDepthStencilState.h" />
     <ClInclude Include="EngineDeviceBuffer.h" />
     <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="EngineGraphicDevice.h">
@@ -281,6 +282,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TimeEventComponent.h" />
     <ClInclude Include="VertexBuffer.h">
       <SubType>
       </SubType>
@@ -316,6 +318,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineDepthStencilState.cpp" />
     <ClCompile Include="EngineDeviceBuffer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp">
       <SubType>
@@ -399,6 +402,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TimeEventComponent.cpp" />
     <ClCompile Include="VertexBuffer.cpp">
       <SubType>
       </SubType>

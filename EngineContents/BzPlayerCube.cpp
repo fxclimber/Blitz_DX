@@ -22,21 +22,21 @@ ABzPlayerCube::ABzPlayerCube()
 	Renderer->SetWorldLocation({ 400.f,240.f,300.f });
 
 
-	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
-	RendererBottom->SetupAttachment(RootComponent);
-	RendererBottom->SetMesh("Rect");
-	RendererBottom->SetRelativeScale3D({ 1500.f,1500.f,1.f });
-	RendererBottom->SetRotation({ 90.f,0.f,0.f });
+	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
+	//RendererBottom->SetupAttachment(RootComponent);
+	//RendererBottom->SetMesh("Rect");
+	//RendererBottom->SetRelativeScale3D({ 1500.f,1500.f,1.f });
+	//RendererBottom->SetRotation({ 90.f,0.f,0.f });
 
 	// 랜더러를 만든다.
-	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetupAttachment(RootComponent);
-	LogoRenderer->SetAutoScaleRatio(5.0f);
+	//LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	//LogoRenderer->SetupAttachment(RootComponent);
+	//LogoRenderer->SetAutoScaleRatio(5.0f);
 
-	LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
-	LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
-	LogoRenderer->ChangeAnimation("Move");
-	LogoRenderer->SetAutoScale(false);
+	//LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
+	//LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
+	//LogoRenderer->ChangeAnimation("Move");
+	//LogoRenderer->SetAutoScale(false);
 
 
 
@@ -87,7 +87,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	//std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
 
 	//UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPos().ToString());
-	FVector RotationDelta(0.f, 100.f * _DeltaTime, 0.f); // 초당 100도 회전
+	FVector RotationDelta(30.f * _DeltaTime, 0.f, 0.f); // 초당 100도 회전
 	AddActorRotation(RotationDelta);
 
 
