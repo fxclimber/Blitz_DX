@@ -22,11 +22,11 @@ ABzPlayerCube::ABzPlayerCube()
 	Renderer->SetWorldLocation({ 400.f,240.f,300.f });
 
 
-	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
-	//RendererBottom->SetupAttachment(RootComponent);
-	//RendererBottom->SetMesh("Rect");
-	//RendererBottom->SetRelativeScale3D({ 1500.f,1500.f,1.f });
-	//RendererBottom->SetRotation({ 90.f,0.f,0.f });
+	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
+	RendererBottom->SetupAttachment(RootComponent);
+	RendererBottom->SetMesh("Rect");
+	RendererBottom->SetRelativeScale3D({ 1500.f,1500.f,1.f });
+	RendererBottom->SetRotation({ 90.f,0.f,0.f });
 
 	// 랜더러를 만든다.
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();

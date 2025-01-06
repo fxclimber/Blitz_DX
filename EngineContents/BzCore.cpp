@@ -22,7 +22,8 @@ void UBzCore::EngineStart(UEngineInitData& _Data)
 	_Data.WindowPos = { 100, 100 };
 	_Data.WindowSize = { 900, 900 };
 
-	
+	UBzCore::ResourceSetting();
+
 	{
 		UEngineDirectory Dir;
 		if (false == Dir.MoveParentToDirectory("ContentsResources"))
