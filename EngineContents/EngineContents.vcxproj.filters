@@ -32,6 +32,9 @@
     <ClInclude Include="BzRendererDefault.h">
       <Filter>Blitz</Filter>
     </ClInclude>
+    <ClInclude Include="BzBottomTmp.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -69,6 +72,9 @@
       <Filter>Blitz</Filter>
     </ClCompile>
     <ClCompile Include="BzRendererDefault.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="BzBottomTmp.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
   </ItemGroup>

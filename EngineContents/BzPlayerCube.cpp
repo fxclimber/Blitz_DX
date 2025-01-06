@@ -5,6 +5,8 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include "BzRendererDefault.h"
+#include <EngineCore/TimeEventComponent.h>
+
 
 ABzPlayerCube::ABzPlayerCube()
 {
@@ -17,9 +19,11 @@ ABzPlayerCube::ABzPlayerCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetRelativeScale3D({ 100.0f, 100.0f, 100.0f });
-	Renderer->SetMesh("Cube");
-	Renderer->SetWorldLocation({ 400.f,240.f,300.f });
+	//Renderer->SetRelativeScale3D({ 50.0f, 50.0f, 50.0f });
+	Renderer->SetScale3D({ 20.f,20.f,20.f });
+
+	float yy = Renderer->GetTransformRef().Scale.Y;
+	Renderer->SetWorldLocation({ 0.f,yy,0.f });
 
 
 	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
@@ -68,6 +72,31 @@ ABzPlayerCube::ABzPlayerCube()
 	}
 
 
+	//-------------------------------------
+
+
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+
+	TimeEventComponent->AddEvent(1.f, // 1초 간격
+		[this](float _Delta, float _Acc)
+		{
+			float yMax = GetActorTransform().Location.Y;
+
+			if (yMax < 400.f) // 아래쪽으로 벗어났을 때
+			{
+				FVector up(0.f, 250.f * _Delta, 0.f); // 위로 이동
+				AddRelativeLocation(up);
+			}
+			else
+			{
+				//Destroy(0.0f);
+			}
+		},
+		[this]()
+		{
+		},
+		true // 반복 실행
+	);
 
 }
 
@@ -84,10 +113,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	//std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
-
-	//UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPos().ToString());
-	FVector RotationDelta(30.f * _DeltaTime, 0.f, 0.f); // 초당 100도 회전
+	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
 	AddActorRotation(RotationDelta);
 
 
@@ -104,12 +130,12 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('W'))
 	{
-		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, 0.0f, 100.0f * _DeltaTime });
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
-		AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f,0.0f, -100.0f * _DeltaTime });
 	}
 
 	if (UEngineInput::IsPress('Q'))

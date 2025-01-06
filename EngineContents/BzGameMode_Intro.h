@@ -13,5 +13,8 @@ protected:
 
 private:
 	std::shared_ptr<class ABzPlayerCube> PlayerCube;
+	std::shared_ptr<class ABzBottomTmp> Bottom;
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
+
 };
 

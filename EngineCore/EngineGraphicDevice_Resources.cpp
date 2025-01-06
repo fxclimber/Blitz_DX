@@ -145,39 +145,39 @@ void UEngineGraphicDevice::MeshInit()
 
 		// À­¸é
 		Vertexs[0] = FEngineVertex{ FVector(-1.0f, 1.0f, -1.0f), {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} }; // »¡°­
-		Vertexs[1] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
-		Vertexs[2] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
-		Vertexs[3] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexs[1] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexs[2] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexs[3] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
 
 		//// ¾Æ·§¸é
-		//Vertexs[4] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} }; // ÃÊ·Ï
-		//Vertexs[5] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
-		//Vertexs[6] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
-		//Vertexs[7] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[4] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} }; // ÃÊ·Ï
+		Vertexs[5] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[6] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[7] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} };
 
 		//// ¾Õ¸é
-		//Vertexs[8] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }; // ÆÄ¶û
-		//Vertexs[9] = FEngineVertex{ FVector(-1.0f, 1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
-		//Vertexs[10] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
-		//Vertexs[11] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexs[8] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }; // ÆÄ¶û
+		Vertexs[9] = FEngineVertex{ FVector(-1.0f, 1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexs[10] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexs[11] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} };
 
-		//// µÞ¸é
-		//Vertexs[12] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {0.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }; // ³ë¶û
-		//Vertexs[13] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {1.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
-		//Vertexs[14] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {1.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
-		//Vertexs[15] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
+		// µÞ¸é
+		Vertexs[12] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {0.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }; // ³ë¶û
+		Vertexs[13] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {1.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[14] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {1.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[15] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} };
 
-		//// ¿ÞÂÊ¸é
-		//Vertexs[16] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {0.0f, 0.0f}, {0.5f, 0.0f, 0.5f, 1.0f} }; // º¸¶ó
-		//Vertexs[17] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {1.0f, 0.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
-		//Vertexs[18] = FEngineVertex{ FVector(-1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
-		//Vertexs[19] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {1.0f, 0.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
+		// ¿ÞÂÊ¸é
+		Vertexs[16] = FEngineVertex{ FVector(-1.0f, -1.0f, -1.0f), {0.0f, 1.0f}, {0.5f, 0.0f, 0.5f, 1.0f} }; // º¸¶ó
+		Vertexs[17] = FEngineVertex{ FVector(-1.0f, 1.0f, -1.0f), {0.0f, 0.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
+		Vertexs[18] = FEngineVertex{ FVector(-1.0f, 1.0f, 1.0f), {1.0f, 0.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
+		Vertexs[19] = FEngineVertex{ FVector(-1.0f, -1.0f, 1.0f), {1.0f, 1.0f}, {0.5f, 0.0f, 0.5f, 1.0f} };
 
-		//// ¿À¸¥ÂÊ¸é
-		//Vertexs[20] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {0.0f, 0.0f}, {0.0f, 1.0f, 1.0f, 1.0f} }; // ÇÏ´Ã»ö
-		//Vertexs[21] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
-		//Vertexs[22] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
-		//Vertexs[23] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
+		// ¿À¸¥ÂÊ¸é
+		Vertexs[20] = FEngineVertex{ FVector(1.0f, -1.0f, 1.0f), {0.0f, 0.0f}, {0.0f, 1.0f, 1.0f, 1.0f} }; // ÇÏ´Ã»ö
+		Vertexs[21] = FEngineVertex{ FVector(1.0f, -1.0f, -1.0f), {1.0f, 0.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
+		Vertexs[22] = FEngineVertex{ FVector(1.0f, 1.0f, -1.0f), {1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
+		Vertexs[23] = FEngineVertex{ FVector(1.0f, 1.0f, 1.0f), {0.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} };
 
 		UEngineVertexBuffer::Create("Cube", Vertexs);
 
@@ -192,45 +192,45 @@ void UEngineGraphicDevice::MeshInit()
 		Indexs.push_back(2);
 		Indexs.push_back(3);
 
-		//// ¾Æ·§¸é (Vertexs[4] ~ Vertexs[7])
-		//Indexs.push_back(4);
-		//Indexs.push_back(5);
-		//Indexs.push_back(6);
-		//Indexs.push_back(4);
-		//Indexs.push_back(6);
-		//Indexs.push_back(7);
+		// ¾Æ·§¸é (Vertexs[4] ~ Vertexs[7])
+		Indexs.push_back(4);
+		Indexs.push_back(5);
+		Indexs.push_back(6);
+		Indexs.push_back(4);
+		Indexs.push_back(6);
+		Indexs.push_back(7);
 
-		//// ¾Õ¸é (Vertexs[8] ~ Vertexs[11])
-		//Indexs.push_back(8);
-		//Indexs.push_back(9);
-		//Indexs.push_back(10);
-		//Indexs.push_back(8);
-		//Indexs.push_back(10);
-		//Indexs.push_back(11);
+		// ¾Õ¸é (Vertexs[8] ~ Vertexs[11])
+		Indexs.push_back(8);
+		Indexs.push_back(9);
+		Indexs.push_back(10);
+		Indexs.push_back(8);
+		Indexs.push_back(10);
+		Indexs.push_back(11);
 
-		//// µÞ¸é (Vertexs[12] ~ Vertexs[15])
-		//Indexs.push_back(12);
-		//Indexs.push_back(13);
-		//Indexs.push_back(14);
-		//Indexs.push_back(12);
-		//Indexs.push_back(14);
-		//Indexs.push_back(15);
+		// µÞ¸é (Vertexs[12] ~ Vertexs[15])
+		Indexs.push_back(12);
+		Indexs.push_back(13);
+		Indexs.push_back(14);
+		Indexs.push_back(12);
+		Indexs.push_back(14);
+		Indexs.push_back(15);
 
-		//// ¿ÞÂÊ¸é (Vertexs[16] ~ Vertexs[19])
-		//Indexs.push_back(16);
-		//Indexs.push_back(17);
-		//Indexs.push_back(18);
-		//Indexs.push_back(16);
-		//Indexs.push_back(18);
-		//Indexs.push_back(19);
+		// ¿ÞÂÊ¸é (Vertexs[16] ~ Vertexs[19])
+		Indexs.push_back(16);
+		Indexs.push_back(17);
+		Indexs.push_back(18);
+		Indexs.push_back(16);
+		Indexs.push_back(18);
+		Indexs.push_back(19);
 
-		//// ¿À¸¥ÂÊ¸é (Vertexs[20] ~ Vertexs[23])
-		//Indexs.push_back(20);
-		//Indexs.push_back(21);
-		//Indexs.push_back(22);
-		//Indexs.push_back(20);
-		//Indexs.push_back(22);
-		//Indexs.push_back(23);
+		// ¿À¸¥ÂÊ¸é (Vertexs[20] ~ Vertexs[23])
+		Indexs.push_back(20);
+		Indexs.push_back(21);
+		Indexs.push_back(22);
+		Indexs.push_back(20);
+		Indexs.push_back(22);
+		Indexs.push_back(23);
 
 		UEngineIndexBuffer::Create("Cube", Indexs);
 

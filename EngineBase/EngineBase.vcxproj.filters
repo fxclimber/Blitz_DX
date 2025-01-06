@@ -32,6 +32,7 @@
     <ClCompile Include="EngineDelegate.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GM2\DX\GM2DX\EngineBase\EngineRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="EngineDelegate.h">
       <Filter>Event</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GM2\DX\GM2DX\EngineBase\EngineRandom.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">

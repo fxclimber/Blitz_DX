@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\GM2\DX\GM2DX\EngineBase\EngineRandom.cpp" />
     <ClCompile Include="EngineDebug.cpp" />
     <ClCompile Include="EngineDelegate.cpp" />
     <ClCompile Include="EngineDirectory.cpp" />
@@ -168,6 +169,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\GM2\DX\GM2DX\EngineBase\EngineRandom.h" />
     <ClInclude Include="EngineDebug.h" />
     <ClInclude Include="EngineDefine.h" />
     <ClInclude Include="EngineDelegate.h" />
