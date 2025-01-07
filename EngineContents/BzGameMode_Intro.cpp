@@ -13,6 +13,8 @@
 #include <chrono>
 #include <EngineBase/EngineRandom.h>
 #include "BzEnemyCube.h"
+#include <EnginePlatform/EngineInput.h>
+#include "BzProjectile.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -71,7 +73,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     //    },
     //    false // 반복 여부
     //);
-
+	Proj = nullptr;
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()
@@ -85,5 +87,18 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
     UEngineDebug::OutPutString(std::to_string(EnemyCubes.size()));
 
 
+	if (UEngineInput::IsPress(VK_LBUTTON))
+	{
+		//FVector PlayerPos = GetActorLocation();
+		//FVector MoveOffset(0.f,100.f*_DeltaTime,0.f);
+		//FVector PosOffset = { 200.f, 200.f, 0.f };
+		Proj = GetWorld()->SpawnActor<ABzProjectile>();
+		//Proj->SetActorRelativeScale3D({ 100.f,100.f,100.f });
+		//Proj->SetActorLocation(PlayerPos);
+		//Proj->AddRelativeLocation(MoveOffset);
+
+		//UEngineDebug::OutPutString(ProjPos.ToString());
+
+	}
 
 }

@@ -26,5 +26,8 @@ private:
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 	std::vector < std::shared_ptr <class ABzEnemyCube >> EnemyCubes;
 	UEngineRandom random;
+
+	std::shared_ptr<class ABzProjectile> Proj;
+
 };
 

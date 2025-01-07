@@ -27,14 +27,11 @@ ABzPlayerCube::ABzPlayerCube()
 	RendererFront->SetupAttachment(RootComponent);
 	RendererFront->SetScale3D({ 15.f,15.f,100.f });
 	RendererFront->SetRotation({0.f,-90.f,0.f});
-	RendererFront->AddRelativeLocation({0.f,100.f,0.f});
 	RendererFront->SetRelativeLocation({100.f,100.f,0.f});
 	FVector BodyScale = Renderer->GetWorldScale3D();
 	float BodyScaleX = BodyScale.X;
 	float BodyScaleY = BodyScale.Y;
 	float BodyScaleZ = BodyScale.Z;
-
-	//RendererFront->SetRelativeLocation({ BodyScale.X-100.f ,BodyScale.Y,BodyScale.Z/2-20.f});
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
@@ -164,21 +161,6 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	}
 
 
-	if (UEngineInput::IsPress(VK_LBUTTON))
-	{
-		float yy = Renderer->GetTransformRef().Scale.Y;
-		FVector PlayerPos = GetActorLocation();
-		FVector MoveOffset(0.f,100.f*_DeltaTime,0.f);
-
-		Proj = GetWorld()->SpawnActor<ABzProjectile>();
-		Proj->SetActorRelativeScale3D({10.f,10.f,100.f});
-		Proj->SetActorLocation(PlayerPos);
-		Proj->AddRelativeLocation(MoveOffset);
-		FVector ProjPos = Proj->GetActorLocation();
-
-		//UEngineDebug::OutPutString(ProjPos.ToString());
-
-	}
 
 }
 

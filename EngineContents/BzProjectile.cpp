@@ -11,10 +11,11 @@ ABzProjectile::ABzProjectile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 10.f,30.f,10.f });
-	Renderer->SetRotation({0.f,90.f,0.f});
-	Renderer->SetWorldLocation({0.f,500.f,0.f});
+	Renderer->SetScale3D({ 100.f,100.f,100.f });
+	//Renderer->SetRotation({0.f,90.f,0.f});
+	//Renderer->SetWorldLocation({0.f,500.f,0.f});
 
+	SetActorRelativeScale3D({100.f,100.f,100.f});
 
 
 }

@@ -22,7 +22,6 @@ private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UBzRendererDefault> RendererFront;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
-	std::shared_ptr<class ABzProjectile> Proj;
 
 	std::shared_ptr<class UCollision> Collision;
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
