@@ -29,6 +29,12 @@ public:
 
 ABzGameMode_Intro::ABzGameMode_Intro()
 {
+    // collision profile name
+    GetWorld()->CreateCollisionProfile("Monster");
+    GetWorld()->CreateCollisionProfile("Player");
+    GetWorld()->LinkCollisionProfile("Player","Monster");
+
+
 	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });

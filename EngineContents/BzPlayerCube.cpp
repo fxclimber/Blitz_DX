@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "BzPlayerCube.h"
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/Collision.h>
+
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
@@ -15,16 +17,36 @@ ABzPlayerCube::ABzPlayerCube()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	// 여러분들만의 랜더링을 하고 싶다면 2가지 방법이 있습니다.
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	//Renderer->SetRelativeScale3D({ 50.0f, 50.0f, 50.0f });
-	Renderer->SetScale3D({ 40.f,80.f,20.f });
-
+	Renderer->SetScale3D({ 20.f,80.f,50.f });
 	float yy = Renderer->GetTransformRef().Scale.Y;
 	Renderer->SetWorldLocation({ 0.f,yy,0.f });
 
+	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
+	RendererFront->SetupAttachment(RootComponent);
+	RendererFront->SetScale3D({ 15.f,15.f,100.f });
+	RendererFront->SetRotation({0.f,-90.f,0.f});
+	RendererFront->AddRelativeLocation({0.f,100.f,0.f});
+	RendererFront->SetRelativeLocation({100.f,100.f,0.f});
+	FVector BodyScale = Renderer->GetWorldScale3D();
+	float BodyScaleX = BodyScale.X;
+	float BodyScaleY = BodyScale.Y;
+	float BodyScaleZ = BodyScale.Z;
 
+	//RendererFront->SetRelativeLocation({ BodyScale.X-100.f ,BodyScale.Y,BodyScale.Z/2-20.f});
+
+	//----collision
+	Collision = CreateDefaultSubObject<UCollision>();
+	Collision->SetupAttachment(RootComponent);
+	Collision->SetCollisionProfileName("Player");
+	Collision->SetScale3D({ 25.f,85.f,55.f });
+
+	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+	{
+		_Other->GetActor()->Destroy();
+		UEngineDebug::OutPutString("Enter");
+	});
 
 
 #ifdef renderer_test
@@ -106,33 +128,41 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	//MoveDirection = CalculateMoveDirection(_DeltaTime);
+	//forwardVector = GetActorForwardVector();
+
+	CalculateMoveDirection(_DeltaTime);
 
 
-	if (UEngineInput::IsPress('A'))
 	{
-		AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsPress('D'))
-	{
-		AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
+		//if (UEngineInput::IsPress('A'))
+		//{
+		//	AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
+		//}
+		//if (UEngineInput::IsPress('D'))
+		//{
+		//	AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
+		//}
+
+		//FVector Test = GetActorForwardVector();
+
+		//if (UEngineInput::IsPress('W'))
+		//{
+		//	AddRelativeLocation(FVector{ 0.0f, 0.0f, 100.0f * _DeltaTime });
+		//}
+
+		//if (UEngineInput::IsPress('S'))
+		//{
+		//	AddRelativeLocation(FVector{ 0.0f,0.0f, -100.0f * _DeltaTime });
+		//}
+
+		//if (UEngineInput::IsPress('Q'))
+		//{
+		//	AddActorRotation(FVector{ 0.0f,  360.0f * _DeltaTime,0.0f });
+		//}
+
 	}
 
-	FVector Test = GetActorForwardVector();
-
-	if (UEngineInput::IsPress('W'))
-	{
-		AddRelativeLocation(FVector{ 0.0f, 0.0f, 100.0f * _DeltaTime });
-	}
-
-	if (UEngineInput::IsPress('S'))
-	{
-		AddRelativeLocation(FVector{ 0.0f,0.0f, -100.0f * _DeltaTime });
-	}
-
-	if (UEngineInput::IsPress('Q'))
-	{
-		AddActorRotation(FVector{ 0.0f,  360.0f * _DeltaTime,0.0f });
-	}
 
 	if (UEngineInput::IsPress(VK_LBUTTON))
 	{
@@ -151,3 +181,51 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	}
 
 }
+
+FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
+{
+	MoveDirection = FVector(0.0f, 0.0f, 0.0f);
+
+	// 키 입력에 따라 이동 방향 설정
+	if (UEngineInput::IsPress('A'))
+	{
+		MoveDirection.X -= 100.0f * _DeltaTime;
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		MoveDirection.X += 100.0f * _DeltaTime;
+	}
+	if (UEngineInput::IsPress('W'))
+	{
+		MoveDirection.Z += 100.0f * _DeltaTime;
+	}
+	if (UEngineInput::IsPress('S'))
+	{
+		MoveDirection.Z -= 100.0f * _DeltaTime;
+	}
+
+	// 위치 이동 처리
+	AddRelativeLocation(MoveDirection);
+
+	// 회전 처리
+	if (MoveDirection.X != 0.0f || MoveDirection.Z != 0.0f)
+	{
+		// 목표 각도 계산 (Z 축 반전)
+		float targetAngle = atan2(-MoveDirection.Z, MoveDirection.X) * UEngineMath::R2D;
+
+		// 현재 각도 가져오기
+		float currentAngle = GetActorTransform().Rotation.Y;
+
+		// 각도 차이 계산 및 보정 (-180 ~ 180도)
+		float deltaAngle = targetAngle - currentAngle;
+		if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+		if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+		// 부드러운 회전 적용 (Lerp)
+		float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 5.0f; // 회전 속도 계수
+		AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
+	}
+
+	return MoveDirection;
+}
+

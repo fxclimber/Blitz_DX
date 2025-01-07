@@ -14,6 +14,9 @@ ABzProjectile::ABzProjectile()
 	Renderer->SetScale3D({ 10.f,30.f,10.f });
 	Renderer->SetRotation({0.f,90.f,0.f});
 	Renderer->SetWorldLocation({0.f,500.f,0.f});
+
+
+
 }
 
 ABzProjectile::~ABzProjectile()

@@ -253,8 +253,8 @@ bool FTransform::OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right)
 {
 	FCollisionData LeftCol = _Left.GetCollisionData();
 	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
+	//LeftCol.OBB.Center.z = 0.0f;
+	//RightCol.OBB.Center.z = 0.0f;
 	return LeftCol.OBB.Intersects(RightCol.OBB);
 }
 
@@ -262,8 +262,8 @@ bool FTransform::OBB2DToRect(const FTransform& _Left, const FTransform& _Right)
 {
 	FCollisionData LeftCol = _Left.GetCollisionData();
 	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
+	//LeftCol.OBB.Center.z = 0.0f;
+	//RightCol.OBB.Center.z = 0.0f;
 	return LeftCol.OBB.Intersects(RightCol.AABB);
 }
 
@@ -271,8 +271,8 @@ bool FTransform::OBB2DToSphere(const FTransform& _Left, const FTransform& _Right
 {
 	FCollisionData LeftCol = _Left.GetCollisionData();
 	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
+	//LeftCol.OBB.Center.z = 0.0f;
+	//RightCol.OBB.Center.z = 0.0f;
 	return LeftCol.OBB.Intersects(RightCol.Sphere);
 }
 
@@ -359,11 +359,6 @@ ENGINEAPI void FTransform::Decompose()
 
 void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 {
-	// 10000 10000 10000
-
-	// 절대로
-	// 100 100 100
-
 
 	// world인지 local
 	ScaleMat.Scale(Scale);
@@ -372,27 +367,19 @@ void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 
 	FMatrix CheckWorld = ScaleMat * RotationMat * LocationMat;
 
-	// 절대로 지켜져야하는 최종 값이 되어야 한다.
 	if (true == _IsAbsolut)
 	{
 		World = CheckWorld;
 		LocalWorld = CheckWorld * ParentMat.InverseReturn();
-		// LocalWorld 나의 로컬값이라는 것.
 	}
 	else
 	{
-		//      크         자             이            공           부
 		LocalWorld = ScaleMat * RotationMat * LocationMat;
 		World = ScaleMat * RotationMat * LocationMat * RevolveMat * ParentMat;
-		// 나의 로컬은 알지만 부모가 아직 안곱해져서 부모를 굽해서 나의 월드 값을 찾아낸다.
 
-		// World.ArrVector[3]; => 
 	}
 
-	// 크자이 값을 역으로 다시 꺼내려고 하는 것.
 	Decompose();
-
-
 
 }
 
