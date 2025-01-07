@@ -1,17 +1,32 @@
 #include "PreCompile.h"
 #include "EngineMath.h"
 
+//DirectX::BoundingSphere Sphere; // 구
+//XMFLOAT3 Center;            // Center of the sphere.
+//float Radius;               // Radius of the sphere.
 
+//DirectX::BoundingBox AABB;
+//XMFLOAT3 Center;            // Center of the box.
+//XMFLOAT3 Extents;           // 센터기준 절반크기를 의미합니다.
+
+//DirectX::BoundingOrientedBox OBB; // 
+//XMFLOAT3 Center;            // Center of the box.
+//XMFLOAT3 Extents;           // Distance from the center to each side.
+//XMFLOAT4 Orientation;       // Unit quaternion representing rotation (box -> world).
+
+// DirectX::BoundingFrustum Cam; // 카메라 
+
+template<>
+FQuat TVector<float>::DegAngleToQuaternion()
+{
+	FQuat Result;
+	Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
+	return Result;
+}
 
 // 디그리를 라디안으로 바꾸는 값이 된다.
 
-const FVector FVector::ZERO = { 0.0f, 0.0f };
-const FVector FVector::LEFT = { -1.0f, 0.0f };
-const FVector FVector::RIGHT = { 1.0f, 0.0f };
-const FVector FVector::UP = { 0.0f, 1.0f };
-const FVector FVector::DOWN = { 0.0f, -1.0f };
-const FVector FVector::FORWARD = { 0.0f, 0.0f, 1.0f };
-const FVector FVector::BACK = { 0.0f, 0.0f , -1.0f };
+
 
 // const FVector FVector::BLUE = {0.0f, 0.0f, 1.0f, 1.0f};
 
@@ -26,7 +41,7 @@ const FIntPoint FIntPoint::DOWN = { 0, 1 };
 const UColor UColor::WHITE = { 255, 255, 255, 0 };
 const UColor UColor::BLACK = { 0, 0, 0, 0 };
 
-ENGINEAPI FIntPoint FVector::ConvertToPoint() const
+FIntPoint FVector::ConvertToPoint() const
 {
 	return { iX(), iY() };
 }
@@ -39,12 +54,17 @@ class CollisionFunctionInit
 public:
 	CollisionFunctionInit()
 	{
+		// 필요할때마다 여러분들이 말해주시면 그때 만들도록 
 		// 데이터 영역이 초기화 될때 초기화하는 일을 자동으로 수행할수 있다.
 		// 데이터 영역이 만들어질때 이 작업은 자동으로 실행된다.
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Rect)][static_cast<int>(ECollisionType::Rect)] = FTransform::RectToRect;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::CirCle)] = FTransform::CirCleToCirCle;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Rect)][static_cast<int>(ECollisionType::CirCle)] = FTransform::RectToCirCle;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::Rect)] = FTransform::CirCleToRect;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::OBB2D)] = FTransform::OBB2DToOBB2D;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Rect)] = FTransform::OBB2DToRect;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::CirCle)] = FTransform::OBB2DToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Point)] = FTransform::OBB2DToPoint;
 
 	}
 };
@@ -98,6 +118,12 @@ FVector FQuat::QuaternionToEulerRad() const
 
 bool FTransform::Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right)
 {
+	if (nullptr == FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)])
+	{
+		MSGASSERT("아직 구현하지 않은 충돌 타입간의 충돌 체크를 하려고 했습니다.");
+		return false;
+	}
+
 	return FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)](_Left, _Right);
 }
 
@@ -118,42 +144,56 @@ bool FTransform::PointToRect(const FTransform& _Left, const FTransform& _Right)
 
 bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Right)
 {
-	FVector Len = _Left.Location - _Right.Location;
 
-	// 트랜스폼을 원으로 봤을때 반지름은 x의 절반크기를 반지름으로 보겠습니다.
-	// 두원의 반지름의 합이 벡터의 길이보다 크다면 
-	if (Len.Length() < _Left.Scale.hX() + _Right.Scale.hX())
-	{
-		return true;
-	}
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.Sphere.Intersects(RightCol.Sphere);
 
-	return false;
+
+	//FVector Len = _Left.Location - _Right.Location;
+
+	//// 트랜스폼을 원으로 봤을때 반지름은 x의 절반크기를 반지름으로 보겠습니다.
+	//// 두원의 반지름의 합이 벡터의 길이보다 크다면 
+	//if (Len.Length() < _Left.Scale.hX() + _Right.Scale.hX())
+	//{
+	//	return true;
+	//}
+
+	//return false;
 }
 
 bool FTransform::RectToRect(const FTransform& _Left, const FTransform& _Right)
 {
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.AABB.Intersects(RightCol.AABB);
 
-	if (_Left.ZAxisCenterLeft() > _Right.ZAxisCenterRight())
-	{
-		return false;
-	}
 
-	if (_Left.ZAxisCenterRight() < _Right.ZAxisCenterLeft())
-	{
-		return false;
-	}
+	//if (_Left.ZAxisCenterLeft() > _Right.ZAxisCenterRight())
+	//{
+	//	return false;
+	//}
 
-	if (_Left.ZAxisCenterTop() > _Right.ZAxisCenterBottom())
-	{
-		return false;
-	}
+	//if (_Left.ZAxisCenterRight() < _Right.ZAxisCenterLeft())
+	//{
+	//	return false;
+	//}
 
-	if (_Left.ZAxisCenterBottom() < _Right.ZAxisCenterTop())
-	{
-		return false;
-	}
+	//if (_Left.ZAxisCenterTop() > _Right.ZAxisCenterBottom())
+	//{
+	//	return false;
+	//}
+
+	//if (_Left.ZAxisCenterBottom() < _Right.ZAxisCenterTop())
+	//{
+	//	return false;
+	//}
 	// 공식 만들면 된다.
-	return true;
+	// return true;
 }
 
 bool FTransform::RectToCirCle(const FTransform& _Left, const FTransform& _Right)
@@ -162,44 +202,91 @@ bool FTransform::RectToCirCle(const FTransform& _Left, const FTransform& _Right)
 }
 
 
+
 bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
 {
-	// 좌우로 반지름 확장한 트랜스폼
-	FTransform WTransform = _Right;
-	WTransform.Scale.X += _Left.Scale.X;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.Sphere.Intersects(RightCol.AABB);
 
-	// 위아래로 반지름 만큼 확장한 트랜스폼
-	FTransform HTransform = _Right;
-	HTransform.Scale.Y += _Left.Scale.X;
 
-	if (true == PointToRect(_Left, WTransform) || true == PointToRect(_Left, HTransform))
-	{
-		return true;
-	}
+	//// 좌우로 반지름 확장한 트랜스폼
+	//FTransform WTransform = _Right;
+	//WTransform.Scale.X += _Left.Scale.X;
 
-	// 비용 절약을 위해서 static으로 만드는 방법도 있는데.
-	// static FVector ArrPoint[4];
-	// 쓰레드에서는 못쓴다.
-	FVector ArrPoint[4];
+	//// 위아래로 반지름 만큼 확장한 트랜스폼
+	//FTransform HTransform = _Right;
+	//HTransform.Scale.Y += _Left.Scale.X;
 
-	ArrPoint[0] = _Right.ZAxisCenterLeftTop();
-	ArrPoint[1] = _Right.ZAxisCenterLeftBottom();
-	ArrPoint[2] = _Right.ZAxisCenterRightTop();
-	ArrPoint[3] = _Right.ZAxisCenterRightBottom();
+	//if (true == PointToRect(_Left, WTransform) || true == PointToRect(_Left, HTransform))
+	//{
+	//	return true;
+	//}
 
-	FTransform PointCirCle;
-	PointCirCle.Scale = _Left.Scale;
-	for (size_t i = 0; i < 4; i++)
-	{
-		PointCirCle.Location = ArrPoint[i];
-		if (true == PointToCirCle(_Left, PointCirCle))
-		{
-			return true;
-		}
-	}
+	//// 비용 절약을 위해서 static으로 만드는 방법도 있는데.
+	//// static FVector ArrPoint[4];
+	//// 쓰레드에서는 못쓴다.
+	//FVector ArrPoint[4];
 
-	return false;
+	//ArrPoint[0] = _Right.ZAxisCenterLeftTop();
+	//ArrPoint[1] = _Right.ZAxisCenterLeftBottom();
+	//ArrPoint[2] = _Right.ZAxisCenterRightTop();
+	//ArrPoint[3] = _Right.ZAxisCenterRightBottom();
+
+	//FTransform PointCirCle;
+	//PointCirCle.Scale = _Left.Scale;
+	//for (size_t i = 0; i < 4; i++)
+	//{
+	//	PointCirCle.Location = ArrPoint[i];
+	//	if (true == PointToCirCle(_Left, PointCirCle))
+	//	{
+	//		return true;
+	//	}
+	//}
+
+	//return false;
 }
+
+bool FTransform::OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.OBB);
+}
+
+bool FTransform::OBB2DToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.AABB);
+}
+
+bool FTransform::OBB2DToSphere(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::OBB2DToPoint(const FTransform& _Left, const FTransform& _Right)
+{
+	// ??
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Extents = { 0.0f, 0.0f, 0.0f };
+	return LeftCol.OBB.Intersects(RightCol.AABB);
+}
+
 
 FVector FVector::Transform(const FVector& _Vector, const class FMatrix& _Matrix)
 {
@@ -220,6 +307,7 @@ FVector FVector::TransformNormal(const FVector& _Vector, const class FMatrix& _M
 	return Copy * _Matrix;
 }
 
+template<>
 FVector FVector::operator*(const class FMatrix& _Matrix) const
 {
 	FVector Result;

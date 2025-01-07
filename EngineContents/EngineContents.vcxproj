@@ -149,11 +149,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BzBottomTmp.h" />
+    <ClInclude Include="BzEnemyCube.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
     <ClInclude Include="BzPlayerCube.h" />
     <ClInclude Include="BzRendererDefault.h" />
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="MyCustomRenderer.h" />
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
@@ -163,12 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BzBottomTmp.cpp" />
+    <ClCompile Include="BzEnemyCube.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />
     <ClCompile Include="BzRendererDefault.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MyCustomRenderer.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />

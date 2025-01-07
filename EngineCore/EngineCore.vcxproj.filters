@@ -135,6 +135,7 @@
     <ClInclude Include="EngineSampler.h" />
     <ClInclude Include="EngineDepthStencilState.h" />
     <ClInclude Include="TimeEventComponent.h" />
+    <ClInclude Include="Collision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -261,6 +262,7 @@
     <ClCompile Include="EngineSampler.cpp" />
     <ClCompile Include="EngineDepthStencilState.cpp" />
     <ClCompile Include="TimeEventComponent.cpp" />
+    <ClCompile Include="Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">

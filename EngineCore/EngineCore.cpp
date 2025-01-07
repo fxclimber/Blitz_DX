@@ -5,6 +5,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include "IContentsCore.h"
 #include "EngineResources.h"
+#include "EngineConstantBuffer.h"
 #include "EngineGUI.h"
 #include "Level.h"
 
@@ -197,7 +198,12 @@ void UEngineCore::EngineFrame()
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render(DeltaTime);
 	// GUI랜더링은 기존 랜더링이 다 끝나고 해주는게 좋다.
+	// 포스트프로세싱
+	// 콜리전
+	CurLevel->Collision(DeltaTime);
 
+
+	CurLevel->Release(DeltaTime);
 }
 
 void UEngineCore::EngineEnd()
@@ -209,6 +215,7 @@ void UEngineCore::EngineEnd()
 	Device.Release();
 
 	UEngineResources::Release();
+	UEngineConstantBuffer::Release();
 
 	CurLevel = nullptr;
 	NextLevel = nullptr;

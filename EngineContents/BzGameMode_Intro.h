@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineBase/EngineRandom.h>
 
 class ABzGameMode_Intro : public AActor
 {
@@ -13,8 +14,11 @@ protected:
 
 private:
 	std::shared_ptr<class ABzPlayerCube> PlayerCube;
+	std::shared_ptr<class ABzEnemyCube> EnemyCube;
 	std::shared_ptr<class ABzBottomTmp> Bottom;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
+	std::vector < std::shared_ptr <class ABzEnemyCube >> EnemyCubes;
+	UEngineRandom random;
 };
 

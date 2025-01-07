@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "Actor.h"
 #include "Renderer.h"
+#include "Collision.h"
 #include "EngineCore.h"
 #include "EngineCamera.h"
 #include "CameraActor.h"
@@ -78,6 +79,11 @@ void ULevel::Tick(float _DeltaTime)
 	// 절대 Ranged for안에서는 erase 리스트의 구조가 변경될 일을 하지 말라고 했ㅅ어요.
 	for (std::shared_ptr<AActor> CurActor : AllActorList)
 	{
+		if (false == CurActor->IsActive())
+		{
+			continue;
+		}
+
 		CurActor->Tick(_DeltaTime);
 	}
 }
@@ -95,12 +101,8 @@ void ULevel::Render(float _DeltaTime)
 	if (true == UEngineWindow::IsApplicationOn())
 	{
 		UEngineGUI::GUIRender();
-
 		// IMGUI가 랜더링을하면서 
-
 	}
-
-
 
 	UEngineCore::GetDevice().RenderEnd();
 }
@@ -111,13 +113,136 @@ void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::share
 {
 	if (false == Cameras.contains(_CameraOrder))
 	{
+		// 이거 왜만들었을까?
+		// 카메라라서 이렇게 했네요
+		// 카메라 먼저 만들어야 니가 랜더러를 관리할수 있다.
 		MSGASSERT("존재하지 않는 카메라에 랜더러를 집어넣으려고 했습니다.");
+		return;
 	}
+
 	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
 
 	Camera->GetCameraComponent()->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
 }
 
+void ULevel::CreateCollisionProfile(std::string_view _ProfileName)
+{
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
 
+	Collisions[UpperName];
+}
 
+void ULevel::LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName)
+{
+	std::string LeftUpperName = UEngineString::ToUpper(_LeftProfileName);
+	std::string RightUpperName = UEngineString::ToUpper(_RightProfileName);
 
+	CollisionLinks[LeftUpperName].push_back(RightUpperName);
+}
+
+void ULevel::PushCollisionProfileEvent(std::shared_ptr<class URenderer> _Renderer)
+{
+
+}
+
+void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::string_view _PrevProfileName, std::shared_ptr<UCollision> _Collision)
+{
+	if (false == Collisions.contains(_ProfileName.data()))
+	{
+		MSGASSERT("존재하지 않는 콜리전 그룹에 랜더러를 집어넣으려고 했습니다.");
+		return;
+	}
+
+	std::string PrevUpperName = UEngineString::ToUpper(_PrevProfileName);
+
+	if (_PrevProfileName != "")
+	{
+		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[PrevUpperName];
+		PrevCollisionGroup.remove(_Collision);
+	}
+
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
+	std::list<std::shared_ptr<UCollision>>& CollisionGroup = Collisions[UpperName];
+	CollisionGroup.push_back(_Collision);
+}
+
+void ULevel::Collision(float _DeltaTime)
+{
+	// Monster Player 충돌체크 해야 한다.
+
+	for (std::pair<const std::string, std::list<std::string>>& Links : CollisionLinks)
+	{
+		const std::string& LeftProfile = Links.first;
+
+		std::list<std::string>& LinkSecond = Links.second;
+
+		for (std::string& RightProfile : LinkSecond)
+		{
+			std::list<std::shared_ptr<class UCollision>>& LeftList = CheckCollisions[LeftProfile];
+			std::list<std::shared_ptr<class UCollision>>& RightList = Collisions[RightProfile];
+
+			for (std::shared_ptr<class UCollision>& LeftCollision : LeftList)
+			{
+				for (std::shared_ptr<class UCollision>& RightCollision : RightList)
+				{
+					LeftCollision->CollisionEventCheck(RightCollision);
+				}
+			}
+		}
+	}
+}
+
+void ULevel::Release(float _DeltaTime)
+{
+	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
+	{
+		Camera.second->GetCameraComponent()->Release(_DeltaTime);
+	}
+
+	{
+		// 충돌체 릴리즈
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
+		{
+			std::list<std::shared_ptr<UCollision>>& List = Group.second;
+
+			std::list<std::shared_ptr<UCollision>>::iterator StartIter = List.begin();
+			std::list<std::shared_ptr<UCollision>>::iterator EndIter = List.end();
+
+			// 언리얼은 중간에 삭제할수 없어.
+			for (; StartIter != EndIter; )
+			{
+				if (false == (*StartIter)->IsDestroy())
+				{
+					++StartIter;
+					continue;
+				}
+
+				// 랜더러는 지울 필요가 없습니다.
+				// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
+				// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+				StartIter = List.erase(StartIter);
+			}
+		}
+	}
+
+	{
+		std::list<std::shared_ptr<AActor>>& List = AllActorList;
+
+		std::list<std::shared_ptr<AActor>>::iterator StartIter = List.begin();
+		std::list<std::shared_ptr<AActor>>::iterator EndIter = List.end();
+
+		// 언리얼은 중간에 삭제할수 없어.
+		for (; StartIter != EndIter; )
+		{
+			if (false == (*StartIter)->IsDestroy())
+			{
+				++StartIter;
+				continue;
+			}
+
+			// 이제 delete도 필요 없다.
+			StartIter = List.erase(StartIter);
+		}
+	}
+}

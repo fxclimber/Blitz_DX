@@ -12,7 +12,7 @@
 #include <random>
 #include <chrono>
 #include <EngineBase/EngineRandom.h>
-
+#include "BzEnemyCube.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -25,7 +25,6 @@ public:
 
 	//}
 
-
 };
 
 ABzGameMode_Intro::ABzGameMode_Intro()
@@ -35,9 +34,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
 	Bottom->SetActorLocation({0.f,0.f,0.f});
-
 	PlayerCube = GetWorld()->SpawnActor<ABzPlayerCube>();
-
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 200.0f, 650.0f, -1000.0f, 1.0f });
@@ -47,32 +44,34 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	cam->SetProjectionType(EProjectionType::Perspective);
 
 	//-----
-    constexpr int MaxCubes = 10; // 배열 크기
-    std::vector<std::shared_ptr<ABzPlayerCube>> PlayerCubes(MaxCubes);
+    //constexpr int MaxCubes = 10; // 배열 크기
+    //std::vector<std::shared_ptr<ABzEnemyCube>> EnemyCube;
     int CurrentIndex = 0; // 현재 배열에서 사용할 인덱스
-    
+    //std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
+    //EnemyCube.push_back(Enemy);
+
 
     TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
     TimeEventComponent->AddEvent(
-        1.0f,
+        5.f,
         [this](float _Delta, float _Acc)
-        {           
-            UEngineRandom random;
-            float randomX = random.Randomfloat(-400.0f, 400.0f);
-            float randomY = random.Randomfloat(-100.0f, 100.0f);
-            float randomZ = random.Randomfloat(-400.0f, 400.0f);
+        {      
+            float randomX = this->random.Randomfloat(-400.0f, 400.0f);
+            float randomY = this->random.Randomfloat(-100.0f, 100.0f);
+            float randomZ = this->random.Randomfloat(-400.0f, 400.0f);
             FVector randomLocation(randomX, randomY, randomZ); 
 
-            std::shared_ptr<ABzPlayerCube> 	PlayerCube1 = GetWorld()->SpawnActor<ABzPlayerCube>();
+            std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
+            EnemyCubes.push_back(Enemy);
 
-            if (PlayerCube1) {
-                PlayerCube1->AddRelativeLocation(randomLocation); // 상대 위치 추가
+            if (Enemy) {
+                Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
             }
         },
         [this]()
         {
         },
-        true // 반복 여부
+        false // 반복 여부
     );
 
 }
@@ -86,6 +85,7 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 {
 	// 부모 호출
 	AActor::Tick(_DeltaTime);
+    UEngineDebug::OutPutString(std::to_string(EnemyCubes.size()));
 
 
 

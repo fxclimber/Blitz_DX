@@ -5,6 +5,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/TimeEventComponent.h>
+#include <EngineCore/Collision.h>
 #include "MyCustomRenderer.h"
 
 ATitleLogo::ATitleLogo()
@@ -12,65 +13,38 @@ ATitleLogo::ATitleLogo()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-
 	// 인벤토리
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
-	TimeEventComponent->AddEvent(2.0f,
-		[](float _Delta, float _Acc)
-		{
-			UEngineDebug::OutPutString("Update" + std::to_string(_Acc));
-		},
-		[]()
-		{
-			UEngineDebug::OutPutString("Test");
-		}, true
-	);
-
-	/*TimeEventComponent->AddEndEvent(2.0f, []()
-		{
-			UEngineDebug::OutPutString("Test");
-		}, true
-	);*/
-
-	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-
-	// 랜더러를 만든다.
-	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetupAttachment(RootComponent);
-	LogoRenderer->SetAutoScaleRatio(5.0f);
-
-	LogoRenderer->SetTexture("tevi_n_01.png", true, 5.0f);
-
-	//LogoRenderer->CreateAnimation("Idle", "Tevi", 0, 3, 0.5f);
-	//LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
-	//LogoRenderer->ChangeAnimation("Move");
-	// LogoRenderer->SetAutoScale(false);
-
-	// 여러분들만의 랜더링을 하고 싶다면 2가지 방법이 있습니다.
-
-	Renderer = CreateDefaultSubObject<MyCustomRenderer>();
+	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetRelativeScale3D({ 100.0f, 100.0f, 1.0f });
+	Renderer->SetTexture("Test.png");
+	// Renderer->SetSprite("Test.png", 2);
+	// Renderer->SetAutoScale(true);
+	// Renderer->SetAutoScaleRatio(5.0f);
+	Renderer->SetScale3D({ 50.0f, 200.0f });
 
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	Collision = CreateDefaultSubObject<UCollision>();
+	Collision->SetupAttachment(RootComponent);
+	Collision->SetCollisionProfileName("Player");
+	Collision->SetScale3D({ 50.0f, 200.0f });
+
+	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image");
-		UEngineFile ImageFiles = Dir.GetFile("BackGround.png");
+			_Other->GetActor()->Destroy();
+			// _Other->Destroy();
+			UEngineDebug::OutPutString("Enter");
+		});
 
-		// 편한 인터페이스로 안됩니다.
-		ColImage.Load(nullptr, ImageFiles.GetPathToString());
-	}
+	//Collision->SetCollisionStay([](UCollision* _This, UCollision* _Other)
+	//	{
+	//		UEngineDebug::OutPutString("Stay");
+	//	});
 
-	UColor Color = ColImage.GetColor(FIntPoint{ 3, 3 }, UColor(255, 255, 255, 255));
-
-	int a = 0;
-
+	//Collision->SetCollisionEnd([](UCollision* _This, UCollision* _Other)
+	//	{
+	//		UEngineDebug::OutPutString("End");
+	//	});
 }
 
 ATitleLogo::~ATitleLogo()
@@ -102,20 +76,26 @@ void ATitleLogo::Tick(float _DeltaTime)
 		AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 
+	//if (공격 상태일때만)
+	//{
+	//	std::vector<UCollision*> Result;
+	//	if (true == Collision->CollisionCheck("Monster", Result))
+	//	{
+	//		Result[0]->GetActor()->Destroy();
+	//	}
+	//}
+
+
 	FVector Test = GetActorForwardVector();
 
 	if (UEngineInput::IsPress('W'))
 	{
-		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
-
-		// AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
-		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
-
-		// AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('Q'))
@@ -123,30 +103,15 @@ void ATitleLogo::Tick(float _DeltaTime)
 		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
 	}
 
-	// LogoRenderer->AddUVPlusValue({_DeltaTime, 0.0f, 0.0f, 1.0f});
-
 	if (UEngineInput::IsPress('F'))
 	{
-		LogoRenderer->ColorData.MulColor = float4(1.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	if (UEngineInput::IsPress('E'))
 	{
-		LogoRenderer->ColorData.PlusColor += float4(1.0f, 1.0f, 1.0f, 1.0f) * _DeltaTime;
-		LogoRenderer->ColorData.PlusColor.W += _DeltaTime;
-
-		// LogoRenderer->ChangeAnimation("Move");
-		// 단 1순간만 처리되는 걸로 
-		// Child->AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f , 0.0f });
 	}
 
 	if (UEngineInput::IsPress('R'))
 	{
-		LogoRenderer->ColorData.PlusColor -= float4(1.0f, 1.0f, 1.0f, 1.0f) * _DeltaTime;
-		LogoRenderer->ColorData.PlusColor.W -= _DeltaTime;
-
-		// Child->SetWorldLocation(FVector{ 100.0f, 0.0f , 0.0f });
 	}
-
-	// AddActorLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f});
 }

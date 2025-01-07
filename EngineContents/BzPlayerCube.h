@@ -18,8 +18,6 @@ private:
 	std::shared_ptr<class USpriteRenderer> Child;
 
 	std::shared_ptr<class UBzRendererDefault> Renderer;
-	//std::shared_ptr<class URenderer> RendererBottom;
-
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
 

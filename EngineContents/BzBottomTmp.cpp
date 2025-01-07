@@ -17,7 +17,7 @@ ABzBottomTmp::ABzBottomTmp()
 	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererBottom->SetupAttachment(RootComponent);
 	RendererBottom->SetMesh("Rect");
-	RendererBottom->SetRelativeScale3D({ 1500.f,1500.f,1.f });
+	RendererBottom->SetRelativeScale3D({ 45.f,45.f,1.f });
 	RendererBottom->SetRotation({ 90.f,0.f,0.f });
 }
 

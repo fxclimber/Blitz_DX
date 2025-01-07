@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 
+// 충돌 함수를 제공해줍니다.
 #include <DirectXMath.h>
 #include <DirectXCollision.h>
 
@@ -70,40 +71,18 @@ public:
 	}
 };
 
-class FQuat
+template<typename ValueType>
+class TVector
 {
 public:
-	union
-	{
-		struct
-		{
-			float X;
-			float Y;
-			float Z;
-			float W;
-		};
-
-		float Arr2D[1][4];
-		float Arr1D[4];
-		// 다이렉트 simd 연산 전용 벡터.
-		DirectX::XMVECTOR DirectVector;
-
-	};
-
-	class FVector QuaternionToEulerDeg() const;
-	class FVector QuaternionToEulerRad() const;
-};
-
-class FVector
-{
-public:
-	static const FVector ZERO;
-	static const FVector LEFT;
-	static const FVector RIGHT;
-	static const FVector UP;
-	static const FVector DOWN;
-	static const FVector FORWARD;
-	static const FVector BACK;
+	static const TVector NONE;
+	static const TVector ZERO;
+	static const TVector LEFT;
+	static const TVector RIGHT;
+	static const TVector UP;
+	static const TVector DOWN;
+	static const TVector FORWARD;
+	static const TVector BACK;
 
 
 public:
@@ -111,60 +90,68 @@ public:
 	{
 		struct
 		{
-			float X;
-			float Y;
-			float Z;
-			float W;
+			ValueType X;
+			ValueType Y;
+			ValueType Z;
+			ValueType W;
 		};
 
-		float Arr2D[1][4];
-		float Arr1D[4];
+		ValueType Arr2D[1][4];
+		ValueType Arr1D[4];
+		DirectX::XMFLOAT3 DirectFloat3;
+		DirectX::XMFLOAT4 DirectFloat4;
 		// 다이렉트 simd 연산 전용 벡터.
 		DirectX::XMVECTOR DirectVector;
 	};
 
 
-	ENGINEAPI FVector()
+	ENGINEAPI TVector()
 		: X(0.0f), Y(0.0f), Z(0.0f), W(1.0f)
 	{
 
 	}
 
-	ENGINEAPI FVector(float _X, float _Y) : X(_X), Y(_Y), Z(0.0f), W(1.0f)
-	{
-
-	}
-
-	ENGINEAPI FVector(float _X, float _Y, float _Z) : X(_X), Y(_Y), Z(_Z), W(1.0f)
-	{
-
-	}
-
-	FVector(float _X, float _Y, float _Z, float _W) : X(_X), Y(_Y), Z(_Z), W(_W)
+	ENGINEAPI TVector(DirectX::XMVECTOR _DirectVector) : DirectVector(_DirectVector)
 	{
 
 	}
 
 
-	FVector(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
+	ENGINEAPI TVector(float _X, float _Y) : X(_X), Y(_Y), Z(0.0f), W(1.0f)
 	{
 
 	}
 
-	FVector(long _X, long _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
+	ENGINEAPI TVector(float _X, float _Y, float _Z) : X(_X), Y(_Y), Z(_Z), W(1.0f)
 	{
 
 	}
 
-	static float GetVectorAngleDeg(const FVector& _Left, const FVector& _Right)
+	TVector(float _X, float _Y, float _Z, float _W) : X(_X), Y(_Y), Z(_Z), W(_W)
+	{
+
+	}
+
+
+	TVector(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
+	{
+
+	}
+
+	TVector(long _X, long _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
+	{
+
+	}
+
+	static float GetVectorAngleDeg(const TVector& _Left, const TVector& _Right)
 	{
 		return GetVectorAngleRad(_Left, _Right) * UEngineMath::R2D;
 	}
 
-	static float GetVectorAngleRad(const FVector& _Left, const FVector& _Right)
+	static float GetVectorAngleRad(const TVector& _Left, const TVector& _Right)
 	{
-		FVector LCopy = _Left;
-		FVector RCopy = _Right;
+		TVector LCopy = _Left;
+		TVector RCopy = _Right;
 		LCopy.Normalize();
 		RCopy.Normalize();
 
@@ -180,16 +167,16 @@ public:
 		return acos(CosRad);
 	}
 
-	static FVector Cross(const FVector& _Left, const FVector& _Right)
+	static TVector Cross(const TVector& _Left, const TVector& _Right)
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = _Left.Y * _Right.Z - _Left.Z * _Right.Y;
 		Result.Y = _Left.Z * _Right.X - _Left.X * _Right.Z;
 		Result.Z = _Left.X * _Right.Y - _Left.Y * _Right.X;
 		return Result;
 	}
 
-	static float Dot(const FVector& _Left, const FVector& _Right)
+	static float Dot(const TVector& _Left, const TVector& _Right)
 	{
 		float LeftLen = _Left.Length();
 		float RightLen = _Right.Length();
@@ -199,14 +186,14 @@ public:
 		return _Left.X * _Right.X + _Left.Y * _Right.Y + _Left.Z * _Right.Z;
 	}
 
-	static FVector Normalize(FVector _Value)
+	static TVector Normalize(TVector _Value)
 	{
 		_Value.Normalize();
 		return _Value;
 	}
 
 	// 360도 개념으로 넣어줘라.
-	static FVector AngleToVectorDeg(float _Angle)
+	static TVector AngleToVectorDeg(float _Angle)
 	{
 		// 360분법을 => 라디안으로 바꾸는 값을 만들어야 한다.
 		// 360 => 6.28
@@ -218,9 +205,9 @@ public:
 	}
 
 
-	static FVector Lerp(FVector _A, FVector _B, float _Alpha)
+	static TVector Lerp(TVector _A, TVector _B, float _Alpha)
 	{
-		FVector Result;
+		TVector Result;
 		_Alpha = UEngineMath::Clamp(_Alpha, 0.0f, 1.0f);
 		Result.X = UEngineMath::Lerp(_A.X, _B.X, _Alpha);
 		Result.Y = UEngineMath::Lerp(_A.Y, _B.Y, _Alpha);
@@ -231,7 +218,7 @@ public:
 	// 여기에서 나온 결과값이 리턴해줄수 있는건
 	// 길이가 1인 벡터이다.
 	// static입니까?
-	static FVector AngleToVectorRad(float _Angle)
+	static TVector AngleToVectorRad(float _Angle)
 	{
 		// 특정 각도를 가리키는 벡터를 만들수 있다고 해죠?
 		// 벡터 길이와 방향을 생각해라.
@@ -245,13 +232,13 @@ public:
 
 	// 일반적으로 벡터와 행렬이 곱해지는 것을 트랜스폼이라고 부릅니다.
 	// 혹은 트랜슬레이션이라는 함수들이 있다.
-	static FVector Transform(const FVector& _Vector, const class FMatrix& _Matrix);
+	static TVector Transform(const TVector& _Vector, const class FMatrix& _Matrix);
 
 	// 이동 적용할께
-	static FVector TransformCoord(const FVector& _Vector, const class FMatrix& _Matrix);
+	static TVector TransformCoord(const TVector& _Vector, const class FMatrix& _Matrix);
 
 	// 이동 적용하지 않을께.
-	static FVector TransformNormal(const FVector& _Vector, const class FMatrix& _Matrix);
+	static TVector TransformNormal(const TVector& _Vector, const class FMatrix& _Matrix);
 
 	int iX() const
 	{
@@ -279,7 +266,7 @@ public:
 		return X == 0.0f || Y == 0.0f;
 	}
 
-	FVector Half() const
+	TVector Half() const
 	{
 		return { X * 0.5f, Y * 0.5f };
 	}
@@ -309,9 +296,9 @@ public:
 		return;
 	}
 
-	FVector NormalizeReturn() const
+	TVector NormalizeReturn() const
 	{
-		FVector Result = *this;
+		TVector Result = *this;
 		Result.Normalize();
 		return Result;
 	}
@@ -324,19 +311,19 @@ public:
 
 	void RotationXRad(float _Angle)
 	{
-		FVector Copy = *this;
+		TVector Copy = *this;
 		Z = (Copy.Z * cosf(_Angle)) - (Copy.Y * sinf(_Angle));
 		Y = (Copy.Z * sinf(_Angle)) + (Copy.Y * cosf(_Angle));
 	}
 
-	FVector RotationXDegReturn(float _Angle)
+	TVector RotationXDegReturn(float _Angle)
 	{
 		return RotationXRadReturn(_Angle * UEngineMath::D2R);
 	}
 
-	FVector RotationXRadReturn(float _Angle)
+	TVector RotationXRadReturn(float _Angle)
 	{
-		FVector Result = *this;
+		TVector Result = *this;
 		Result.Z = (Z * cosf(_Angle)) - (Y * sinf(_Angle));
 		Result.Y = (Z * sinf(_Angle)) + (Y * cosf(_Angle));
 		return Result;
@@ -351,24 +338,28 @@ public:
 
 	void RotationYRad(float _Angle)
 	{
-		FVector Copy = *this;
+		TVector Copy = *this;
 		X = (Copy.X * cosf(_Angle)) - (Copy.Z * sinf(_Angle));
 		Z = (Copy.X * sinf(_Angle)) + (Copy.Z * cosf(_Angle));
 	}
 
-	FVector RotationYDegReturn(float _Angle)
+	TVector RotationYDegReturn(float _Angle)
 	{
 		return RotationYRadReturn(_Angle * UEngineMath::D2R);
 	}
 
-	FVector RotationYRadReturn(float _Angle)
+	TVector RotationYRadReturn(float _Angle)
 	{
-		FVector Result = *this;
+		TVector Result = *this;
 		Result.X = (X * cosf(_Angle)) - (Z * sinf(_Angle));
 		Result.Z = (X * sinf(_Angle)) + (Z * cosf(_Angle));
 		return Result;
 	}
 
+	TVector ABSVectorReturn()
+	{
+		return DirectX::XMVectorAbs(DirectVector);
+	}
 	// 
 	void RotationZDeg(float _Angle)
 	{
@@ -377,51 +368,51 @@ public:
 
 	void RotationZRad(float _Angle)
 	{
-		FVector Copy = *this;
+		TVector Copy = *this;
 		X = (Copy.X * cosf(_Angle)) - (Copy.Y * sinf(_Angle));
 		Y = (Copy.X * sinf(_Angle)) + (Copy.Y * cosf(_Angle));
 	}
 
-	FVector RotationZDegReturn(float _Angle)
+	TVector RotationZDegReturn(float _Angle)
 	{
 		return RotationZRadReturn(_Angle * UEngineMath::D2R);
 	}
 
-	FVector RotationZRadReturn(float _Angle)
+	TVector RotationZRadReturn(float _Angle)
 	{
-		FVector Result = *this;
+		TVector Result = *this;
 		Result.X = (X * cosf(_Angle)) - (Y * sinf(_Angle));
 		Result.Y = (X * sinf(_Angle)) + (Y * cosf(_Angle));
 		return Result;
 	}
 
-	float Dot(const FVector& other) const
+	float Dot(const TVector& other) const
 	{
 		return X * other.X + Y * other.Y;
 	}
 
-	FVector operator*(float _Value) const
+	TVector operator*(float _Value) const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = X * _Value;
 		Result.Y = Y * _Value;
 		Result.Z = Z * _Value;
 		return Result;
 	}
 
-	FVector operator+(const FVector& _Other) const
+	TVector operator+(const TVector& _Other) const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = X + _Other.X;
 		Result.Y = Y + _Other.Y;
 		return Result;
 	}
 
 	// 선언과 구현이 분리된 녀석들만 붙여줘면 된다.
-	ENGINEAPI FVector operator*(const class FMatrix& _Matrix) const;
-	ENGINEAPI FVector& operator*=(const class FMatrix& _Matrix);
+	ENGINEAPI TVector operator*(const class FMatrix& _Matrix) const;
+	ENGINEAPI TVector& operator*=(const class FMatrix& _Matrix);
 
-	FVector& operator-=(const FVector& _Other)
+	TVector& operator-=(const TVector& _Other)
 	{
 		X -= _Other.X;
 		Y -= _Other.Y;
@@ -429,60 +420,60 @@ public:
 	}
 
 
-	FVector operator-(const FVector& _Other) const
+	TVector operator-(const TVector& _Other) const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = X - _Other.X;
 		Result.Y = Y - _Other.Y;
 		return Result;
 	}
 
-	FVector operator-() const
+	TVector operator-() const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = -X;
 		Result.Y = -Y;
 		Result.Z = -Z;
 		return Result;
 	}
 
-	FVector operator/(int _Value) const
+	TVector operator/(int _Value) const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = X / _Value;
 		Result.Y = Y / _Value;
 		return Result;
 	}
 
-	FVector operator/(const FVector& Other) const
+	TVector operator/(const TVector& Other) const
 	{
-		FVector Result;
+		TVector Result;
 		Result.X = X / Other.X;
 		Result.Y = Y / Other.Y;
 		return Result;
 	}
 
 	// ture가 나오는 
-	bool operator==(const FVector& _Other) const
+	bool operator==(const TVector& _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
 	}
 
 	// float은 비교가 굉장히 위험
 	// const가 붙은 함수에서는 const가 붙은 함수 호출할수 없다.
-	bool EqualToInt(FVector _Other) const
+	bool EqualToInt(TVector _Other) const
 	{
-		// const FVector* const Ptr;
+		// const TVector* const Ptr;
 		// this = nullptr;
 		return iX() == _Other.iX() && iY() == _Other.iY();
 	}
 
-	//bool Compare(FVector _Other, float _limite = 0.0f) const
+	//bool Compare(TVector _Other, float _limite = 0.0f) const
 	//{
 	//	return X == _Other.X && Y == _Other.Y;
 	//}
 
-	FVector& operator+=(const FVector& _Other)
+	TVector& operator+=(const TVector& _Other)
 	{
 		X += _Other.X;
 		Y += _Other.Y;
@@ -490,7 +481,7 @@ public:
 		return *this;
 	}
 
-	FVector& operator*=(const FVector& _Other)
+	TVector& operator*=(const TVector& _Other)
 	{
 		X *= _Other.X;
 		Y *= _Other.Y;
@@ -498,7 +489,7 @@ public:
 		return *this;
 	}
 
-	FVector& operator*=(float _Other)
+	TVector& operator*=(float _Other)
 	{
 		X *= _Other;
 		Y *= _Other;
@@ -523,16 +514,65 @@ public:
 		return Stream;
 	}
 
-	FQuat DegAngleToQuaternion()
-	{
-		FQuat Result;
-		Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
-		return Result;
-	}
+	class FQuat DegAngleToQuaternion();
 
 };
 
-using float4 = FVector;
+template<>
+const TVector<float> TVector<float>::NONE = TVector<float>(0.0f, 0.0f, 0.0f, 1.0f);
+
+template<>
+const TVector<float> TVector<float>::ZERO = TVector<float>(0.0f, 0.0f, 0.0f, 0.0f);
+
+template<>
+const TVector<float> TVector<float>::LEFT = TVector<float>(-1.0f, 0.0f, 0.0f, 0.0f);;
+
+template<>
+const TVector<float> TVector<float>::RIGHT = TVector<float>(1.0f, 0.0f, 0.0f, 0.0f);;
+
+template<>
+const TVector<float> TVector<float>::UP = TVector<float>(0.0f, 1.0f, 0.0f, 0.0f);;
+
+template<>
+const TVector<float> TVector<float>::DOWN = TVector<float>(0.0f, -1.0f, 0.0f, 0.0f);;
+
+template<>
+const TVector<float> TVector<float>::FORWARD = TVector<float>(0.0f, 0.0f, 1.0f, 0.0f);;
+
+template<>
+const TVector<float> TVector<float>::BACK = TVector<float>(0.0f, 0.0f, -1.0f, 0.0f);;
+
+
+class FQuat
+{
+public:
+	union
+	{
+		struct
+		{
+			float X;
+			float Y;
+			float Z;
+			float W;
+		};
+
+		float Arr2D[1][4];
+		float Arr1D[4];
+		// 다이렉트 simd 연산 전용 벡터.
+		DirectX::XMFLOAT4 DirectFloat4;
+		DirectX::XMVECTOR DirectVector;
+
+	};
+
+	TVector<float> QuaternionToEulerDeg() const;
+	TVector<float> QuaternionToEulerRad() const;
+};
+
+
+
+using FVector = TVector<float>;
+
+using float4 = TVector<float>;
 
 // 행렬 은 보통 매트릭스 라고 합니다.
 class FMatrix
@@ -772,10 +812,30 @@ enum class ECollisionType
 	Point,
 	Rect,
 	CirCle, // 타원이 아닌 정방원 
+	OBB2D,
+	Sphere,
+	// 회전하지 않은 박스
+	AABB,
+	// 회전한 박스
+	OBB,
 	Max
 
-	//AABB,
-	//OBB,
+};
+
+struct FCollisionData
+{
+	union
+	{
+		// 정방원
+		DirectX::BoundingSphere Sphere;
+		DirectX::BoundingBox AABB;
+		DirectX::BoundingOrientedBox OBB;
+	};
+
+	FCollisionData()
+	{
+
+	}
 };
 
 // 대부분 오브젝트에서 크기와 위치는 한쌍입니다.
@@ -815,7 +875,7 @@ struct FTransform
 	float4x4 WVP;
 
 	FTransform()
-		: Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
+		: Scale(FVector(1.0f, 1.0f, 1.0f, 1.0f))
 	{
 
 	}
@@ -834,7 +894,7 @@ private:
 	static std::function<bool(const FTransform&, const FTransform&)> AllCollisionFunction[static_cast<int>(ECollisionType::Max)][static_cast<int>(ECollisionType::Max)];
 
 public:
-	static bool Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right);
+	ENGINEAPI static bool Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right);
 
 	// 완전히 같은 형의 함수죠?
 	static bool PointToCirCle(const FTransform& _Left, const FTransform& _Right);
@@ -845,6 +905,25 @@ public:
 
 	static bool CirCleToCirCle(const FTransform& _Left, const FTransform& _Right);
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
+
+	// 연산량이 크다.
+	static bool OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right);
+	static bool OBB2DToRect(const FTransform& _Left, const FTransform& _Right);
+	static bool OBB2DToSphere(const FTransform& _Left, const FTransform& _Right);
+	static bool OBB2DToPoint(const FTransform& _Left, const FTransform& _Right);
+
+
+
+	FCollisionData GetCollisionData() const
+	{
+		FCollisionData Result;
+		// OBB를 세팅해준거 같지만 모든 애들을 다 세팅해준 것입니다.
+		// Sphere와 AABB전체를 다 세팅해준겁니다.
+		Result.OBB.Center = WorldLocation.DirectFloat3;
+		Result.OBB.Extents = (WorldScale * 0.5f).ABSVectorReturn().DirectFloat3;
+		Result.OBB.Orientation = WorldQuat.DirectFloat4;
+		return Result;
+	}
 
 	FVector ZAxisCenterLeftTop() const
 	{

@@ -4,18 +4,18 @@
 #include <EnginePlatform/EngineWinImage.h>
 
 // Ό³Έν :
-class ATitleLogo : public AActor
+class AMonster : public AActor
 {
 public:
 	// constrcuter destructer
-	ATitleLogo();
-	~ATitleLogo();
+	AMonster();
+	~AMonster();
 
 	// delete Function
-	ATitleLogo(const ATitleLogo& _Other) = delete;
-	ATitleLogo(ATitleLogo&& _Other) noexcept = delete;
-	ATitleLogo& operator=(const ATitleLogo& _Other) = delete;
-	ATitleLogo& operator=(ATitleLogo&& _Other) noexcept = delete;
+	AMonster(const AMonster& _Other) = delete;
+	AMonster(AMonster&& _Other) noexcept = delete;
+	AMonster& operator=(const AMonster& _Other) = delete;
+	AMonster& operator=(AMonster&& _Other) noexcept = delete;
 
 	std::shared_ptr<class USpriteRenderer> GetRenderer()
 	{
@@ -29,10 +29,8 @@ protected:
 private:
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
-
 	std::shared_ptr<class USpriteRenderer> Renderer;
 
 	std::shared_ptr<class UCollision> Collision;
-
 };
 

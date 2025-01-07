@@ -77,11 +77,17 @@ public:
 		TransformUpdate();
 	}
 
+	FVector GetWorldScale3D()
+	{
+		return Transform.WorldScale;
+	}
+
 
 	FTransform& GetTransformRef()
 	{
 		return Transform;
 	}
+
 
 	ENGINEAPI void SetupAttachment(std::shared_ptr<USceneComponent> _Parent);
 

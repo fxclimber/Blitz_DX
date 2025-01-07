@@ -14,18 +14,16 @@ ABzPlayerCube::ABzPlayerCube()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-
 	// 여러분들만의 랜더링을 하고 싶다면 2가지 방법이 있습니다.
-
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
 	//Renderer->SetRelativeScale3D({ 50.0f, 50.0f, 50.0f });
-	Renderer->SetScale3D({ 20.f,20.f,20.f });
+	Renderer->SetScale3D({ 40.f,80.f,20.f });
 
 	float yy = Renderer->GetTransformRef().Scale.Y;
 	Renderer->SetWorldLocation({ 0.f,yy,0.f });
 
-
+#ifdef renderer_test
 	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
 	//RendererBottom->SetupAttachment(RootComponent);
 	//RendererBottom->SetMesh("Rect");
@@ -41,13 +39,7 @@ ABzPlayerCube::ABzPlayerCube()
 	//LogoRenderer->CreateAnimation("Move", "Tevi", 4, 16, 0.3f);
 	//LogoRenderer->ChangeAnimation("Move");
 	//LogoRenderer->SetAutoScale(false);
-
-
-
-
-
-
-
+#endif renderer_test
 
 	{
 		//{// 아틀라스에서 애니 
@@ -70,11 +62,8 @@ ABzPlayerCube::ABzPlayerCube()
 		}
 
 	}
-
-
 	//-------------------------------------
-
-
+#ifdef TimeEventTest 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
 	TimeEventComponent->AddEvent(1.f, // 1초 간격
@@ -97,7 +86,7 @@ ABzPlayerCube::ABzPlayerCube()
 		},
 		true // 반복 실행
 	);
-
+#endif 
 }
 
 ABzPlayerCube::~ABzPlayerCube()
@@ -113,8 +102,6 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
-	AddActorRotation(RotationDelta);
 
 
 	if (UEngineInput::IsPress('A'))

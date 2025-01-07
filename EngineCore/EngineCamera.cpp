@@ -55,7 +55,39 @@ void UEngineCamera::Render(float _DetlaTime)
 
 		for (std::shared_ptr<URenderer> Renderer : RenderList)
 		{
+			if (false == Renderer->IsActive())
+			{
+				continue;
+			}
+
 			Renderer->Render(this, _DetlaTime);
+		}
+	}
+}
+
+void UEngineCamera::Release(float _DeltaTime)
+{
+
+	//// Ranged for를 돌릴때는 복사가 일어나므로
+	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
+	{
+		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
+		std::list<std::shared_ptr<URenderer>>::iterator StartIter = RenderList.begin();
+		std::list<std::shared_ptr<URenderer>>::iterator EndIter = RenderList.end();
+
+		// 언리얼은 중간에 삭제할수 없어.
+		for (; StartIter != EndIter; )
+		{
+			if (false == (*StartIter)->IsDestroy())
+			{
+				++StartIter;
+				continue;
+			}
+
+			// 랜더러는 지울 필요가 없습니다.
+			// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
+			// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+			StartIter = RenderList.erase(StartIter);
 		}
 	}
 }
