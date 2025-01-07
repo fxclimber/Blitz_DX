@@ -153,6 +153,7 @@
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
     <ClInclude Include="BzPlayerCube.h" />
+    <ClInclude Include="BzProjectile.h" />
     <ClInclude Include="BzRendererDefault.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="Monster.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />
+    <ClCompile Include="BzProjectile.cpp" />
     <ClCompile Include="BzRendererDefault.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />

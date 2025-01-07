@@ -6,6 +6,7 @@
 #include <EngineCore/CameraActor.h>
 #include "BzRendererDefault.h"
 #include <EngineCore/TimeEventComponent.h>
+#include "BzProjectile.h"
 
 
 ABzPlayerCube::ABzPlayerCube()
@@ -22,6 +23,9 @@ ABzPlayerCube::ABzPlayerCube()
 
 	float yy = Renderer->GetTransformRef().Scale.Y;
 	Renderer->SetWorldLocation({ 0.f,yy,0.f });
+
+
+
 
 #ifdef renderer_test
 	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
@@ -127,7 +131,23 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('Q'))
 	{
-		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
+		AddActorRotation(FVector{ 0.0f,  360.0f * _DeltaTime,0.0f });
+	}
+
+	if (UEngineInput::IsPress(VK_LBUTTON))
+	{
+		float yy = Renderer->GetTransformRef().Scale.Y;
+		FVector PlayerPos = GetActorLocation();
+		FVector MoveOffset(0.f,100.f*_DeltaTime,0.f);
+
+		Proj = GetWorld()->SpawnActor<ABzProjectile>();
+		Proj->SetActorRelativeScale3D({10.f,10.f,100.f});
+		Proj->SetActorLocation(PlayerPos);
+		Proj->AddRelativeLocation(MoveOffset);
+		FVector ProjPos = Proj->GetActorLocation();
+
+		//UEngineDebug::OutPutString(ProjPos.ToString());
+
 	}
 
 }

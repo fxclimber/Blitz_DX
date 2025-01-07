@@ -5,7 +5,6 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/TimeEventComponent.h>
-#include "MyCustomRenderer.h"
 #include <EngineCore/Collision.h>
 
 AMonster::AMonster()

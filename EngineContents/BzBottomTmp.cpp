@@ -9,10 +9,8 @@
 
 ABzBottomTmp::ABzBottomTmp()
 {
-	// root 역할의 디폴트컴포넌트 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
-
 
 	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererBottom->SetupAttachment(RootComponent);

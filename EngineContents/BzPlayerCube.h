@@ -19,7 +19,7 @@ private:
 
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
-
+	std::shared_ptr<class ABzProjectile> Proj;
 
 };
 

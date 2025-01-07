@@ -41,6 +41,9 @@
     <ClInclude Include="BzEnemyCube.h">
       <Filter>Blitz</Filter>
     </ClInclude>
+    <ClInclude Include="BzProjectile.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -87,6 +90,9 @@
       <Filter>Jo</Filter>
     </ClCompile>
     <ClCompile Include="BzEnemyCube.cpp">
+      <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="BzProjectile.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
   </ItemGroup>

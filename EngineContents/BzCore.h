@@ -13,7 +13,12 @@ protected:
 	void EngineEnd();
 	void ResourceSetting();
 
-private:
+	std::shared_ptr<class ABzGameMode_Intro> GetGameMode()
+	{
+		return GameMode;
+	}
 
+private:
+	std::shared_ptr<class ABzGameMode_Intro> GameMode = nullptr;
 };
 
