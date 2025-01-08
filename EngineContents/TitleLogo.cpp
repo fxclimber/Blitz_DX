@@ -27,7 +27,7 @@ ATitleLogo::ATitleLogo()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Player");
-	Collision->SetScale3D({ 50.0f, 200.0f });
+	Collision->SetScale3D({ 100.0f, 300.0f });
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
@@ -45,6 +45,9 @@ ATitleLogo::ATitleLogo()
 	//	{
 	//		UEngineDebug::OutPutString("End");
 	//	});
+
+	GetWorld()->GetMainCamera()->AttachToActor(this);
+
 }
 
 ATitleLogo::~ATitleLogo()
@@ -54,6 +57,8 @@ ATitleLogo::~ATitleLogo()
 void ATitleLogo::BeginPlay()
 {
 	AActor::BeginPlay();
+
+
 }
 
 void ATitleLogo::Tick(float _DeltaTime)
@@ -75,6 +80,8 @@ void ATitleLogo::Tick(float _DeltaTime)
 	{
 		AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
 	}
+
+
 
 	//if (공격 상태일때만)
 	//{

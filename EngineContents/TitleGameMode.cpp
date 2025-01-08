@@ -14,7 +14,17 @@ class TestWindow : public UEngineGUIWindow
 public:
 	void OnGUI() override
 	{
-		ImGui::Button("WindowButton");
+		if (true == ImGui::Button("WindowButton"))
+		{
+			std::shared_ptr<AMonster> NewMonster = GetWorld()->SpawnActor<AMonster>();
+			NewMonster->SetActorLocation({ 300.0f, 200.0f, 0.0f });
+		}
+
+		if (true == ImGui::Button("FreeCameraOn"))
+		{
+			GetWorld()->GetMainCamera()->FreeCameraSwitch();
+		}
+
 		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
 		ImGui::Text("test");
 

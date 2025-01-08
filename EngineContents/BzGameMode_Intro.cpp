@@ -2,6 +2,9 @@
 #include "BzGameMode_Intro.h"
 #include "BzPlayerCube.h"
 #include "BzBottomTmp.h"
+#include "BzEnemyCube.h"
+#include "BzProjectile.h"
+
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
@@ -12,9 +15,7 @@
 #include <random>
 #include <chrono>
 #include <EngineBase/EngineRandom.h>
-#include "BzEnemyCube.h"
 #include <EnginePlatform/EngineInput.h>
-#include "BzProjectile.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -31,13 +32,16 @@ public:
 
 ABzGameMode_Intro::ABzGameMode_Intro()
 {
-    // collision profile name
-    GetWorld()->CreateCollisionProfile("Monster");
-    GetWorld()->CreateCollisionProfile("Player");
-    GetWorld()->LinkCollisionProfile("Player","Monster");
-
-
 	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+	
+    // collision profile name
+    GetWorld()->CreateCollisionProfile("Enemy");
+    GetWorld()->CreateCollisionProfile("Player");
+    GetWorld()->CreateCollisionProfile("Proj");
+
+    GetWorld()->LinkCollisionProfile("Player","Enemy");
+    GetWorld()->LinkCollisionProfile("Proj","Enemy");
+
 	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
 	Bottom->SetActorLocation({0.f,0.f,0.f});
@@ -51,29 +55,28 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	cam->SetProjectionType(EProjectionType::Perspective);
 
 	//-----
-    //TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
-    //TimeEventComponent->AddEvent(
-    //    5.f,
-    //    [this](float _Delta, float _Acc)
-    //    {      
-    //        float randomX = this->random.Randomfloat(-400.0f, 400.0f);
-    //        float randomY = this->random.Randomfloat(-100.0f, 100.0f);
-    //        float randomZ = this->random.Randomfloat(-400.0f, 400.0f);
-    //        FVector randomLocation(randomX, randomY, randomZ); 
+    TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+    TimeEventComponent->AddEvent(
+        5.f,
+        [this](float _Delta, float _Acc)
+        {      
+            float randomX = this->random.Randomfloat(-800.0f, 800.0f);
+            float randomY = this->random.Randomfloat(0.f, 0.0f);
+            float randomZ = this->random.Randomfloat(-800.0f, 800.0f);
+            FVector randomLocation(randomX, randomY, randomZ); 
 
-    //        std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
-    //        EnemyCubes.push_back(Enemy);
+            std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
+            EnemyCubes.push_back(Enemy);
 
-    //        if (Enemy) {
-    //            Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
-    //        }
-    //    },
-    //    [this]()
-    //    {
-    //    },
-    //    false // 반복 여부
-    //);
-	Proj = nullptr;
+            if (Enemy) {
+                Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
+            }
+        },
+        [this]()
+        {
+        },
+        false // 반복 여부
+    );
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()
@@ -89,15 +92,20 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress(VK_LBUTTON))
 	{
-		//FVector PlayerPos = GetActorLocation();
-		//FVector MoveOffset(0.f,100.f*_DeltaTime,0.f);
-		//FVector PosOffset = { 200.f, 200.f, 0.f };
-		Proj = GetWorld()->SpawnActor<ABzProjectile>();
-		//Proj->SetActorRelativeScale3D({ 100.f,100.f,100.f });
-		//Proj->SetActorLocation(PlayerPos);
-		//Proj->AddRelativeLocation(MoveOffset);
+		FVector PlayerPos = PlayerCube->GetActorLocation();
+		FVector offsetPos = {100.f,80.f,0.f};
+		FVector PlayerRot = PlayerCube->GetActorTransform().Rotation;
+		FVector MoveDir = PlayerCube->GetActorForwardVector();
+		float BulletSpeed = 30000.f;
+		FVector MoveOffset = (MoveDir * _DeltaTime * BulletSpeed);
 
-		//UEngineDebug::OutPutString(ProjPos.ToString());
+		Proj = GetWorld()->SpawnActor<ABzProjectile>();
+		Proj->SetPlayer(PlayerCube);
+
+		//Proj->SetActorLocation(PlayerPos+ offsetPos);
+		//Proj->SetActorRotation(PlayerRot);
+		//Proj->AddActorLocation(MoveOffset);
+
 
 	}
 

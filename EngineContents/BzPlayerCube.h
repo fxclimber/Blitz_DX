@@ -6,6 +6,10 @@ class ABzPlayerCube : public AActor
 public:
 	ABzPlayerCube();
 	~ABzPlayerCube();
+	std::shared_ptr<class UBzRendererDefault> GetFire()
+	{
+		return RendererFront;
+	}
 
 
 
@@ -26,6 +30,8 @@ private:
 	std::shared_ptr<class UCollision> Collision;
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
 	FVector forwardVector = GetActorForwardVector();
+	std::shared_ptr<class ACameraActor> Camera ;
+	FVector diff = { 0.f,0.f,0.f };
 
 };
 

@@ -10,7 +10,6 @@
 #include "EngineTexture.h"
 #include "EngineDepthStencilState.h"
 
-
 void UEngineGraphicDevice::DefaultResourcesInit()
 {
 	DepthStencilInit();
@@ -22,17 +21,31 @@ void UEngineGraphicDevice::DefaultResourcesInit()
 	MaterialInit();
 }
 
-
 void UEngineGraphicDevice::DepthStencilInit()
 {
-	D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
-	Desc.DepthEnable = true;
-	Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	// 깊이값이 더 작으면 통과시켜
-	Desc.DepthFunc = D3D11_COMPARISON_LESS;
-	Desc.StencilEnable = false;
-	// Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	UEngineDepthStencilState::Create("BaseDepth", Desc);
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		// 깊이값이 더 작으면 통과시켜
+		Desc.DepthFunc = D3D11_COMPARISON_LESS;
+		Desc.StencilEnable = false;
+		// Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+		UEngineDepthStencilState::Create("BaseDepth", Desc);
+	}
+
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		// 깊이값이 더 작으면 통과시켜
+		Desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+		Desc.StencilEnable = false;
+		// Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+		UEngineDepthStencilState::Create("CollisionDebugDepth", Desc);
+	}
 }
 
 void UEngineGraphicDevice::TextureInit()
@@ -84,8 +97,6 @@ void UEngineGraphicDevice::ShaderInit()
 		UEngineShader::ReflectionCompile(ShaderFiles[i]);
 	}
 }
-
-
 
 void UEngineGraphicDevice::MeshInit()
 {
@@ -244,6 +255,8 @@ void UEngineGraphicDevice::MeshInit()
 
 }
 
+
+
 void UEngineGraphicDevice::BlendInit()
 {
 	// 머티리얼이나 이런곳에서 이 블랜드 세팅이 존재한다.
@@ -292,11 +305,21 @@ void UEngineGraphicDevice::BlendInit()
 
 void UEngineGraphicDevice::RasterizerStateInit()
 {
-	D3D11_RASTERIZER_DESC Desc = {};
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	{
+		D3D11_RASTERIZER_DESC Desc = {};
+		Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
-	UEngineRasterizerState::Create("EngineBase", Desc);
+		UEngineRasterizerState::Create("EngineBase", Desc);
+	}
+
+	{
+		D3D11_RASTERIZER_DESC Desc = {};
+		Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+
+		UEngineRasterizerState::Create("CollisionDebugRas", Desc);
+	}
 }
 
 void UEngineGraphicDevice::MaterialInit()
@@ -305,5 +328,14 @@ void UEngineGraphicDevice::MaterialInit()
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("SpriteMaterial");
 		Mat->SetVertexShader("EngineSpriteShader.fx");
 		Mat->SetPixelShader("EngineSpriteShader.fx");
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("CollisionDebugMaterial");
+		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
+		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
+		// 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
+		Mat->SetDepthStencilState("CollisionDebugDepth");
+		Mat->SetRasterizerState("CollisionDebugRas");
 	}
 }

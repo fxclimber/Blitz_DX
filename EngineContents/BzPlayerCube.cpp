@@ -119,46 +119,25 @@ ABzPlayerCube::~ABzPlayerCube()
 void ABzPlayerCube::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	Camera = GetWorld()->GetCamera(0);
+	FVector thisPos = GetActorLocation();
+	FVector camPos = Camera->GetActorLocation();
+	diff = camPos - thisPos;
+	diff += {0.f, 0.f, -1000.f};
 }
 
 void ABzPlayerCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	//MoveDirection = CalculateMoveDirection(_DeltaTime);
-	//forwardVector = GetActorForwardVector();
-
 	CalculateMoveDirection(_DeltaTime);
 
+	FVector thisPos = GetActorLocation();
 
-	{
-		//if (UEngineInput::IsPress('A'))
-		//{
-		//	AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
-		//}
-		//if (UEngineInput::IsPress('D'))
-		//{
-		//	AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
-		//}
 
-		//FVector Test = GetActorForwardVector();
 
-		//if (UEngineInput::IsPress('W'))
-		//{
-		//	AddRelativeLocation(FVector{ 0.0f, 0.0f, 100.0f * _DeltaTime });
-		//}
 
-		//if (UEngineInput::IsPress('S'))
-		//{
-		//	AddRelativeLocation(FVector{ 0.0f,0.0f, -100.0f * _DeltaTime });
-		//}
-
-		//if (UEngineInput::IsPress('Q'))
-		//{
-		//	AddActorRotation(FVector{ 0.0f,  360.0f * _DeltaTime,0.0f });
-		//}
-
-	}
 
 
 

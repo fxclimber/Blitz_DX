@@ -4,6 +4,8 @@
 // Ό³Έν :
 class UEngineGUIWindow : public UObject
 {
+	friend class UEngineGUI;
+
 public:
 	// constrcuter destructer
 	ENGINEAPI UEngineGUIWindow();
@@ -18,9 +20,15 @@ public:
 	virtual void BeginPlay() {}
 	virtual void OnGUI() = 0;
 
+	ULevel* GetWorld()
+	{
+		return World;
+	}
+
 protected:
 
 private:
+	ULevel* World;
 
 };
 
