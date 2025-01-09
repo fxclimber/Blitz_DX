@@ -71,6 +71,15 @@ private:
 		std::vector<std::function<void()>> UpEvents;
 		std::vector<std::function<void()>> FreeEvents;
 
+		void Reset()
+		{
+			IsDown = false;
+			IsPress = false;
+			IsUp = false;
+			IsFree = true;
+			PressTime = 0.0f;
+			FreeTime = 0.0f;
+		}
 
 		// 벡터나 리스트를 사용하면 에러가 난다.
 		// 학생들이 대처를 못하는데
@@ -97,17 +106,19 @@ private:
 public:
 	ENGINEAPI static void KeyCheck(float _DeltaTime);
 
+	ENGINEAPI static void KeyReset();
+
 	// UEngineInput::GetInst().IsDown('A')
 
-	bool IsDoubleClick(int _KeyIndex, float _Time)
+	static bool IsDoubleClick(int _KeyIndex, float _Time)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("아직도 등록되지 않은 키가 존재합니다.");
 			return false;
 		}
 
-		return Keys[_KeyIndex].IsDown && Keys[_KeyIndex].FreeTime < _Time;
+		return GetInst().Keys[_KeyIndex].IsDown && GetInst().Keys[_KeyIndex].FreeTime < _Time;
 	}
 
 	static bool IsDown(int _KeyIndex)
@@ -128,7 +139,7 @@ public:
 		return GetInst().Keys[_KeyIndex].IsDown;
 	}
 
-	bool IsUp(int _KeyIndex)
+	static bool IsUp(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
@@ -150,7 +161,7 @@ public:
 		return GetInst().Keys[_KeyIndex].IsPress;
 	}
 
-	float IsPressTime(int _KeyIndex)
+	static float IsPressTime(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
@@ -162,7 +173,7 @@ public:
 	}
 
 
-	bool IsFree(int _KeyIndex)
+	static bool IsFree(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{

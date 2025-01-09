@@ -7,6 +7,7 @@
 class ULevel : public UObject
 {
 	friend class UCollision;
+	friend class UEngineCore;
 
 public:
 	// constrcuter destructer
@@ -23,6 +24,17 @@ public:
 	void LevelChangeStart();
 	// 내가 교체 당했을때
 	void LevelChangeEnd();
+
+	class AGameMode* GetGameMode()
+	{
+		return GameMode;
+	}
+
+	class APawn* GetMainPawn()
+	{
+		return MainPawn;
+	}
+
 
 
 	void Tick(float _DeltaTime);
@@ -54,7 +66,7 @@ public:
 	std::shared_ptr<class ACameraActor> SpawnCamera(int _Order);
 
 	template<typename ActorType>
-	std::shared_ptr<ActorType> SpawnActor()
+	std::shared_ptr<ActorType> SpawnActor(std::string_view _Name = "")
 	{
 		// AMonster : public AActor
 		// SpawnActor<AMonster>();
@@ -80,6 +92,8 @@ public:
 		// 플레이스먼트 new 
 		std::shared_ptr<ActorType> NewActor(NewPtr = new(ActorMemory) ActorType());
 
+		ActorPtr->SetName(_Name);
+
 		//컴파일러는 그걸 모른다.
 		BeginPlayList.push_back(NewActor);
 
@@ -97,10 +111,54 @@ public:
 
 	ENGINEAPI void LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName);
 
+	// #ifdef _DEBUG
+		// 에디터에서는 빠른지 느린지를 따지지 않는다.
+		// 에디터기능을 만들때는 최적화를 신경안쓰는 경우가 많다.
+		// 실제 플레이와는 전혀 관련이 없으니까.
+	template<typename ConvertType>
+	ENGINEAPI std::list<std::shared_ptr<ConvertType>> GetAllActorListByClass()
+	{
+		std::list<std::shared_ptr<ConvertType>> List;
+
+		for (std::shared_ptr<class AActor> Actor : AllActorList)
+		{
+			std::shared_ptr<ConvertType> Convert = std::dynamic_pointer_cast<ConvertType>(Actor);
+			if (nullptr == Convert)
+			{
+				continue;
+			}
+			List.push_back(Convert);
+		}
+
+		return List;
+	}
+
+	template<typename ConvertType>
+	ENGINEAPI std::vector<std::shared_ptr<ConvertType>> GetAllActorArrayByClass()
+	{
+		std::vector<std::shared_ptr<ConvertType>> List;
+
+		for (std::shared_ptr<class AActor> Actor : AllActorList)
+		{
+			std::shared_ptr<ConvertType> Convert = std::dynamic_pointer_cast<ConvertType>(Actor);
+			if (nullptr == Convert)
+			{
+				continue;
+			}
+			List.push_back(Convert);
+		}
+
+		return List;
+	}
+	// #endif
 
 protected:
 
 private:
+	class AGameMode* GameMode = nullptr;
+
+	class APawn* MainPawn = nullptr;
+
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
 
 	std::list<std::shared_ptr<class AActor>> AllActorList;
@@ -116,5 +174,7 @@ private:
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> CheckCollisions;
 
 	std::map<std::string, std::list<std::string>> CollisionLinks;
+
+	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn);
 };
 

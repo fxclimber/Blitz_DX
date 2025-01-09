@@ -20,19 +20,19 @@ std::shared_ptr<UEngineResources> UEngineResources::Find(std::string_view _ResNa
 
 void UEngineResources::PushRes(std::shared_ptr<UEngineResources> _Res, const std::string_view _Info, std::string_view _Name, std::string_view _Path)
 {
+	std::string UpperName = UEngineString::ToUpper(_Name);
 	//       텍스처에                  Player.png가 들어있는지 확인.
-	if (true == ResMap[_Info.data()].contains(_Name.data()))
+	if (true == ResMap[_Info.data()].contains(UpperName))
 	{
 		MSGASSERT("이미 로드한 리소스를 또 로드 하려고 했습니다" + std::string(_Info.data()) + "  " + _Name.data());
 		return;
 	}
 
 	// 이걸 호출한 쪽의 영역으로 잡히게 된다.
-	std::string UpperName = UEngineString::ToUpper(_Name);
 
 	_Res->SetName(UpperName);
 	_Res->Path = _Path;
-	ResMap[_Info.data()].insert({UpperName, _Res });
+	ResMap[_Info.data()].insert({ UpperName, _Res });
 
 	return;
 }

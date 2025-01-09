@@ -12,6 +12,7 @@
 
 HINSTANCE UEngineWindow::hInstance = nullptr;
 std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
+std::map<HWND, UEngineWindow*> UEngineWindow::AllWindows;
 std::function<bool(HWND, UINT, WPARAM, LPARAM)> UEngineWindow::CustomProc = nullptr;
 int WindowCount = 0;
 // bool UEngineWindow::LoopActive = true;
@@ -27,9 +28,14 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
     {
         if (true == CustomProc(hWnd, message, wParam, lParam))
         {
-            // return true;
+            return true;
         }
     }
+
+    //if (true == AllWindows.contains(hWnd))
+    //{
+    //    MSGASSERT("존재하지 않는 윈도우가 메세지가 들어왔습니다.");
+    //}
 
     switch (message)
     {
@@ -43,6 +49,28 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         HDC hdc = BeginPaint(hWnd, &ps);
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
         EndPaint(hWnd, &ps);
+    }
+    break;
+    case WM_SETFOCUS:
+    {
+        if (true == AllWindows.contains(hWnd))
+        {
+            // MSGASSERT("존재하지 않는 윈도우가 메세지가 들어왔습니다.");
+            AllWindows[hWnd]->IsFocusValue = true;
+        }
+        UEngineDebug::OutPutString("F");
+        // AllWindows[]
+        //Window.IsFocus = true;
+    }
+    break;
+    case WM_KILLFOCUS:
+    {
+        if (true == AllWindows.contains(hWnd))
+        {
+            // MSGASSERT("존재하지 않는 윈도우가 메세지가 들어왔습니다.");
+            AllWindows[hWnd]->IsFocusValue = false;
+        }
+        UEngineDebug::OutPutString("K");
     }
     break;
     case WM_DESTROY:
@@ -184,6 +212,8 @@ void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassN
 
     // 윈도우가 만들어지면 hdc를 여기서 얻어올 겁니다.
     HDC WindowMainDC = GetDC(WindowHandle);
+
+    AllWindows.insert({ WindowHandle, this });
 }
 
 void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)

@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "Monster.h"
+#include "Monster2.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
@@ -8,9 +8,10 @@
 #include "MyCustomRenderer.h"
 #include <EngineCore/Collision.h>
 
-AMonster::AMonster()
+AMonster2::AMonster2()
 {
-	MonsterTypeValue = EMonsterType::Monster;
+	MonsterTypeValue = EMonsterType::Monster2;
+
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
@@ -19,7 +20,7 @@ AMonster::AMonster()
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetTexture("Test.png");
+	Renderer->SetSprite("Tevi", 0);
 	Renderer->SetScale3D({ 50.0f, 50.0f });
 
 	Collision = CreateDefaultSubObject<UCollision>();
@@ -29,16 +30,16 @@ AMonster::AMonster()
 
 }
 
-AMonster::~AMonster()
+AMonster2::~AMonster2()
 {
 }
 
-void AMonster::BeginPlay()
+void AMonster2::BeginPlay()
 {
 	AActor::BeginPlay();
 }
 
-void AMonster::Tick(float _DeltaTime)
+void AMonster2::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
@@ -48,18 +49,15 @@ void AMonster::Tick(float _DeltaTime)
 
 }
 
-void AMonster::Serialize(UEngineSerializer& _Ser)
+// 데이터를 직렬화(압축)
+void AMonster2::Serialize(UEngineSerializer& _Ser)
 {
 	_Ser << GetActorLocation();
-	//_Ser << std::string("Test.png");
-	//_Ser << FVector(50.0f, 50.0f);
 }
-
-
-void AMonster::DeSerialize(UEngineSerializer& _Ser)
+// 데이터를 복구(할때)
+void AMonster2::DeSerialize(UEngineSerializer& _Ser)
 {
-	FVector SavePos;
-	_Ser >> SavePos;
-	SetActorLocation(SavePos);
-
+	FVector Location;
+	_Ser >> Location;
+	SetActorLocation(Location);
 }

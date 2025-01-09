@@ -8,6 +8,7 @@
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/imgui.h>
 #include <EngineCore/EngineCamera.h>
+#include "ContentsEditorGUI.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -48,7 +49,6 @@ ATitleGameMode::ATitleGameMode()
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
 
-	NewTest;
 
 	{
 		Logo = GetWorld()->SpawnActor<ATitleLogo>();
@@ -61,7 +61,6 @@ ATitleGameMode::ATitleGameMode()
 	}
 
 
-	UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 }
 
 ATitleGameMode::~ATitleGameMode()
@@ -79,4 +78,31 @@ void ATitleGameMode::Tick(float _DeltaTime)
 		Logo = nullptr;
 	}
 
+}
+
+void ATitleGameMode::LevelChangeStart()
+{
+	UEngineGUI::AllWindowOff();
+
+	{
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		}
+
+		Window->SetActive(true);
+	}
+
+	{
+		std::shared_ptr<TestWindow> Window = UEngineGUI::FindGUIWindow<TestWindow>("TestWindow");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+		}
+
+		Window->SetActive(true);
+	}
 }

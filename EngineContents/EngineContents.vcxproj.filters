@@ -11,12 +11,6 @@
     <ClInclude Include="ContentsCore.h">
       <Filter>Jo</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Jo</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRenderer.h">
-      <Filter>Jo</Filter>
-    </ClInclude>
     <ClInclude Include="BzCore.h">
       <Filter>Blitz</Filter>
     </ClInclude>
@@ -35,14 +29,35 @@
     <ClInclude Include="BzBottomTmp.h">
       <Filter>Blitz</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Jo</Filter>
-    </ClInclude>
     <ClInclude Include="BzEnemyCube.h">
       <Filter>Blitz</Filter>
     </ClInclude>
     <ClInclude Include="BzProjectile.h">
       <Filter>Blitz</Filter>
+    </ClInclude>
+    <ClInclude Include="GMConst.h">
+      <Filter>Jo</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapGameMode.h">
+      <Filter>Jo\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Jo\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster2.h">
+      <Filter>Jo\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Jo\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsEditorGUI.h">
+      <Filter>Jo\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRenderer.h">
+      <Filter>Jo\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="AMon.h">
+      <Filter>Jo\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,12 +71,6 @@
     <ClCompile Include="ContentsCore.cpp">
       <Filter>Jo</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Jo</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRenderer.cpp">
-      <Filter>Jo</Filter>
-    </ClCompile>
     <ClCompile Include="BzCore.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
@@ -70,9 +79,6 @@
     </ClCompile>
     <ClCompile Include="BzPlayerCube.cpp">
       <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="ContentsCore_Resources.cpp">
-      <Filter>Jo</Filter>
     </ClCompile>
     <ClCompile Include="MyCustomRenderer.cpp">
       <Filter>Jo\Render</Filter>
@@ -86,14 +92,35 @@
     <ClCompile Include="BzBottomTmp.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Jo</Filter>
-    </ClCompile>
     <ClCompile Include="BzEnemyCube.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
     <ClCompile Include="BzProjectile.cpp">
       <Filter>Blitz</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapGameMode.cpp">
+      <Filter>Jo\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore_Resources.cpp">
+      <Filter>Jo\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Jo\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster2.cpp">
+      <Filter>Jo\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Jo\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsEditorGUI.cpp">
+      <Filter>Jo\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRenderer.cpp">
+      <Filter>Jo\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="AMon.cpp">
+      <Filter>Jo\Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +138,9 @@
     </Filter>
     <Filter Include="Jo\Render">
       <UniqueIdentifier>{a9de3d83-93ba-4562-a599-eaa8e979055e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jo\GUI">
+      <UniqueIdentifier>{01a92484-7eab-4ea4-96ed-583618cfd333}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AMon.h" />
     <ClInclude Include="BzBottomTmp.h" />
     <ClInclude Include="BzEnemyCube.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
@@ -156,15 +157,20 @@
     <ClInclude Include="BzProjectile.h" />
     <ClInclude Include="BzRendererDefault.h" />
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="ContentsEditorGUI.h" />
+    <ClInclude Include="GMConst.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Monster2.h" />
     <ClInclude Include="MyCustomRenderer.h" />
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="TileMapGameMode.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AMon.cpp" />
     <ClCompile Include="BzBottomTmp.cpp" />
     <ClCompile Include="BzEnemyCube.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
@@ -174,7 +180,9 @@
     <ClCompile Include="BzRendererDefault.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="ContentsEditorGUI.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Monster2.cpp" />
     <ClCompile Include="MyCustomRenderer.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -183,6 +191,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="BzResourceManager.cpp" />
+    <ClCompile Include="TileMapGameMode.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
   </ItemGroup>

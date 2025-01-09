@@ -2,7 +2,7 @@
 #include <EngineCore/Actor.h>
 #include <EngineBase/EngineRandom.h>
 
-class ABzGameMode_Intro : public AActor
+class ABzGameMode_Intro : public AGameMode
 {
 public:
 	ABzGameMode_Intro();

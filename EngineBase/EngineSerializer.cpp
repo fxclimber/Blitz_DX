@@ -1,6 +1,18 @@
 #include "PreCompile.h"
 #include "EngineSerializer.h"
 
+// 데이터를 직렬화(압축)
+void ISerializObject::Serialize(UEngineSerializer& _Ser)
+{
+
+}
+// 데이터를 복구(할때)
+void ISerializObject::DeSerialize(UEngineSerializer& _Ser)
+{
+
+}
+
+
 UEngineSerializer::UEngineSerializer()
 {
 }
@@ -9,7 +21,7 @@ UEngineSerializer::~UEngineSerializer()
 {
 }
 
-void UEngineSerializer::Write(void* _Data, unsigned int _Size)
+void UEngineSerializer::Write(const void* _Data, unsigned int _Size)
 {
 	// vector밖에 없다.
 	// 

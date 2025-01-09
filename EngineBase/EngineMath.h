@@ -942,8 +942,20 @@ public:
 	// 연산량이 크다.
 	static bool OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right);
 	static bool OBB2DToRect(const FTransform& _Left, const FTransform& _Right);
-	static bool OBB2DToSphere(const FTransform& _Left, const FTransform& _Right);
 	static bool OBB2DToPoint(const FTransform& _Left, const FTransform& _Right);
+	static bool OBB2DToCirCle(const FTransform& _Left, const FTransform& _Right);
+
+	static bool OBBToSphere(const FTransform& _Left, const FTransform& _Right);
+	static bool OBBToOBB(const FTransform& _Left, const FTransform& _Right);
+	static bool OBBToAABB(const FTransform& _Left, const FTransform& _Right);
+
+	static bool SphereToSphere(const FTransform& _Left, const FTransform& _Right);
+	static bool SphereToOBB(const FTransform& _Left, const FTransform& _Right);
+	static bool SphereToAABB(const FTransform& _Left, const FTransform& _Right);
+
+	static bool AABBToSphere(const FTransform& _Left, const FTransform& _Right);
+	static bool AABBToOBB(const FTransform& _Left, const FTransform& _Right);
+	static bool AABBToAABB(const FTransform& _Left, const FTransform& _Right);
 
 
 

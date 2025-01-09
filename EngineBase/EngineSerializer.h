@@ -8,8 +8,8 @@ class UEngineSerializer
 {
 public:
 	// constrcuter destructer
-	UEngineSerializer();
-	~UEngineSerializer();
+	ENGINEAPI UEngineSerializer();
+	ENGINEAPI ~UEngineSerializer();
 
 	// delete Function
 	UEngineSerializer(const UEngineSerializer& _Other) = delete;
@@ -18,29 +18,29 @@ public:
 	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
 	// 데이터의 크기
-	void Write(void* _Data, unsigned int _Size);
+	ENGINEAPI void Write(const void* _Data, unsigned int _Size);
 
-	void operator<<(int& _Data)
+	void operator<<(const int& _Data)
 	{
 		Write(&_Data, sizeof(int));
 	}
 
-	void operator<<(bool& _Data)
+	void operator<<(const bool& _Data)
 	{
 		Write(&_Data, sizeof(bool));
 	}
 
-	void operator<<(FVector& _Data)
+	void operator<<(const FVector& _Data)
 	{
 		Write(&_Data, sizeof(FVector));
 	}
 
-	void operator<<(FIntPoint& _Data)
+	void operator<<(const FIntPoint& _Data)
 	{
 		Write(&_Data, sizeof(FIntPoint));
 	}
 
-	void operator<<(std::string& _Data)
+	void operator<<(const std::string& _Data)
 	{
 		// int하나랑 포인터 하나 들고 있죠?
 		// 길이도 같이 저장해야 한다.
@@ -67,7 +67,7 @@ public:
 		}
 	}
 
-	void Read(void* _Data, unsigned int _Size);
+	ENGINEAPI void Read(void* _Data, unsigned int _Size);
 
 	void operator>>(int& _Data)
 	{
@@ -170,10 +170,16 @@ class ISerializObject
 	// 3. 내부 가상함수들은 Private이 존재할수 없다.
 
 public:
+	ENGINEAPI virtual ~ISerializObject() = 0
+	{
+
+	}
+
+public:
 	// 데이터를 직렬화(압축)
-	virtual void Serialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void Serialize(UEngineSerializer& _Ser);
 	// 데이터를 복구(할때)
-	virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void DeSerialize(UEngineSerializer& _Ser);
 };
 
 //class Test

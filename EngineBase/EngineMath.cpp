@@ -63,8 +63,20 @@ public:
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::Rect)] = FTransform::CirCleToRect;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::OBB2D)] = FTransform::OBB2DToOBB2D;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Rect)] = FTransform::OBB2DToRect;
-		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::CirCle)] = FTransform::OBB2DToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::CirCle)] = FTransform::OBB2DToCirCle;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Point)] = FTransform::OBB2DToPoint;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::Sphere)] = FTransform::OBBToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::AABB)] = FTransform::OBBToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::OBB)] = FTransform::OBBToOBB;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::Sphere)] = FTransform::SphereToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::AABB)] = FTransform::SphereToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::OBB)] = FTransform::SphereToOBB;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::Sphere)] = FTransform::AABBToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::AABB)] = FTransform::AABBToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::OBB)] = FTransform::AABBToOBB;
 
 	}
 };
@@ -115,6 +127,124 @@ FVector FQuat::QuaternionToEulerRad() const
 
 	return result;
 }
+
+
+FVector FVector::Transform(const FVector& _Vector, const class FMatrix& _Matrix)
+{
+	return _Vector * _Matrix;
+}
+
+FVector FVector::TransformCoord(const FVector& _Vector, const class FMatrix& _Matrix)
+{
+	FVector Copy = _Vector;
+	Copy.W = 1.0f;
+	return Copy * _Matrix;
+}
+
+FVector FVector::TransformNormal(const FVector& _Vector, const class FMatrix& _Matrix)
+{
+	FVector Copy = _Vector;
+	Copy.W = 0.0f;
+	return Copy * _Matrix;
+}
+
+template<>
+FVector FVector::operator*(const class FMatrix& _Matrix) const
+{
+	FVector Result;
+	// 나머지 완성하고 곱해서 결과 확인해보세요.
+
+	// x y z w가 다 곱해져야 한다.
+	Result.X = Arr2D[0][0] * _Matrix.Arr2D[0][0] + Arr2D[0][1] * _Matrix.Arr2D[1][0] + Arr2D[0][2] * _Matrix.Arr2D[2][0] + Arr2D[0][3] * _Matrix.Arr2D[3][0];
+	Result.Y = Arr2D[0][0] * _Matrix.Arr2D[0][1] + Arr2D[0][1] * _Matrix.Arr2D[1][1] + Arr2D[0][2] * _Matrix.Arr2D[2][1] + Arr2D[0][3] * _Matrix.Arr2D[3][1];
+	Result.Z = Arr2D[0][0] * _Matrix.Arr2D[0][2] + Arr2D[0][1] * _Matrix.Arr2D[1][2] + Arr2D[0][2] * _Matrix.Arr2D[2][2] + Arr2D[0][3] * _Matrix.Arr2D[3][2];
+	Result.W = Arr2D[0][0] * _Matrix.Arr2D[0][3] + Arr2D[0][1] * _Matrix.Arr2D[1][3] + Arr2D[0][2] * _Matrix.Arr2D[2][3] + Arr2D[0][3] * _Matrix.Arr2D[3][3];
+
+
+	//std::cout << "X : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][0] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][0] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][0] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][0] << std::endl;
+	//std::cout << "Y : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][1] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][1] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][1] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][1] << std::endl;
+	//std::cout << "Z : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][2] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][2] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][2] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][2] << std::endl;
+	//std::cout << "W : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][3] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][3] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][3] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][3] << std::endl;
+
+	//std::cout << Result.ToString() << std::endl;
+
+
+	return Result;
+}
+
+FVector& FVector::operator*=(const FMatrix& _Matrix)
+{
+	DirectVector = DirectX::XMVector4Transform(DirectVector, _Matrix.DirectMatrix);
+	return *this;
+}
+
+FMatrix FMatrix::operator*(const FMatrix& _Matrix)
+{
+	FMatrix Result;
+	Result.DirectMatrix = DirectX::XMMatrixMultiply(DirectMatrix, _Matrix.DirectMatrix);
+	return Result;
+
+}
+
+ENGINEAPI void FTransform::Decompose()
+{
+	World.Decompose(WorldScale, WorldQuat, WorldLocation);
+
+	LocalWorld.Decompose(RelativeScale, RelativeQuat, RelativeLocation);
+
+	//Scale = RelativeScale;
+	//Quat = RelativeQuat;
+	//Rotation = RelativeQuat.QuaternionToEulerDeg();
+	//Location = RelativeLocation;
+}
+
+void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
+{
+	// 10000 10000 10000
+
+	// 절대로
+	// 100 100 100
+
+
+	// world인지 local
+	ScaleMat.Scale(Scale);
+	RotationMat.RotationDeg(Rotation);
+	LocationMat.Position(Location);
+
+	// 로컬 월드 가 될지 안될지 
+	FMatrix CheckWorld = ScaleMat * RotationMat * LocationMat;
+
+	// 절대로 지켜져야하는 최종 값이 되어야 한다.
+	if (true == _IsAbsolut)
+	{
+		// 3000, 0
+		// 100, 0
+		// -2900
+
+		// CheckWorld 월드가 되어야 한다고 결정.
+		World = CheckWorld;
+		LocalWorld = CheckWorld * ParentMat.InverseReturn();
+		// LocalWorld 나의 로컬값이라는 것.
+	}
+	else
+	{
+		//      크         자             이            공           부
+		LocalWorld = CheckWorld;
+		World = CheckWorld * RevolveMat * ParentMat;
+		// 나의 로컬은 알지만 부모가 아직 안곱해져서 부모를 굽해서 나의 월드 값을 찾아낸다.
+
+		// World.ArrVector[3]; => 
+	}
+
+	// 크자이 값을 역으로 다시 꺼내려고 하는 것.
+	Decompose();
+
+
+
+}
+
+
+
 
 bool FTransform::Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right)
 {
@@ -267,7 +397,7 @@ bool FTransform::OBB2DToRect(const FTransform& _Left, const FTransform& _Right)
 	return LeftCol.OBB.Intersects(RightCol.AABB);
 }
 
-bool FTransform::OBB2DToSphere(const FTransform& _Left, const FTransform& _Right)
+bool FTransform::OBB2DToCirCle(const FTransform& _Left, const FTransform& _Right)
 {
 	FCollisionData LeftCol = _Left.GetCollisionData();
 	FCollisionData RightCol = _Right.GetCollisionData();
@@ -278,7 +408,6 @@ bool FTransform::OBB2DToSphere(const FTransform& _Left, const FTransform& _Right
 
 bool FTransform::OBB2DToPoint(const FTransform& _Left, const FTransform& _Right)
 {
-	// ??
 	FCollisionData LeftCol = _Left.GetCollisionData();
 	FCollisionData RightCol = _Right.GetCollisionData();
 	LeftCol.OBB.Center.z = 0.0f;
@@ -287,118 +416,59 @@ bool FTransform::OBB2DToPoint(const FTransform& _Left, const FTransform& _Right)
 	return LeftCol.OBB.Intersects(RightCol.AABB);
 }
 
-
-FVector FVector::Transform(const FVector& _Vector, const class FMatrix& _Matrix)
+bool FTransform::OBBToSphere(const FTransform& _Left, const FTransform& _Right)
 {
-	return _Vector * _Matrix;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.Sphere);
+}
+bool FTransform::OBBToOBB(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.OBB);
+}
+bool FTransform::OBBToAABB(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.AABB);
 }
 
-FVector FVector::TransformCoord(const FVector& _Vector, const class FMatrix& _Matrix)
+
+bool FTransform::SphereToSphere(const FTransform& _Left, const FTransform& _Right)
 {
-	FVector Copy = _Vector;
-	Copy.W = 1.0f;
-	return Copy * _Matrix;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.Sphere);
 }
-
-FVector FVector::TransformNormal(const FVector& _Vector, const class FMatrix& _Matrix)
+bool FTransform::SphereToOBB(const FTransform& _Left, const FTransform& _Right)
 {
-	FVector Copy = _Vector;
-	Copy.W = 0.0f;
-	return Copy * _Matrix;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.OBB);
 }
-
-template<>
-FVector FVector::operator*(const class FMatrix& _Matrix) const
+bool FTransform::SphereToAABB(const FTransform& _Left, const FTransform& _Right)
 {
-	FVector Result;
-	// 나머지 완성하고 곱해서 결과 확인해보세요.
-
-	// x y z w가 다 곱해져야 한다.
-	Result.X = Arr2D[0][0] * _Matrix.Arr2D[0][0] + Arr2D[0][1] * _Matrix.Arr2D[1][0] + Arr2D[0][2] * _Matrix.Arr2D[2][0] + Arr2D[0][3] * _Matrix.Arr2D[3][0];
-	Result.Y = Arr2D[0][0] * _Matrix.Arr2D[0][1] + Arr2D[0][1] * _Matrix.Arr2D[1][1] + Arr2D[0][2] * _Matrix.Arr2D[2][1] + Arr2D[0][3] * _Matrix.Arr2D[3][1];
-	Result.Z = Arr2D[0][0] * _Matrix.Arr2D[0][2] + Arr2D[0][1] * _Matrix.Arr2D[1][2] + Arr2D[0][2] * _Matrix.Arr2D[2][2] + Arr2D[0][3] * _Matrix.Arr2D[3][2];
-	Result.W = Arr2D[0][0] * _Matrix.Arr2D[0][3] + Arr2D[0][1] * _Matrix.Arr2D[1][3] + Arr2D[0][2] * _Matrix.Arr2D[2][3] + Arr2D[0][3] * _Matrix.Arr2D[3][3];
-
-
-	//std::cout << "X : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][0] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][0] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][0] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][0] << std::endl;
-	//std::cout << "Y : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][1] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][1] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][1] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][1] << std::endl;
-	//std::cout << "Z : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][2] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][2] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][2] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][2] << std::endl;
-	//std::cout << "W : " << Arr2D[0][0] << "*" << _Matrix.Arr2D[0][3] << "+" << Arr2D[0][1] << "*" << _Matrix.Arr2D[1][3] << "+" << Arr2D[0][2] << "*" << _Matrix.Arr2D[2][3] << "+" << Arr2D[0][3] << "*" << _Matrix.Arr2D[3][3] << std::endl;
-
-	//std::cout << Result.ToString() << std::endl;
-
-
-	return Result;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.AABB);
 }
-
-FVector& FVector::operator*=(const FMatrix& _Matrix)
+bool FTransform::AABBToSphere(const FTransform& _Left, const FTransform& _Right)
 {
-	DirectVector = DirectX::XMVector4Transform(DirectVector, _Matrix.DirectMatrix);
-	return *this;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.Sphere);
 }
-
-FMatrix FMatrix::operator*(const FMatrix& _Matrix)
+bool FTransform::AABBToOBB(const FTransform& _Left, const FTransform& _Right)
 {
-	FMatrix Result;
-	Result.DirectMatrix = DirectX::XMMatrixMultiply(DirectMatrix, _Matrix.DirectMatrix);
-	return Result;
-
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.OBB);
 }
-
-ENGINEAPI void FTransform::Decompose()
+bool FTransform::AABBToAABB(const FTransform& _Left, const FTransform& _Right)
 {
-	World.Decompose(WorldScale, WorldQuat, WorldLocation);
-
-	LocalWorld.Decompose(RelativeScale, RelativeQuat, RelativeLocation);
-
-	//Scale = RelativeScale;
-	//Quat = RelativeQuat;
-	//Rotation = RelativeQuat.QuaternionToEulerDeg();
-	//Location = RelativeLocation;
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.AABB);
 }
-
-void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
-{
-	// 10000 10000 10000
-
-	// 절대로
-	// 100 100 100
-
-
-	// world인지 local
-	ScaleMat.Scale(Scale);
-	RotationMat.RotationDeg(Rotation);
-	LocationMat.Position(Location);
-
-	// 로컬 월드 가 될지 안될지 
-	FMatrix CheckWorld = ScaleMat * RotationMat * LocationMat;
-
-	// 절대로 지켜져야하는 최종 값이 되어야 한다.
-	if (true == _IsAbsolut)
-	{
-		// 3000, 0
-		// 100, 0
-		// -2900
-
-		// CheckWorld 월드가 되어야 한다고 결정.
-		World = CheckWorld;
-		LocalWorld = CheckWorld * ParentMat.InverseReturn();
-		// LocalWorld 나의 로컬값이라는 것.
-	}
-	else
-	{
-		//      크         자             이            공           부
-		LocalWorld = CheckWorld;
-		World = CheckWorld * RevolveMat * ParentMat;
-		// 나의 로컬은 알지만 부모가 아직 안곱해져서 부모를 굽해서 나의 월드 값을 찾아낸다.
-
-		// World.ArrVector[3]; => 
-	}
-
-	// 크자이 값을 역으로 다시 꺼내려고 하는 것.
-	Decompose();
-
-
-
-}
-

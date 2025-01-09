@@ -55,8 +55,9 @@ void URenderer::SetMaterial(std::string_view _Name, UINT _Index /*= 0*/)
 	Unit.SetMaterial(_Name);
 }
 
-void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
+void URenderer::RenderTransUpdate(UEngineCamera* _Camera)
 {
+	// 쉽게 말하면 트랜스폼 
 	// 트랜스폼은 랜더러가 가지고 있습니다.
 	FTransform& CameraTrans = _Camera->GetTransformRef();
 	FTransform& RendererTrans = GetTransformRef();
@@ -64,7 +65,11 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	RendererTrans.View = CameraTrans.View;
 	RendererTrans.Projection = CameraTrans.Projection;
 	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+}
 
+void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
+{
+	this->RenderTransUpdate(_Camera);
 
 	for (size_t i = 0; i < Units.size(); i++)
 	{

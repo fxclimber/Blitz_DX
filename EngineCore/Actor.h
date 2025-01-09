@@ -171,6 +171,11 @@ protected:
 	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 
 private:
+	// 누구의 자식인지도 알고 
+	AActor* Parent = nullptr;
+	// 자기 자식들도 알게 된다.
+	std::list<std::shared_ptr<AActor>> ChildList;
+
 	// 초기화 하면 안됩니다.
 	// 스폰액터 방식이 변경되었으니까.
 	ULevel* World;
