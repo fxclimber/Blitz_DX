@@ -28,6 +28,7 @@ private:
 	UEngineRandom random;
 
 	std::shared_ptr<class ABzProjectile> Proj;
-
+	std::shared_ptr<ACameraActor> Camera;
+	FVector CamInitPos;
 };
 

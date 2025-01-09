@@ -2,6 +2,7 @@
 #include "EngineGraphicDevice.h"
 #include "EngineTexture.h"
 #include "EngineDepthStencilState.h"
+#include <EngineContents/BzCore.h>
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -341,8 +342,11 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
 void UEngineGraphicDevice::RenderStart()
 {
+    UBzCore::BgColor;
     FVector ClearColor;
-    ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
+    //ClearColor = FVector(0.5f, 0.5f, 0.5f, 1.0f);
+    ClearColor = UBzCore::BgColor;
+
     // 이미지 파란색으로 채색해줘.
     // 한번 싹지우고
     Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);

@@ -38,11 +38,12 @@ ABzPlayerCube::ABzPlayerCube()
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Player");
 	Collision->SetScale3D({ 25.f,85.f,55.f });
+	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 	{
-		_Other->GetActor()->Destroy();
-		UEngineDebug::OutPutString("Enter");
+		//_Other->GetActor()->Destroy();
+		//UEngineDebug::OutPutString("Enter");
 	});
 
 
@@ -150,19 +151,19 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 	// 키 입력에 따라 이동 방향 설정
 	if (UEngineInput::IsPress('A'))
 	{
-		MoveDirection.X -= 100.0f * _DeltaTime;
+		MoveDirection.X -= MoveSpeed * _DeltaTime;
 	}
 	if (UEngineInput::IsPress('D'))
 	{
-		MoveDirection.X += 100.0f * _DeltaTime;
+		MoveDirection.X += MoveSpeed * _DeltaTime;
 	}
 	if (UEngineInput::IsPress('W'))
 	{
-		MoveDirection.Z += 100.0f * _DeltaTime;
+		MoveDirection.Z += MoveSpeed * _DeltaTime;
 	}
 	if (UEngineInput::IsPress('S'))
 	{
-		MoveDirection.Z -= 100.0f * _DeltaTime;
+		MoveDirection.Z -= MoveSpeed * _DeltaTime;
 	}
 
 	// 위치 이동 처리

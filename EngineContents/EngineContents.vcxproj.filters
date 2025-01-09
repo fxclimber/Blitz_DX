@@ -11,29 +11,8 @@
     <ClInclude Include="ContentsCore.h">
       <Filter>Jo</Filter>
     </ClInclude>
-    <ClInclude Include="BzCore.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BzGameMode_Intro.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BzPlayerCube.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
     <ClInclude Include="MyCustomRenderer.h">
       <Filter>Jo\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="BzRendererDefault.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BzBottomTmp.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BzEnemyCube.h">
-      <Filter>Blitz</Filter>
-    </ClInclude>
-    <ClInclude Include="BzProjectile.h">
-      <Filter>Blitz</Filter>
     </ClInclude>
     <ClInclude Include="GMConst.h">
       <Filter>Jo</Filter>
@@ -59,6 +38,27 @@
     <ClInclude Include="AMon.h">
       <Filter>Jo\Title</Filter>
     </ClInclude>
+    <ClInclude Include="BzBottomTmp.h">
+      <Filter>Blitz\Tmp</Filter>
+    </ClInclude>
+    <ClInclude Include="BzCore.h">
+      <Filter>Blitz\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="BzEnemyCube.h">
+      <Filter>Blitz\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BzPlayerCube.h">
+      <Filter>Blitz\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BzGameMode_Intro.h">
+      <Filter>Blitz\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="BzProjectile.h">
+      <Filter>Blitz\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="BzRendererDefault.h">
+      <Filter>Blitz\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -71,32 +71,8 @@
     <ClCompile Include="ContentsCore.cpp">
       <Filter>Jo</Filter>
     </ClCompile>
-    <ClCompile Include="BzCore.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzGameMode_Intro.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzPlayerCube.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
     <ClCompile Include="MyCustomRenderer.cpp">
       <Filter>Jo\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="BzResourceManager.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzRendererDefault.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzBottomTmp.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzEnemyCube.cpp">
-      <Filter>Blitz</Filter>
-    </ClCompile>
-    <ClCompile Include="BzProjectile.cpp">
-      <Filter>Blitz</Filter>
     </ClCompile>
     <ClCompile Include="TileMapGameMode.cpp">
       <Filter>Jo\GameMode</Filter>
@@ -122,6 +98,30 @@
     <ClCompile Include="AMon.cpp">
       <Filter>Jo\Title</Filter>
     </ClCompile>
+    <ClCompile Include="BzBottomTmp.cpp">
+      <Filter>Blitz\Tmp</Filter>
+    </ClCompile>
+    <ClCompile Include="BzCore.cpp">
+      <Filter>Blitz\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="BzEnemyCube.cpp">
+      <Filter>Blitz\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="BzPlayerCube.cpp">
+      <Filter>Blitz\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="BzGameMode_Intro.cpp">
+      <Filter>Blitz\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="BzProjectile.cpp">
+      <Filter>Blitz\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="BzRendererDefault.cpp">
+      <Filter>Blitz\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="BzResourceManager.cpp">
+      <Filter>Blitz\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -141,6 +141,24 @@
     </Filter>
     <Filter Include="Jo\GUI">
       <UniqueIdentifier>{01a92484-7eab-4ea4-96ed-583618cfd333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Character">
+      <UniqueIdentifier>{35415a1f-cce0-48a1-9925-9a7eadd18554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\GameMode">
+      <UniqueIdentifier>{38dc437d-7ed9-4a0d-a4ab-bb0685e8f269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Skill">
+      <UniqueIdentifier>{44356477-6925-432d-b60a-a2c1c4b4b69e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Resource">
+      <UniqueIdentifier>{039eba00-2467-43f5-84d0-b163106c73d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Tmp">
+      <UniqueIdentifier>{ce29f663-ec0d-4d9c-b4dd-396347df977e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Core">
+      <UniqueIdentifier>{13c0214c-8b68-4c08-bae7-1eebce191c51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

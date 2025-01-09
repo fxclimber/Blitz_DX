@@ -8,6 +8,7 @@
 
 // #define은 그냥 무조건 복붙
 CreateContentsCoreDefine(UBzCore);
+//FVector UBzCore::BgColor = { 1.f,1.f,0.f,1.f };
 
 UBzCore::UBzCore()
 {

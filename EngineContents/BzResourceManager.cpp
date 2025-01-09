@@ -28,18 +28,17 @@ void UBzCore::ResourceSetting()
 	}
 
 	{
-		// Create Material 
+		// default Material 
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("BzDefault");
 		Mat->SetVertexShader("BlitzShaderDefault.hlsl");
 		Mat->SetPixelShader("BlitzShaderDefault.hlsl");
 	}
 	{
-		//std::shared_ptr<UEngineMaterial> MatSprite = UEngineMaterial::Create("EngineSprite");
-		//MatSprite->SetVertexShader("EngineSpriteShader.fx");
-		//MatSprite->SetPixelShader("EngineSpriteShader.fx");
+		// uv Material 
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("BzUV");
+		Mat->SetVertexShader("BzShaderUV.hlsl");
+		Mat->SetPixelShader("BzShaderUV.hlsl");
 	}
-
-
 
 
 

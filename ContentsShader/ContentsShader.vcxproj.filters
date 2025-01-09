@@ -3,5 +3,6 @@
   <ItemGroup>
     <FxCompile Include="TestShader.fx" />
     <FxCompile Include="BlitzShaderDefault.hlsl" />
+    <FxCompile Include="BzShaderUV.hlsl" />
   </ItemGroup>
 </Project>

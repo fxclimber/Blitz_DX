@@ -29,6 +29,7 @@ private:
 
 	std::shared_ptr<class UCollision> Collision;
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
+	float MoveSpeed =300.f;
 	FVector forwardVector = GetActorForwardVector();
 	std::shared_ptr<class ACameraActor> Camera ;
 	FVector diff = { 0.f,0.f,0.f };

@@ -16,21 +16,22 @@ ABzEnemyCube::ABzEnemyCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 20.f,20.f,20.f });
+	Renderer->SetScale3D({ 300.f,300.f,300.f });
 	float YY = Renderer->GetTransformRef().Scale.Y;
 	Renderer->SetWorldLocation({ 0.f,YY,0.f });
-	Renderer->GetRenderUnit().SetTexture("bz_teXture0", "CheckUP.png");
+	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
-	Collision->SetCollisionProfileName("EnemY");
-	Collision->SetScale3D({ 25.f,85.f,55.f });
+	Collision->SetCollisionProfileName("Enemy");
+	Collision->SetScale3D(Renderer->GetTransformRef().WorldScale);
+	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
 			_Other->GetActor()->Destroy();
-			UEngineDebug::OutPutString("Enter");
+			//UEngineDebug::OutPutString("Enter");
 		});
 
 
@@ -56,20 +57,20 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
 	//AddActorRotation(RotationDelta);
 
-	Ani_Idle(_DeltaTime);
-	Physics(_DeltaTime);
+	//Ani_Idle(_DeltaTime);
+	//Physics(_DeltaTime);
 
 }
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)
 {
 	rotationAngle = sinf(_DeltaTime) * 45.0f;
-	FVector rotZ = {0.f,0.f,rotationAngle};
+	FVector rotZ = {0.f,rotationAngle,0.f};
 	AddActorRotation(rotZ);
 
 	jumpHeight = sinf(_DeltaTime) * 50.0f;
 	FVector jump = {0.f,jumpHeight,0.f};
-	AddActorLocation(jump);
+	//AddActorLocation(jump);
 
 }
 

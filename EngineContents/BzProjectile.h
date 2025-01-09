@@ -20,7 +20,7 @@ private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UCollision> Collision;
 
-	float Speed = 1000.f;
+	float Speed = 100.f;
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
 	FVector ForwardDir = {0.f,0.f,0.f};
 

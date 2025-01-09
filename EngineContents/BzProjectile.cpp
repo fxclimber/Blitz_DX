@@ -23,7 +23,9 @@ ABzProjectile::ABzProjectile()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetScale3D({ 50.f,5.f,5.f });
+	Collision->SetScale3D({ 30,15.f,15.f });
+	// Collision->AddRelativeLocation({30.f,0.f,0.f});
+	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
@@ -65,6 +67,8 @@ void ABzProjectile::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 	//CalculateMoveDirection(_DeltaTime);
 	AddRelativeLocation(ForwardDir * _DeltaTime * Speed);
+
+	//Collision->CollisionCheck();
 }
 
 void ABzProjectile::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)

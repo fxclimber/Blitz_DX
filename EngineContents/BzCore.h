@@ -7,6 +7,7 @@ public:
 	UBzCore();
 	~UBzCore();
 
+	ENGINEAPI static inline FVector BgColor= { 0.f,0.f,0.1f,1.f };
 protected:
 	void EngineStart(UEngineInitData& _Data);
 	void EngineTick(float _DeltaTime);
