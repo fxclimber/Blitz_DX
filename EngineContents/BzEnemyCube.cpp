@@ -16,7 +16,7 @@ ABzEnemyCube::ABzEnemyCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 300.f,300.f,300.f });
+	Renderer->SetScale3D({ 50.f,100.f,20.f });
 	float YY = Renderer->GetTransformRef().Scale.Y;
 	Renderer->SetWorldLocation({ 0.f,YY,0.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
@@ -25,7 +25,7 @@ ABzEnemyCube::ABzEnemyCube()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Enemy");
-	Collision->SetScale3D(Renderer->GetTransformRef().WorldScale);
+	Collision->SetScale3D({ 50.f,100.f,20.f });
 	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
@@ -57,7 +57,7 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
 	//AddActorRotation(RotationDelta);
 
-	//Ani_Idle(_DeltaTime);
+	Ani_Idle(_DeltaTime);
 	//Physics(_DeltaTime);
 
 }

@@ -356,7 +356,7 @@ public:
 		return Result;
 	}
 
-	TVector ABSVectorReturn()
+	TVector ABSVectorReturn() const
 	{
 		return DirectX::XMVectorAbs(DirectVector);
 	}
@@ -965,7 +965,7 @@ public:
 		// OBB를 세팅해준거 같지만 모든 애들을 다 세팅해준 것입니다.
 		// Sphere와 AABB전체를 다 세팅해준겁니다.
 		Result.OBB.Center = WorldLocation.DirectFloat3;
-		Result.OBB.Extents = (WorldScale * 0.5f).ABSVectorReturn().DirectFloat3;
+		Result.OBB.Extents = WorldScale.ABSVectorReturn().DirectFloat3;
 		Result.OBB.Orientation = WorldQuat.DirectFloat4;
 		return Result;
 	}

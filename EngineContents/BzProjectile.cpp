@@ -16,20 +16,20 @@ ABzProjectile::ABzProjectile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 50.f,5.f,5.f });
+	Renderer->SetScale3D({ 30.f,5.f,5.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetScale3D({ 30,15.f,15.f });
+	Collision->SetScale3D({ 30.f,5.f,5.f });
 	// Collision->AddRelativeLocation({30.f,0.f,0.f});
 	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
-			//_Other->GetActor()->Destroy();
+			_Other->GetActor()->Destroy();
 			UEngineDebug::OutPutString("Enter");
 		});
 

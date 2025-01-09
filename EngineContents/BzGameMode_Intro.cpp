@@ -57,28 +57,28 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	cam->SetProjectionType(EProjectionType::Perspective);
 
 	//-----
-    //TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
-    //TimeEventComponent->AddEvent(
-    //    0.2f,
-    //    [this](float _Delta, float _Acc)
-    //    {      
-    //        float randomX = this->random.Randomfloat(-800.0f, 800.0f);
-    //        float randomY = this->random.Randomfloat(0.f, 0.0f);
-    //        float randomZ = this->random.Randomfloat(-800.0f, 800.0f);
-    //        FVector randomLocation(randomX, randomY, randomZ); 
+    TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+    TimeEventComponent->AddEvent(
+        1.0f,
+        [this](float _Delta, float _Acc)
+        {      
+            float randomX = this->random.Randomfloat(-800.0f, 800.0f);
+            float randomY = this->random.Randomfloat(0.f, 0.0f);
+            float randomZ = this->random.Randomfloat(-800.0f, 800.0f);
+            FVector randomLocation(randomX, randomY, randomZ); 
 
-    //        std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
-    //        EnemyCubes.push_back(Enemy);
+            std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
+            EnemyCubes.push_back(Enemy);
 
-    //        if (Enemy) {
-    //            Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
-    //        }
-    //    },
-    //    [this]()
-    //    {
-    //    },
-    //    false // 반복 여부
-    //);
+            if (Enemy) {
+                Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
+            }
+        },
+        [this]()
+        {
+        },
+        false // 반복 여부
+    );
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()
