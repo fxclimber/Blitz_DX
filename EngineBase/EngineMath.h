@@ -356,7 +356,7 @@ public:
 		return Result;
 	}
 
-	TVector ABSVectorReturn() const
+	TVector ABSVectorReturn()
 	{
 		return DirectX::XMVectorAbs(DirectVector);
 	}
@@ -486,6 +486,14 @@ public:
 		X *= _Other.X;
 		Y *= _Other.Y;
 		Z *= _Other.Z;
+		return *this;
+	}
+
+	TVector& operator/=(const TVector& _Other)
+	{
+		X /= _Other.X;
+		Y /= _Other.Y;
+		Z /= _Other.Z;
 		return *this;
 	}
 
@@ -965,7 +973,7 @@ public:
 		// OBB를 세팅해준거 같지만 모든 애들을 다 세팅해준 것입니다.
 		// Sphere와 AABB전체를 다 세팅해준겁니다.
 		Result.OBB.Center = WorldLocation.DirectFloat3;
-		Result.OBB.Extents = WorldScale.ABSVectorReturn().DirectFloat3;
+		Result.OBB.Extents = (WorldScale * 0.5f).ABSVectorReturn().DirectFloat3;
 		Result.OBB.Orientation = WorldQuat.DirectFloat4;
 		return Result;
 	}
@@ -1071,11 +1079,12 @@ public:
 };
 
 
-class UColor
+template<typename ValueType>
+class TColor
 {
 public:
-	static const UColor WHITE;
-	static const UColor BLACK;
+	static const TColor WHITE;
+	static const TColor BLACK;
 
 	union
 	{
@@ -1089,22 +1098,30 @@ public:
 		};
 	};
 
-	UColor(unsigned long _Value)
+	TColor(unsigned long _Value)
 		:Color(_Value)
 	{
 
 	}
 
-	bool operator==(const UColor& _Other)
+	bool operator==(const TColor& _Other)
 	{
 		return R == _Other.R && G == _Other.G && B == _Other.B;
 	}
 
 
-	UColor(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
+	TColor(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
 		:R(_R), G(_G), B(_B), A(_A)
 	{
 
 	}
 };
+
+using UColor = TColor<unsigned char>;
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::WHITE = TColor<unsigned char>(255, 255, 255, 0);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::BLACK = TColor<unsigned char>(0, 0, 0, 0);
 

@@ -25,7 +25,7 @@ public:
 
 	ENGINEAPI void ComponentTick(float _DeltaTime) override;
 
-	void AddRelativeLocation(const FVector& _Value)
+	ENGINEAPI void AddRelativeLocation(const FVector& _Value)
 	{
 		Transform.Location += _Value;
 		TransformUpdate();

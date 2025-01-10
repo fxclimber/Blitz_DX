@@ -14,6 +14,8 @@ public:
 	{
 		return PlayerCube;
 	}
+	void ZoomCameraByMoving(ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount);
+		
 
 
 

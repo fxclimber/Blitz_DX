@@ -49,7 +49,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	EnemyCube = GetWorld()->SpawnActor<ABzEnemyCube>();
 
 	Camera = GetWorld()->GetMainCamera();
-	CamInitPos = { 700.0f, 780.0f, -1000.0f, 1.0f };
+	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
 	Camera->SetActorLocation(CamInitPos);
 	Camera->SetActorRotation({ 35.f,340.f,10.f });
 
@@ -91,7 +91,7 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
     //UEngineDebug::OutPutString(std::to_string(EnemyCubes.size()));
 
-	//Camera->SetActorLocation(CamInitPos + PlayerCube->GetActorLocation() + FVector(-300.f,100.f,-5000000.f));
+	Camera->SetActorLocation(FVector(CamInitPos.X+PlayerCube->GetActorLocation().X, CamInitPos.Y,CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 
 	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
@@ -105,12 +105,23 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 		Proj = GetWorld()->SpawnActor<ABzProjectile>();
 		Proj->SetPlayer(PlayerCube);
 		Proj->SetActorLocation(PlayerCube->GetActorLocation());
-
-		//Proj->SetActorLocation(PlayerPos+ offsetPos);
-		//Proj->SetActorRotation(PlayerRot);
-		//Proj->AddActorLocation(MoveOffset);
-
-
+	}
+	if (UEngineInput::IsPressTime(VK_NUMPAD0))
+	{
+		//Camera->GetCameraComponent()->SetFOV(50.f);
+		ZoomCameraByMoving(Camera.get(), PlayerCube.get(), 30.f);
 	}
 
+}
+// zoom-in
+void ABzGameMode_Intro::ZoomCameraByMoving(ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount) {
+	if (CameraActor && TargetActor) {
+		FVector CameraLocation = Camera->GetActorLocation();
+		FVector TargetLocation = PlayerCube->GetActorLocation();
+		FVector Direction = TargetLocation - CameraLocation;
+		Direction.Normalize(); // Direction º¤ÅÍ°¡ Á¤±ÔÈ­µÊ
+
+		FVector NewCameraLocation = CameraLocation + Direction * ZoomAmount;
+		CameraActor->SetActorLocation(NewCameraLocation);
+	}
 }

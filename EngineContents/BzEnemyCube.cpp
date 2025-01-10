@@ -17,20 +17,18 @@ ABzEnemyCube::ABzEnemyCube()
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
 	Renderer->SetScale3D({ 50.f,100.f,20.f });
-	float YY = Renderer->GetTransformRef().Scale.Y;
-	Renderer->SetWorldLocation({ 0.f,YY,0.f });
+	Renderer->SetPivot(PivotType::Bottom);
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
+
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
-	Collision->SetupAttachment(RootComponent);
+	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Enemy");
-	Collision->SetScale3D({ 50.f,100.f,20.f });
 	Collision->SetCollisionType(ECollisionType::OBB);
-
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
-			_Other->GetActor()->Destroy();
+			//_Other->GetActor()->Destroy();
 			//UEngineDebug::OutPutString("Enter");
 		});
 

@@ -19,25 +19,19 @@ ABzPlayerCube::ABzPlayerCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 20.f,80.f,50.f });
-	float yy = Renderer->GetTransformRef().Scale.Y;
-	Renderer->SetWorldLocation({ 0.f,yy,0.f });
+	Renderer->SetScale3D({ 40.f,120.f,60.f });
+	Renderer->SetPivot(PivotType::Bottom);
 
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererFront->SetupAttachment(RootComponent);
-	RendererFront->SetScale3D({ 15.f,15.f,100.f });
+	RendererFront->SetScale3D({ 25.f,25.f,100.f });
 	RendererFront->SetRotation({0.f,-90.f,0.f});
-	RendererFront->SetRelativeLocation({100.f,100.f,0.f});
-	FVector BodyScale = Renderer->GetWorldScale3D();
-	float BodyScaleX = BodyScale.X;
-	float BodyScaleY = BodyScale.Y;
-	float BodyScaleZ = BodyScale.Z;
+	RendererFront->SetRelativeLocation({60.f,140.f,0.f});
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
-	Collision->SetupAttachment(RootComponent);
+	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Player");
-	Collision->SetScale3D({ 25.f,85.f,55.f });
 	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
