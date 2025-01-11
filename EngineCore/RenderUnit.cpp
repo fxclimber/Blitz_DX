@@ -69,6 +69,24 @@ void URenderUnit::ConstantBufferLinkData(std::string_view _Name, void* _Data)
 	}
 }
 
+void URenderUnit::SetTexture(std::string_view _Name, UEngineTexture* _Texture)
+{
+	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+	{
+		if (false == Resources.contains(i))
+		{
+			continue;
+		}
+
+		if (false == Resources[i].IsTexture(_Name))
+		{
+			continue;
+		}
+
+		Resources[i].TextureSetting(_Name, _Texture);
+	}
+}
+
 void URenderUnit::SetTexture(std::string_view _Name, std::string_view _ResName)
 {
 	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
@@ -183,6 +201,8 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 	//	OutPutMergeSetting();
 	// 랜더타겟이라는 것을 바뀔겁니다.
 	Material->GetBlend()->Setting();
+
+	Material->GetDepthStencilState()->Setting();
 
 	UEngineCore::GetDevice().GetContext()->DrawIndexed(Mesh->GetIndexBuffer()->GetIndexCount(), 0, 0);
 }

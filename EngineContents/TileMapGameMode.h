@@ -22,41 +22,8 @@ protected:
 
 private:
 	std::shared_ptr<class UTileMapWindow> TileMapWindow;
-};
 
-//
-//// 삼각형 하나
-//struct FNaviData
-//{
-//	int Index;
-//
-//	FVector Arr[3];
-//
-//	int ArrIndex[3];
-//
-//	// std::vector<FNaviData*> LinkArr;
-//	// std::vector<int> Arr;
-//
-//	void Intersect(AActor* Player, float& Dis)
-//	{
-//		// DirectX::TriangleTests::Intersects()
-//	}
-//};
-//
-//class ANaviMeshManager : AActor
-//{
-//	std::vector<FNaviData> Data;
-//
-//	void LoadModel(std::string_view _Path)
-//	{
-//		std::vector<FVector> AllVector;
-//	}
-//
-//	// 연결을 만들어주면 됩니다.
-//	void LinkProgress();
-//};
-//
-//class Player
-//{
-//	FNaviData* CurNaviMesh;
-//};
+	std::shared_ptr<class USpriteRenderer> PivotSpriteRenderer;
+
+	std::shared_ptr<class UTileMapRenderer> TileMapRenderer;
+};

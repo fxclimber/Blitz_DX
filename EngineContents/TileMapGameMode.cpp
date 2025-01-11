@@ -4,7 +4,9 @@
 #include "Monster.h"
 #include "Monster2.h"
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/TileMapRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/imgui.h>
@@ -18,15 +20,94 @@ enum class ESpawnList
 	Monster2,
 };
 
+enum class EEditMode
+{
+	TileMap,
+	Object,
+};
+
 class UTileMapWindow : public UEngineGUIWindow
 {
 public:
 	int SelectItem = 0;
+	int ObjectItem = -1;
+	UTileMapRenderer* TileMapRenderer = nullptr;
+	EEditMode Mode = EEditMode::TileMap;
 
 	// std::list<std::shared_ptr<AMon>> AllMonsterList;
+	int TileCountX = 10;
+	int TileCountY = 10;
+	int SelectTileIndex = 0;
 
-	void OnGUI() override
+	void TileMapMode()
 	{
+		{
+			UEngineSprite* Sprite = TileMapRenderer->GetSprite();
+
+			for (size_t i = 0; i < Sprite->GetSpriteCount(); i++)
+			{
+				UEngineTexture* Texture = Sprite->GetTexture(i);
+				FSpriteData Data = Sprite->GetSpriteData(i);
+
+				//SRV입니다
+				ImTextureID SRV = reinterpret_cast<ImTextureID>(Texture->GetSRV());
+
+				std::string Text = std::to_string(i);
+
+				if (i != 0)
+				{
+					if (0 != (i % 10))
+					{
+						ImGui::SameLine();
+					}
+				}
+
+
+				ImVec2 Pos = { Data.CuttingPos.X, Data.CuttingPos.Y };
+				ImVec2 Size = { Data.CuttingPos.X + Data.CuttingSize.X, Data.CuttingPos.Y + Data.CuttingSize.Y };
+
+				if (ImGui::ImageButton(Text.c_str(), SRV, { 60, 60 }, Pos, Size))
+				{
+					SelectTileIndex = static_cast<int>(i);
+				}
+				// 엔터를 치지 않는개념.
+			}
+
+
+			ImGui::InputInt("TileMapX", &TileCountX);
+			ImGui::InputInt("TileMapY", &TileCountY);
+
+			if (ImGui::Button("TileMap Create"))
+			{
+				for (int y = 0; y < TileCountY; y++)
+				{
+					for (int x = 0; x < TileCountX; x++)
+					{
+						TileMapRenderer->SetTile(x, y, SelectTileIndex);
+					}
+				}
+			}
+
+
+			if (true == UEngineInput::IsPress(VK_LBUTTON))
+			{
+				FVector ScreenPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPos();
+
+				TileMapRenderer->SetTile(ScreenPos, SelectTileIndex);
+			}
+
+			if (true == UEngineInput::IsPress(VK_RBUTTON))
+			{
+				FVector ScreenPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPos();
+
+				TileMapRenderer->RemoveTile(ScreenPos);
+			}
+		}
+	}
+
+	void ObjectMode()
+	{
+
 		{
 			std::vector<const char*> Arr;
 			Arr.push_back("Monster");
@@ -34,6 +115,8 @@ public:
 
 
 			ImGui::ListBox("SpawnList", &SelectItem, &Arr[0], 2);
+
+			// GetMainWindow()->IsScreenOut();
 
 			if (true == UEngineInput::IsDown(VK_LBUTTON))
 			{
@@ -73,7 +156,8 @@ public:
 		}
 
 		{
-			std::list<std::shared_ptr<AMon>> AllMonsterList = GetWorld()->GetAllActorListByClass<AMon>();
+			std::vector<std::shared_ptr<AMon>> AllMonsterList = GetWorld()->GetAllActorArrayByClass<AMon>();
+
 			std::vector<std::string> ArrString;
 			for (std::shared_ptr<class AActor> Actor : AllMonsterList)
 			{
@@ -89,24 +173,25 @@ public:
 
 			if (0 < Arr.size())
 			{
-				ImGui::ListBox("AllActorList", &SelectItem, &Arr[0], Arr.size());
+				ImGui::ListBox("AllActorList", &ObjectItem, &Arr[0], static_cast<int>(Arr.size()));
+
+				if (ObjectItem != -1)
+				{
+
+				}
+
+				if (true == ImGui::Button("Delete"))
+				{
+					AllMonsterList[ObjectItem]->Destroy();
+					ObjectItem = -1;
+				}
+
 			}
 		}
+	}
 
-		{
-			int ValueX = 10;
-			ImGui::InputInt("TileMapX", &ValueX);
-			int ValueY = 10;
-			ImGui::InputInt("TileMapY", &ValueY);
-
-			if (ImGui::Button("TileMap Create"))
-			{
-				int a = 0;
-			}
-
-
-		}
-
+	void SaveAndLoad()
+	{
 
 		if (true == ImGui::Button("Save"))
 		{
@@ -151,8 +236,9 @@ public:
 					Actor->Serialize(Ser);
 				}
 
-				UEngineFile NewFile = Dir.GetFile(ofn.lpstrFile);
+				TileMapRenderer->Serialize(Ser);
 
+				UEngineFile NewFile = Dir.GetFile(ofn.lpstrFile);
 				NewFile.FileOpen("wb");
 				NewFile.Write(Ser);
 			}
@@ -221,9 +307,44 @@ public:
 					NewMon->DeSerialize(Ser);
 				}
 
+				TileMapRenderer->DeSerialize(Ser);
 
 			}
 		}
+	}
+
+	void OnGUI() override
+	{
+		{
+			if (Mode == EEditMode::Object)
+			{
+				if (ImGui::Button("ObjectMode"))
+				{
+					Mode = EEditMode::TileMap;
+				}
+			}
+			else
+			{
+				if (ImGui::Button("TileMapMode"))
+				{
+					Mode = EEditMode::Object;
+				}
+			}
+		}
+
+		switch (Mode)
+		{
+		case EEditMode::TileMap:
+			TileMapMode();
+			break;
+		case EEditMode::Object:
+			ObjectMode();
+			break;
+		default:
+			break;
+		}
+
+		SaveAndLoad();
 	}
 };
 
@@ -233,6 +354,21 @@ ATileMapGameMode::ATileMapGameMode()
 // 이걸 UI공유할건지 
 	GetWorld()->CreateCollisionProfile("Monster");
 
+	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
+	RootComponent = Default;
+
+
+	PivotSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	PivotSpriteRenderer->SetupAttachment(RootComponent);
+	PivotSpriteRenderer->SetRelativeScale3D({ 50.0f, 50.0f, 1.0f });
+
+	TileMapRenderer = CreateDefaultSubObject<UTileMapRenderer>();
+	TileMapRenderer->SetupAttachment(RootComponent);
+	TileMapRenderer->SetTileSetting(ETileMapType::Iso, "TileMap.png", { 128.0f, 63.0f }, { 128.0f, 192.0f }, { 0.0f, 0.0f });
+
+
+
+	// CreateDefaultSubObject<>
 
 	// 카메라를 일정거리 뒤로 가서 
 	// 카메라 위치조정을 무조건 해줘야 할것이다.
@@ -277,6 +413,7 @@ void ATileMapGameMode::LevelChangeStart()
 		}
 
 		TileMapWindow->SetActive(true);
+		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
 	}
 
 }

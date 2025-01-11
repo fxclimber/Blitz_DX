@@ -283,6 +283,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TileMapRenderer.h" />
     <ClInclude Include="TimeEventComponent.h" />
     <ClInclude Include="VertexBuffer.h">
       <SubType>
@@ -404,6 +405,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TileMapRenderer.cpp" />
     <ClCompile Include="TimeEventComponent.cpp" />
     <ClCompile Include="VertexBuffer.cpp">
       <SubType>

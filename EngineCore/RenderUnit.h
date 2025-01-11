@@ -50,10 +50,12 @@ public:
 	ENGINEAPI void SetTexture(std::string_view _Name, std::string_view _ResName);
 	ENGINEAPI void SetSampler(std::string_view Name, std::string_view _ResName);
 
+	ENGINEAPI void SetTexture(std::string_view _Name, UEngineTexture* _Texture);
+
 private:
 	// 자신만의 리소스를 가지고 있습니다.
 	std::map<EShaderType, UEngineShaderResources> Resources;
 
-	ENGINEAPI void InputLayOutCreate();
+	void InputLayOutCreate();
 };
 
