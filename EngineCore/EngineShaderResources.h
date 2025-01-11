@@ -38,8 +38,16 @@ public:
 
 	void Setting()
 	{
-		Res->Setting(ShaderType, BindIndex);
+		if (nullptr == Res)
+		{
+			return;
+		}
+		else
+		{
+			Res->Setting(ShaderType, BindIndex);
+		}
 	}
+
 };
 
 class UEngineSamplerRes : public UEngineShaderRes

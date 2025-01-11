@@ -18,11 +18,12 @@ ATitleLogo::ATitleLogo()
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetTexture("Test.png");
+	Renderer->SetTexture("tevi_n_01.png");
+	Renderer->BillboardOn();
 	// Renderer->SetSprite("Test.png", 2);
 	// Renderer->SetAutoScale(true);
 	// Renderer->SetAutoScaleRatio(5.0f);
-	Renderer->SetScale3D({ 50.0f, 200.0f });
+	Renderer->SetScale3D({ 200.0f, 200.0f });
 
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
@@ -46,7 +47,7 @@ ATitleLogo::ATitleLogo()
 	//		UEngineDebug::OutPutString("End");
 	//	});
 
-	GetWorld()->GetMainCamera()->AttachToActor(this);
+	// GetWorld()->GetMainCamera()->AttachToActor(this);
 
 }
 

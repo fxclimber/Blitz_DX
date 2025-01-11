@@ -59,6 +59,9 @@
     <ClInclude Include="BzRendererDefault.h">
       <Filter>Blitz\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="BzTileMapGameMode.h">
+      <Filter>Blitz\GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="BzResourceManager.cpp">
       <Filter>Blitz\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="BzTileMapGameMode.cpp">
+      <Filter>Blitz\GameMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

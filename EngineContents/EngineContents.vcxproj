@@ -156,6 +156,7 @@
     <ClInclude Include="BzPlayerCube.h" />
     <ClInclude Include="BzProjectile.h" />
     <ClInclude Include="BzRendererDefault.h" />
+    <ClInclude Include="BzTileMapGameMode.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ContentsEditorGUI.h" />
     <ClInclude Include="GMConst.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="BzPlayerCube.cpp" />
     <ClCompile Include="BzProjectile.cpp" />
     <ClCompile Include="BzRendererDefault.cpp" />
+    <ClCompile Include="BzTileMapGameMode.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp" />

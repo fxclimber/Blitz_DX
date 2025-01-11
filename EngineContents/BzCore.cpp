@@ -3,11 +3,19 @@
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
+#include <EngineCore/EngineGUI.h>
+
+
+#include "ContentsEditorGUI.h"
 #include "BzGameMode_Intro.h"
+#include "BzTileMapGameMode.h"
+
 #include "BzPlayerCube.h"
 
 // #define은 그냥 무조건 복붙
 CreateContentsCoreDefine(UBzCore);
+
+
 //FVector UBzCore::BgColor = { 1.f,1.f,0.f,1.f };
 
 UBzCore::UBzCore()
@@ -58,7 +66,16 @@ void UBzCore::EngineStart(UEngineInitData& _Data)
 
 	// 주인공 APawn 상속 받으세요.
 	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Intro");
+	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn>("BzTileMap");
 	UEngineCore::OpenLevel("Intro");
+
+	// imgui window
+	UEngineGUI::AllWindowOff();
+
+	//UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	//std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	//Window->SetActive(true);
+
 
 }
 

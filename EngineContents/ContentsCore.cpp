@@ -34,36 +34,6 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	MyGSetting();
 
 
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image");
-		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
-		for (size_t i = 0; i < ImageFiles.size(); i++)
-		{
-			std::string FilePath = ImageFiles[i].GetPathToString();
-			UEngineTexture::Load(FilePath);
-		}
-	}
-
-	UEngineSprite::CreateSpriteToMeta("Player.png", ".sdata");
-
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Tevi");
-
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-
 
 	// 주인공 APawn 상속 받으세요.
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");

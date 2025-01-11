@@ -14,8 +14,9 @@ public:
 	{
 		return PlayerCube;
 	}
-	void ZoomCameraByMoving(ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount);
+	void ZoomCameraByMoving(class ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount);
 		
+	void LevelChangeStart() override;
 
 
 
@@ -30,7 +31,7 @@ private:
 	UEngineRandom random;
 
 	std::shared_ptr<class ABzProjectile> Proj;
-	std::shared_ptr<ACameraActor> Camera;
+	std::shared_ptr<class ACameraActor> Camera;
 	FVector CamInitPos;
 };
 

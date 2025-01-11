@@ -10,22 +10,34 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
+
 #include <EngineCore/imgui.h>
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineBase/EngineRandom.h>
 #include <EnginePlatform/EngineInput.h>
 
+#include "ContentsEditorGUI.h"
+
 class TestWindow : public UEngineGUIWindow
 {
 public:
-	//void OnGUI() override
-	//{
-	//	ImGui::Button("WindowButton");
-	//	ImGui::SameLine(); // ÇÑ°£ ¶ç±â
-	//	ImGui::Text("test");
+	void OnGUI() override
+	{
+		if (true == ImGui::Button("WindowButton"))
+		{
+			//std::shared_ptr<AMonster> NewMonster = GetWorld()->SpawnActor<AMonster>();
+			//NewMonster->SetActorLocation({ 300.0f, 200.0f, 0.0f });
+		}
 
-	//}
+		if (true == ImGui::Button("FreeCameraOn"))
+		{
+			GetWorld()->GetMainCamera()->FreeCameraSwitch();
+		}
 
+		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
+		ImGui::Text("test");
+
+	}
 };
 
 ABzGameMode_Intro::ABzGameMode_Intro()
@@ -124,4 +136,32 @@ void ABzGameMode_Intro::ZoomCameraByMoving(ACameraActor* CameraActor, AActor* Ta
 		FVector NewCameraLocation = CameraLocation + Direction * ZoomAmount;
 		CameraActor->SetActorLocation(NewCameraLocation);
 	}
+}
+
+void ABzGameMode_Intro::LevelChangeStart()
+{
+	UEngineGUI::AllWindowOff();
+
+	{
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		}
+
+		Window->SetActive(true);
+	}
+
+	{
+		std::shared_ptr<TestWindow> Window = UEngineGUI::FindGUIWindow<TestWindow>("TestWindow");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+		}
+
+		Window->SetActive(true);
+	}
+
 }
