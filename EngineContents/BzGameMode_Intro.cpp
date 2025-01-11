@@ -18,12 +18,12 @@
 
 #include "ContentsEditorGUI.h"
 
-class TestWindow : public UEngineGUIWindow
+class UPlayWindow : public UEngineGUIWindow
 {
 public:
 	void OnGUI() override
 	{
-		if (true == ImGui::Button("WindowButton"))
+		if (true == ImGui::Button("NAN"))
 		{
 			//std::shared_ptr<AMonster> NewMonster = GetWorld()->SpawnActor<AMonster>();
 			//NewMonster->SetActorLocation({ 300.0f, 200.0f, 0.0f });
@@ -35,7 +35,7 @@ public:
 		}
 
 		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
-		ImGui::Text("test");
+		ImGui::Text("CAM");
 
 	}
 };
@@ -143,25 +143,26 @@ void ABzGameMode_Intro::LevelChangeStart()
 	UEngineGUI::AllWindowOff();
 
 	{
-		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
 		}
 
 		Window->SetActive(true);
 	}
 
 	{
-		std::shared_ptr<TestWindow> Window = UEngineGUI::FindGUIWindow<TestWindow>("TestWindow");
+		std::shared_ptr<UPlayWindow> Window = UEngineGUI::FindGUIWindow<UPlayWindow>("Play");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+			Window = UEngineGUI::CreateGUIWindow<UPlayWindow>("Play");
 		}
 
 		Window->SetActive(true);
 	}
-
 }
+
+

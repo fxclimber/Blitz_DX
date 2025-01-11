@@ -15,7 +15,8 @@ public:
 		return PlayerCube;
 	}
 	void ZoomCameraByMoving(class ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount);
-		
+
+	// (imgui에디터에서 선택) 레벨이동한다	
 	void LevelChangeStart() override;
 
 

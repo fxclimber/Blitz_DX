@@ -26,7 +26,7 @@ enum class EEditMode
 	Object,
 };
 
-class UTileMapWindow : public UEngineGUIWindow
+class UTileMap : public UEngineGUIWindow
 {
 public:
 	int SelectItem = 0;
@@ -394,22 +394,22 @@ void ABzTileMapGameMode::LevelChangeStart()
 	UEngineGUI::AllWindowOff();
 
 	{
-		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
 		}
 
 		Window->SetActive(true);
 	}
 
 	{
-		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMapWindow>("TileMapWindow");
+		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMap>("TileMap");
 
 		if (nullptr == TileMapWindow)
 		{
-			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMapWindow>("TileMapWindow");
+			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMap>("TileMap");
 		}
 
 		TileMapWindow->SetActive(true);

@@ -65,16 +65,16 @@ void UBzCore::EngineStart(UEngineInitData& _Data)
 
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Intro");
+	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Play");
 	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn>("BzTileMap");
-	UEngineCore::OpenLevel("Intro");
+	UEngineCore::OpenLevel("Play");
 
 	// imgui window
 	UEngineGUI::AllWindowOff();
 
-	//UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	//std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	//Window->SetActive(true);
+	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
+	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
+	Window->SetActive(true);
 
 
 }
