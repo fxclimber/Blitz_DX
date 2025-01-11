@@ -62,6 +62,12 @@
     <ClInclude Include="BzTileMapGameMode.h">
       <Filter>Blitz\GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="BzEnemyCubeBig.h">
+      <Filter>Blitz\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BzEnemy.h">
+      <Filter>Blitz\Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -127,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="BzTileMapGameMode.cpp">
       <Filter>Blitz\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="BzEnemyCubeBig.cpp">
+      <Filter>Blitz\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="BzEnemy.cpp">
+      <Filter>Blitz\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

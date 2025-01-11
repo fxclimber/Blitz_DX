@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "BzEnemYCube.h"
+#include "BzEnemyCubeBig.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
@@ -9,9 +9,9 @@
 #include <EngineCore/Collision.h>
 #include <EngineBase/EngineMath.h>
 
-ABzEnemyCube::ABzEnemyCube()
+ABzEnemyCubeBig::ABzEnemyCubeBig()
 {
-	EEnemyTypeValue = EEnemyType::BzEnemyCube;
+	EEnemyTypeValue = EEnemyType::BzEnemyCubeBig;
 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
@@ -38,18 +38,18 @@ ABzEnemyCube::ABzEnemyCube()
 
 }
 
-ABzEnemyCube::~ABzEnemyCube()
+ABzEnemyCubeBig::~ABzEnemyCubeBig()
 {
 }
 
-void ABzEnemyCube::BeginPlay()
+void ABzEnemyCubeBig::BeginPlay()
 {
 	AActor::BeginPlay();
 	pos = GetActorLocation();
 
 }
 
-void ABzEnemyCube::Tick(float _DeltaTime)
+void ABzEnemyCubeBig::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
@@ -62,7 +62,7 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 
 }
 
-void ABzEnemyCube::Ani_Idle(float _DeltaTime)
+void ABzEnemyCubeBig::Ani_Idle(float _DeltaTime)
 {
 	rotationAngle = sinf(_DeltaTime) * 45.0f;
 	FVector rotZ = {0.f,rotationAngle,0.f};
@@ -75,7 +75,7 @@ void ABzEnemyCube::Ani_Idle(float _DeltaTime)
 }
 
 
-void ABzEnemyCube::Physics(float _DeltaTime)
+void ABzEnemyCubeBig::Physics(float _DeltaTime)
 {
 		//static const vec2 gravitY = vec2(0.0f, -9.8f);
 		static const float coef_res = 0.7f; // coefficient of restitution

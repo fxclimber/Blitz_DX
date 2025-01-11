@@ -14,10 +14,16 @@
 #include "ContentsEditorGUI.h"
 #include <EnginePlatform/EngineInput.h>
 
+#include "BzBottomTmp.h"
+#include "BzEnemyCube.h"
+#include "BzEnemy.h"
+#include "BzEnemyCube.h"
+#include "BzEnemyCubeBig.h"
+
 enum class ESpawnList
 {
-	Monster,
-	Monster2,
+	ABzEnemyCube,
+	ABzEnemyCubeBig,
 };
 
 enum class EEditMode
@@ -108,58 +114,61 @@ public:
 	void ObjectMode()
 	{
 
-		{
+		{// object mode 에서 선택할 리스트 
 			std::vector<const char*> Arr;
-			Arr.push_back("Monster");
-			Arr.push_back("Monster2");
-
-
+			Arr.push_back("ABzEnemyCube");
+			Arr.push_back("ABzEnemyCubeBig");
 			ImGui::ListBox("SpawnList", &SelectItem, &Arr[0], 2);
-
 			// GetMainWindow()->IsScreenOut();
-
 			if (true == UEngineInput::IsDown(VK_LBUTTON))
 			{
 				ESpawnList SelectMonster = static_cast<ESpawnList>(SelectItem);
 				std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetMainCamera();
-				FVector Pos = Camera->ScreenMousePosToWorldPos();
-				Pos.Z = 0.0f;
+				Camera->SetActorLocation({0.f,2000.f,0.f});
+				Camera->SetActorRotation({90.f,0.f,0.f});
+				std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
+				cam->SetProjectionType(EProjectionType::Perspective);
 
-				std::shared_ptr<AMon> NewMonster;
+				std::shared_ptr<ABzBottomTmp> Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
+				Bottom->SetActorRelativeScale3D({ 300.f,1.f ,300.f });
+				Bottom->SetActorLocation({ 0.f,0.f,0.f });
+
+				FVector Pos = Camera->ScreenMousePosToWorldPos();
+				//Pos.Z = 0.0f;
+
+				std::shared_ptr<ABzEnemy> enemy;
 
 				switch (SelectMonster)
 				{
-				case ESpawnList::Monster:
-					NewMonster = GetWorld()->SpawnActor<AMonster>("Monster");
+				case ESpawnList::ABzEnemyCube:
+					enemy = GetWorld()->SpawnActor<ABzEnemyCube>("ABzEnemyCube");
 					break;
-				case ESpawnList::Monster2:
-					NewMonster = GetWorld()->SpawnActor<AMonster2>("Monster2");
+				case ESpawnList::ABzEnemyCubeBig:
+					enemy = GetWorld()->SpawnActor<ABzEnemyCubeBig>("ABzEnemyCubeBig");
 					break;
 				default:
 					break;
 				}
-
-				NewMonster->SetActorLocation(Pos);
+				enemy->SetActorLocation(Pos);
 			}
 		}
 
 		{
 			if (ImGui::Button("EditObjectDelete"))
 			{
-				std::list<std::shared_ptr<AMon>> AllMonsterList = GetWorld()->GetAllActorListByClass<AMon>();
-				for (std::shared_ptr<AMon> Mon : AllMonsterList)
+				std::list<std::shared_ptr<ABzEnemy>> AllEnemyList = GetWorld()->GetAllActorListByClass<ABzEnemy>();
+				for (std::shared_ptr<ABzEnemy> Mon : AllEnemyList)
 				{
 					Mon->Destroy();
 				}
-
 			}
 		}
 
 		{
-			std::vector<std::shared_ptr<AMon>> AllMonsterList = GetWorld()->GetAllActorArrayByClass<AMon>();
+			std::vector<std::shared_ptr<ABzEnemy>> AllEnemyList = GetWorld()->GetAllActorArrayByClass<ABzEnemy>();
 
 			std::vector<std::string> ArrString;
-			for (std::shared_ptr<class AActor> Actor : AllMonsterList)
+			for (std::shared_ptr<class AActor> Actor : AllEnemyList)
 			{
 				ArrString.push_back(Actor->GetName());
 			}
@@ -169,7 +178,6 @@ public:
 			{
 				Arr.push_back(ArrString[i].c_str());
 			}
-
 
 			if (0 < Arr.size())
 			{
@@ -182,7 +190,7 @@ public:
 
 				if (true == ImGui::Button("Delete"))
 				{
-					AllMonsterList[ObjectItem]->Destroy();
+					AllEnemyList[ObjectItem]->Destroy();
 					ObjectItem = -1;
 				}
 
@@ -216,7 +224,7 @@ public:
 			ofn.nFilterIndex = 1;
 			ofn.lpstrFileTitle = NULL;
 			ofn.nMaxFileTitle = 0;
-			ofn.lpstrDefExt = "MapData";
+			ofn.lpstrDefExt = "MapData";//ContentsResources의 data폴더 
 			ofn.lpstrInitialDir = InitPath.c_str();
 			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
@@ -350,9 +358,8 @@ public:
 
 ABzTileMapGameMode::ABzTileMapGameMode()
 {
-	// 레벨마다 해주셔야 합니다.
-// 이걸 UI공유할건지 
-	GetWorld()->CreateCollisionProfile("Monster");
+	GetWorld()->CreateCollisionProfile("Enemy");
+
 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
@@ -378,10 +385,6 @@ ABzTileMapGameMode::ABzTileMapGameMode()
 
 }
 
-ABzTileMapGameMode::~ABzTileMapGameMode()
-{
-
-}
 
 void ABzTileMapGameMode::Tick(float _DeltaTime)
 {
@@ -394,22 +397,22 @@ void ABzTileMapGameMode::LevelChangeStart()
 	UEngineGUI::AllWindowOff();
 
 	{
-		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
 		}
 
 		Window->SetActive(true);
 	}
 
 	{
-		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMap>("TileMap");
+		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMap>("Map_Edit");
 
 		if (nullptr == TileMapWindow)
 		{
-			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMap>("TileMap");
+			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMap>("Map_Edit");
 		}
 
 		TileMapWindow->SetActive(true);

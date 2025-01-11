@@ -1,15 +1,12 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 
-// 설명 :
 class ABzTileMapGameMode : public AGameMode
 {
 public:
-	// constrcuter destructer
 	ABzTileMapGameMode();
-	~ABzTileMapGameMode();
+	~ABzTileMapGameMode(){}
 
-	// delete Function
 	ABzTileMapGameMode(const ABzTileMapGameMode& _Other) = delete;
 	ABzTileMapGameMode(ABzTileMapGameMode&& _Other) noexcept = delete;
 	ABzTileMapGameMode& operator=(const ABzTileMapGameMode& _Other) = delete;
@@ -21,9 +18,11 @@ protected:
 	void LevelChangeStart() override;
 
 private:
-	std::shared_ptr<class UTileMap> TileMapWindow;
+	std::shared_ptr<class UTileMap> TileMapWindow;//게임모드에서 윈도우 갖고있게
 
 	std::shared_ptr<class USpriteRenderer> PivotSpriteRenderer;
 
 	std::shared_ptr<class UTileMapRenderer> TileMapRenderer;
+
+	std::shared_ptr<class UBzRendererDefault> BzRendererDefault;
 };

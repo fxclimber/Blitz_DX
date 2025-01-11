@@ -3,11 +3,11 @@
 #include "BzEnemy.h"
 
 
-class ABzEnemyCube : public ABzEnemy
+class ABzEnemyCubeBig : public ABzEnemy
 {
 public:
-	ABzEnemyCube();
-	~ABzEnemyCube();
+	ABzEnemyCubeBig();
+	~ABzEnemyCubeBig();
 
 protected:
 	void BeginPlay() override;
