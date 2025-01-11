@@ -89,5 +89,21 @@ void UContentsCore::MyGSetting()
 		Mat->SetRasterizerState("CollisionDebugRas");
 	}
 
+	{
+		// default Material 
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("BzDefault");
+		Mat->SetVertexShader("BlitzShaderDefault.hlsl");
+		Mat->SetPixelShader("BlitzShaderDefault.hlsl");
+	}
+	{
+		// uv Material 
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("BzUV");
+		Mat->SetVertexShader("BzShaderUV.hlsl");
+		Mat->SetPixelShader("BzShaderUV.hlsl");
+	}
+
+
+
+
 
 }

@@ -143,11 +143,11 @@ void ABzGameMode_Intro::LevelChangeStart()
 	UEngineGUI::AllWindowOff();
 
 	{
-		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
 		}
 
 		Window->SetActive(true);

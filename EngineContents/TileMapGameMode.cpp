@@ -394,6 +394,7 @@ void ATileMapGameMode::LevelChangeStart()
 	UEngineGUI::AllWindowOff();
 
 	{
+		//std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
 		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
 
 		if (nullptr == Window)

@@ -11,6 +11,12 @@
 #include <EngineCore/EngineGUIWindow.h>
 #include "ContentsEditorGUI.h"
 
+#include "BzCore.h"
+
+
+#include "BzGameMode_Intro.h"
+#include "BzTileMapGameMode.h"
+
 // #define은 그냥 무조건 복붙
 //CreateContentsCoreDefine(UContentsCore);
 
@@ -36,9 +42,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
-	UEngineCore::CreateLevel<ATileMapGameMode, APawn>("TileMapEditor");
-	UEngineCore::OpenLevel("TileMapEditor");
+	//UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
+	//UEngineCore::CreateLevel<ATileMapGameMode, APawn>("TileMapEditor");
+
+	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Play");
+	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn>("BzTileMap");
+
+	UEngineCore::OpenLevel("BzTileMap");
 
 	UEngineGUI::AllWindowOff();
 

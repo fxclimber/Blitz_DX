@@ -11,6 +11,7 @@
 #include "BzTileMapGameMode.h"
 
 #include "BzPlayerCube.h"
+#include "TileMapGameMode.h"
 
 // #define은 그냥 무조건 복붙
 CreateContentsCoreDefine(UBzCore);
@@ -28,52 +29,23 @@ UBzCore::~UBzCore()
 
 void UBzCore::EngineStart(UEngineInitData& _Data)
 {
-	_Data.WindowPos = { 100, 100 };
+	_Data.WindowPos = { 500, 100 };
 	_Data.WindowSize = { 900, 900 };
 
-	UBzCore::ResourceSetting();
-
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image");
-		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
-		for (size_t i = 0; i < ImageFiles.size(); i++)
-		{
-			std::string FilePath = ImageFiles[i].GetPathToString();
-			UEngineTexture::Load(FilePath);
-		}
-	}
-
-	UEngineSprite::CreateSpriteToMeta("Player.png", ".sdata");
-
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Tevi");
-
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
+	UBzCore::ResourceSetting();//이거 안하면 리소스들 널로 나온다 
 
 
 	// 주인공 APawn 상속 받으세요.
 	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Play");
 	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn>("BzTileMap");
+	//UEngineCore::CreateLevel<ATileMapGameMode, APawn>("TileMapEditor");//임시 
 	UEngineCore::OpenLevel("Play");
 
-	// imgui window
+	// imgui window------------------------------------------------
 	UEngineGUI::AllWindowOff();
 
-	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("Editor");
-	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("Editor");
+	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
 	Window->SetActive(true);
 
 
