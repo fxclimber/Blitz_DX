@@ -68,6 +68,9 @@
     <ClInclude Include="BzEnemy.h">
       <Filter>Blitz\Character</Filter>
     </ClInclude>
+    <ClInclude Include="BzConst.h">
+      <Filter>Blitz</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="BzEnemy.cpp">
       <Filter>Blitz\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="BzConst.cpp">
+      <Filter>Blitz</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

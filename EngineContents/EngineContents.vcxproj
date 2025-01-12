@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="AMon.h" />
     <ClInclude Include="BzBottomTmp.h" />
+    <ClInclude Include="BzConst.h" />
     <ClInclude Include="BzEnemyCube.h" />
     <ClInclude Include="BzEnemyCubeBig.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ClCompile Include="AMon.cpp" />
     <ClCompile Include="BzBottomTmp.cpp" />
+    <ClCompile Include="BzConst.cpp" />
     <ClCompile Include="BzEnemyCube.cpp" />
     <ClCompile Include="BzEnemyCubeBig.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />

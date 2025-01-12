@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "BzEnemYCube.h"
+#include "BzEnemyCube.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
@@ -8,6 +8,7 @@
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/Collision.h>
 #include <EngineBase/EngineMath.h>
+#include "BzConst.h"
 
 ABzEnemyCube::ABzEnemyCube()
 {
@@ -35,7 +36,6 @@ ABzEnemyCube::ABzEnemyCube()
 		});
 
 
-
 }
 
 ABzEnemyCube::~ABzEnemyCube()
@@ -46,12 +46,12 @@ void ABzEnemyCube::BeginPlay()
 {
 	AActor::BeginPlay();
 	pos = GetActorLocation();
-
 }
 
 void ABzEnemyCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+	BzConst::TotalTime += _DeltaTime;
 
 	radius = GetActorTransform().Scale.X;
 	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
@@ -64,13 +64,26 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)
 {
-	rotationAngle = sinf(_DeltaTime) * 45.0f;
-	FVector rotZ = {0.f,rotationAngle,0.f};
+	float amplitude = 0.5f;
+	float frequency = .15f;
+	float rotationAngle = amplitude * sin(BzConst::TotalTime * frequency);
+	FVector rotZ = {0.f,0.f,rotationAngle};
 	AddActorRotation(rotZ);
 
-	jumpHeight = sinf(_DeltaTime) * 50.0f;
-	FVector jump = {0.f,jumpHeight,0.f};
-	//AddActorLocation(jump);
+	float jumpAmplitude = 142.f;
+	float jumpFrequency = 0.05f;
+
+	float normalizedTime = fmod(BzConst::TotalTime * jumpFrequency, 1.0f);
+
+	// 포물선 식 계산
+	float jumpHeight = jumpAmplitude * (-4.f * normalizedTime * (normalizedTime - 1.f));
+
+	// 기준 위치에서 상대적으로 이동
+	FVector currentLocation = GetActorLocation();
+	FVector jumpOffset = FVector(0.f, jumpHeight, 0.f);
+	FVector newLocation = pos + jumpOffset - FVector(0.f, currentLocation.Y - pos.Y, 0.f);
+
+	AddActorLocation(newLocation - currentLocation);
 
 }
 

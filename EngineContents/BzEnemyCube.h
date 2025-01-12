@@ -2,7 +2,6 @@
 #include <EngineCore/Actor.h>
 #include "BzEnemy.h"
 
-
 class ABzEnemyCube : public ABzEnemy
 {
 public:
@@ -27,5 +26,8 @@ private:
 	FVector vel = { 0.f,1.f,0.f };
 	float radius = 0;
 	FVector pos = {};
+
+
+
 };
 
