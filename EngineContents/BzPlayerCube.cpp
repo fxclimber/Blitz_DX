@@ -27,7 +27,9 @@ ABzPlayerCube::ABzPlayerCube()
 	RendererFront->SetScale3D({ 25.f,25.f,100.f });
 	RendererFront->SetRotation({0.f,-90.f,0.f});
 	RendererFront->SetRelativeLocation({60.f,140.f,0.f});
+	RendererFront->AddLocalRotation({30.f,0.f,0.f});
 
+	FireRot = RendererFront->GetTransformRef().WorldRotation;
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(Renderer);
@@ -131,8 +133,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	FVector thisPos = GetActorLocation();
 
 
-
-
+	FireRot = RendererFront->GetTransformRef().Rotation;
 
 
 
@@ -160,7 +161,6 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 		MoveDirection.Z -= MoveSpeed * _DeltaTime;
 	}
 
-	// 위치 이동 처리
 	AddRelativeLocation(MoveDirection);
 
 	// 회전 처리
@@ -168,16 +168,12 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 	{
 		// 목표 각도 계산 (Z 축 반전)
 		float targetAngle = atan2(-MoveDirection.Z, MoveDirection.X) * UEngineMath::R2D;
-
-		// 현재 각도 가져오기
 		float currentAngle = GetActorTransform().Rotation.Y;
-
 		// 각도 차이 계산 및 보정 (-180 ~ 180도)
 		float deltaAngle = targetAngle - currentAngle;
 		if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
 		if (deltaAngle < -180.0f) deltaAngle += 360.0f;
-
-		// 부드러운 회전 적용 (Lerp)
+		// 부드러운 회전
 		float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 5.0f; // 회전 속도 계수
 		AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
 	}

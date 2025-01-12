@@ -36,7 +36,6 @@ public:
 	}
 
 
-
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
 	void Collision(float _DeltaTime);
@@ -158,6 +157,7 @@ private:
 	class AGameMode* GameMode = nullptr;
 
 	class APawn* MainPawn = nullptr;
+	//std::shared_ptr<class APawn> MainPawn = nullptr;
 
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
 

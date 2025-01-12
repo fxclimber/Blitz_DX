@@ -10,7 +10,10 @@ public:
 	{
 		return RendererFront;
 	}
-
+	FVector GetFireRot()
+	{
+		return FireRot;
+	}
 
 
 protected:
@@ -34,5 +37,6 @@ private:
 	std::shared_ptr<class ACameraActor> Camera ;
 	FVector diff = { 0.f,0.f,0.f };
 
+	FVector FireRot = {0.f,0.f,0.f};
 };
 

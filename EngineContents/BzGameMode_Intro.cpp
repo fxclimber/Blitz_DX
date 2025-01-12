@@ -36,14 +36,11 @@ public:
 
 		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
 		ImGui::Text("CAM");
-
 	}
 };
 
 ABzGameMode_Intro::ABzGameMode_Intro()
 {
-	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
-	
     // collision profile name
     GetWorld()->CreateCollisionProfile("Enemy");
     GetWorld()->CreateCollisionProfile("Player");

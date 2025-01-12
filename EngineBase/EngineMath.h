@@ -400,6 +400,13 @@ public:
 		return Result;
 	}
 
+	TVector operator*(const TVector& Other) const {
+		return TVector(
+			X * Other.X,
+			Y * Other.Y,
+			Z * Other.Z
+		);
+	}
 	TVector operator+(const TVector& _Other) const
 	{
 		TVector Result;

@@ -184,6 +184,10 @@ FMatrix FMatrix::operator*(const FMatrix& _Matrix)
 
 }
 
+
+
+
+
 ENGINEAPI void FTransform::Decompose()
 {
 	World.Decompose(WorldScale, WorldQuat, WorldLocation);

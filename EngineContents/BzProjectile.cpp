@@ -7,7 +7,7 @@
 #include <EngineCore/CameraActor.h>
 #include "BzRendererDefault.h"
 #include <EngineCore/TimeEventComponent.h>
-
+#include <EngineBase/EngineMath.h>
 
 ABzProjectile::ABzProjectile()
 {
@@ -16,15 +16,13 @@ ABzProjectile::ABzProjectile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 30.f,5.f,5.f });
+	Renderer->SetScale3D({ 15.f,15.f,85.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
-	Collision->SetupAttachment(RootComponent);
+	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetScale3D({ 30.f,5.f,5.f });
-	// Collision->AddRelativeLocation({30.f,0.f,0.f});
 	Collision->SetCollisionType(ECollisionType::OBB);
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
@@ -35,29 +33,31 @@ ABzProjectile::ABzProjectile()
 
 }
 
-ABzProjectile::~ABzProjectile()
-{
-}
-
 void ABzProjectile::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	MoveDirection = Player->GetActorTransform().Rotation;
-	//FVector SpawnPos = Player->GetActorLocation();
-	auto fire = Player->GetFire();
-	const auto& pos = fire.get()->GetTransformRef().WorldLocation;
-	const auto& scale = fire.get()->GetTransformRef().WorldScale;
-	FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
-	FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
-	//SpawnPos = SpawnPos+ FVector{0.f,0.f,scale.Z * 2 };
+	{
+		MoveDirection = Player->GetActorTransform().Rotation;
 
-	fire.get()->GetTransformRef().Location;
-	//SpawnPos += {0.f, 100.f, 0.f};
-	SetActorRotation(MoveDirection);
-	SetActorLocation(SpawnPos);
-	//ForwardDir = GetActorForwardVector();
-	ForwardDir = GetActorRightVector();
+		auto fire = Player->GetFire();
+		const auto& pos = fire.get()->GetTransformRef().WorldLocation;
+		const auto& scale = fire.get()->GetTransformRef().WorldScale;
+		const auto& rotRender = fire.get()->GetTransformRef().Rotation;
+		FVector rot = Player->GetActorTransform().Rotation;
+		rot -= rotRender;
+
+
+		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
+		FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
+
+		fire.get()->GetTransformRef().Location;
+		SetActorRotation(rot);
+		SetActorLocation(SpawnPos);
+		ForwardDir = GetActorForwardVector();
+
+	}
+	//Velocity = ForwardDir * Speed;
 }
 
 
@@ -65,10 +65,73 @@ void ABzProjectile::BeginPlay()
 void ABzProjectile::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-	//CalculateMoveDirection(_DeltaTime);
-	AddRelativeLocation(ForwardDir * _DeltaTime * Speed);
+	//PrevPos = GetActorLocation();
 
-	//Collision->CollisionCheck();
+	CalculateMoveAcceleration(_DeltaTime);
+	ForwardDir += Gravity *_DeltaTime;
+	//AddRelativeLocation(ForwardDir * _DeltaTime * Speed);
+	AddActorLocation(ForwardDir * _DeltaTime * Speed);
+	std::string fireRotString =
+		"FireRot: (X: " + std::to_string(ForwardDir.X) +
+		", Y: " + std::to_string(ForwardDir.Y) +
+		", Z: " + std::to_string(ForwardDir.Z) + ")";
+	UEngineDebug::OutPutString(fireRotString);
+}
+
+
+FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
+{
+	FVector pos = GetActorLocation();
+	static const float coef_res = 0.6f;      
+	static const float coef_friction = 0.7f; 
+
+	if (pos.Y <= 2.0f)
+	{
+		// Y축 반발력 적용 (지면에 닿고 Y 방향 속도가 음수일 때)
+		if (ForwardDir.Y <= 0.0f)
+		{
+			ForwardDir.Y *= -coef_res;
+		}
+		ForwardDir.X *= coef_friction;
+		ForwardDir.Z *= coef_friction;
+		
+		if (pos.Y < 0.0f)
+		{
+			pos.Y = 0.0f;
+			SetActorLocation(pos);// 지면에 닿은 경우 Y 위치 고정
+		}
+	}
+	if (!(ForwardDir.X == 0.0f && ForwardDir.Y == 0.0f && ForwardDir.Z == 0.0f))
+	{
+		FVector normalizedDir = ForwardDir.NormalizeReturn();
+
+		float targetYaw = atan2(normalizedDir.X, normalizedDir.Z); // XZ 평면 기준
+		float targetPitch = atan2(normalizedDir.Y, sqrt(normalizedDir.X * normalizedDir.X + normalizedDir.Z * normalizedDir.Z)); // Y축 포함
+
+		FVector currentRotation = GetActorTransform().Rotation;
+
+		float deltaYaw = targetYaw - currentRotation.Y;
+		float deltaPitch = targetPitch - currentRotation.X;
+
+		if (deltaYaw > DirectX::XM_PI) deltaYaw -= DirectX::XM_2PI;
+		if (deltaYaw < -DirectX::XM_PI) deltaYaw += DirectX::XM_2PI;
+
+		if (deltaPitch > DirectX::XM_PI) deltaPitch -= DirectX::XM_2PI;
+		if (deltaPitch < -DirectX::XM_PI) deltaPitch += DirectX::XM_2PI;
+
+		// 부드러운 회전 적용
+		float lerpedYaw = currentRotation.Y + deltaYaw * _DeltaTime * 3.0f; // 속도 계수 3.0f
+		float lerpedPitch = currentRotation.X + deltaPitch * _DeltaTime * 103.0f;
+
+		// 새로운 회전값 설정
+		FVector newRotation(lerpedPitch, lerpedYaw, currentRotation.Z); // Roll 고정
+		SetActorRotation(newRotation);
+	}
+
+
+
+
+	return ForwardDir;
 }
 
 void ABzProjectile::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
@@ -77,22 +140,3 @@ void ABzProjectile::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
 }
 
 
-FVector ABzProjectile::CalculateMoveDirection(float _DeltaTime)
-{
-	AddActorLocation(MoveDirection);
-
-	if (MoveDirection.X != 0.0f || MoveDirection.Z != 0.0f)
-	{
-		float targetAngle = atan2(-MoveDirection.Z, MoveDirection.X) * UEngineMath::R2D;
-		float currentAngle = GetActorTransform().Rotation.Y;
-
-		float deltaAngle = targetAngle - currentAngle;
-		if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-		if (deltaAngle < -180.0f) deltaAngle += 360.0f;
-
-		float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 5.0f; // 회전 속도 계수
-		AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
-	}
-
-	return MoveDirection;
-}

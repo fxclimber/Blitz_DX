@@ -127,7 +127,7 @@ public:
 				Camera->SetActorLocation({0.f,2000.f,0.f});
 				Camera->SetActorRotation({90.f,0.f,0.f});
 				std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
-				cam->SetProjectionType(EProjectionType::Perspective);
+				//cam->SetProjectionType(EProjectionType::Perspective);
 
 				std::shared_ptr<ABzBottomTmp> Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
 				Bottom->SetActorRelativeScale3D({ 300.f,1.f ,300.f });
@@ -364,7 +364,6 @@ ABzTileMapGameMode::ABzTileMapGameMode()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-
 	PivotSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	PivotSpriteRenderer->SetupAttachment(RootComponent);
 	PivotSpriteRenderer->SetRelativeScale3D({ 50.0f, 50.0f, 1.0f });
@@ -373,18 +372,10 @@ ABzTileMapGameMode::ABzTileMapGameMode()
 	TileMapRenderer->SetupAttachment(RootComponent);
 	TileMapRenderer->SetTileSetting(ETileMapType::Iso, "TileMap.png", { 128.0f, 63.0f }, { 128.0f, 192.0f }, { 0.0f, 0.0f });
 
-
-
-	// CreateDefaultSubObject<>
-
-	// 카메라를 일정거리 뒤로 가서 
-	// 카메라 위치조정을 무조건 해줘야 할것이다.
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
-
 }
-
 
 void ABzTileMapGameMode::Tick(float _DeltaTime)
 {
@@ -418,5 +409,4 @@ void ABzTileMapGameMode::LevelChangeStart()
 		TileMapWindow->SetActive(true);
 		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
 	}
-
 }

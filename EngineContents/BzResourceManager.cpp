@@ -74,7 +74,6 @@ void UBzCore::ResourceSetting()
 	}
 	//-----------------------
 	// 스프라이트렌더러용 임시, 로직완성후 삭제,변경할것 
-
 	{
 		UEngineDirectory Dir;
 		if (false == Dir.MoveParentToDirectory("ContentsResources"))
