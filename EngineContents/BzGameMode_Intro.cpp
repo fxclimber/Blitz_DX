@@ -46,16 +46,14 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->CreateCollisionProfile("Player");
     GetWorld()->CreateCollisionProfile("Proj");
 	// 충돌연결 
-   // GetWorld()->LinkCollisionProfile("Player","Enemy");
+    GetWorld()->LinkCollisionProfile("Player","Enemy");
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
+    GetWorld()->LinkCollisionProfile("Enemy","Enemy");
 
 	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
 	Bottom->SetActorLocation({0.f,0.f,0.f});
-	PlayerCube = GetWorld()->SpawnActor<ABzPlayerCube>();
-	PlayerCube->SetActorLocation(FVector{200.f,0.f,-500.f});
-	PlayerCube->SetActorRotation(FVector{0.f,250.f,0.f});
-	EnemyCube = GetWorld()->SpawnActor<ABzEnemyCube>();
+
 
 	Camera = GetWorld()->GetMainCamera();
 	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
@@ -65,29 +63,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
 	cam->SetProjectionType(EProjectionType::Perspective);
 
-	//-----
-    TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
-    TimeEventComponent->AddEvent(
-        1.0f,
-        [this](float _Delta, float _Acc)
-        {      
-            float randomX = this->random.Randomfloat(-800.0f, 800.0f);
-            float randomY = this->random.Randomfloat(0.f, 0.0f);
-            float randomZ = this->random.Randomfloat(-800.0f, 800.0f);
-            FVector randomLocation(randomX, randomY, randomZ); 
 
-            std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
-            EnemyCubes.push_back(Enemy);
-
-            if (Enemy) {
-                Enemy->AddRelativeLocation(randomLocation); // 상대 위치 추가
-            }
-        },
-        [this]()
-        {
-        },
-        false // 반복 여부
-    );
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()
@@ -95,10 +71,33 @@ ABzGameMode_Intro::~ABzGameMode_Intro()
 
 }
 
+void ABzGameMode_Intro::BeginPlay()
+{
+	PlayerCube = std::shared_ptr<ABzPlayerCube>(dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn()));
+	PlayerCube->SetActorLocation(FVector{ 200.f,0.f,-500.f });
+	PlayerCube->SetActorRotation(FVector{ 0.f,250.f,0.f });
+
+	EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>();
+	EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
+	//-----
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+	TimeEventComponent->AddEvent(
+		.2f,
+		[this](float _Delta, float _Acc)
+		{
+			FVector randomLocation(GetRandomLocation(8.f));
+			SpawnEnemy(randomLocation);
+		},
+		[this]()
+		{
+		},
+		false // 반복 여부
+		);
+}
+
 void ABzGameMode_Intro::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-    //UEngineDebug::OutPutString(std::to_string(EnemyCubes.size()));
 
 	Camera->SetActorLocation(FVector(CamInitPos.X+PlayerCube->GetActorLocation().X, CamInitPos.Y,CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 
@@ -115,13 +114,33 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 		Proj->SetPlayer(PlayerCube);
 		Proj->SetActorLocation(PlayerCube->GetActorLocation());
 	}
-	if (UEngineInput::IsPressTime(VK_NUMPAD0))
-	{
-		//Camera->GetCameraComponent()->SetFOV(50.f);
-		ZoomCameraByMoving(Camera.get(), PlayerCube.get(), 30.f);
-	}
 
 }
+
+
+FVector ABzGameMode_Intro::GetRandomLocation(float _x) {
+	float range = _x * 100.f;
+	float x = this->random.Randomfloat(-range, range);
+	float z = this->random.Randomfloat(-range, range);
+	float y = this->random.Randomfloat(0.0f, 0.f);
+	return FVector(x, y, z);
+}
+
+void ABzGameMode_Intro::SpawnEnemy(FVector randomLocation) 
+{
+	std::shared_ptr<ABzEnemyCube> Enemy = GetWorld()->SpawnActor<ABzEnemyCube>();
+	if (Enemy) 
+	{
+		Enemy->AddRelativeLocation(randomLocation); 
+		EnemyCubes.push_back(Enemy); // 배열에 추가
+	}
+}
+
+
+
+
+
+
 // zoom-in
 void ABzGameMode_Intro::ZoomCameraByMoving(ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount) {
 	if (CameraActor && TargetActor) {

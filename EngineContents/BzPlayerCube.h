@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-class ABzPlayerCube : public AActor
+class ABzPlayerCube : public APawn
 {
 public:
 	ABzPlayerCube();

@@ -9,6 +9,8 @@
 #include <EngineCore/Collision.h>
 #include <EngineBase/EngineMath.h>
 #include "BzConst.h"
+#include "BzplayerCube.h"
+#include <EngineBase/EngineMath.h>
 
 ABzEnemyCube::ABzEnemyCube()
 {
@@ -19,7 +21,7 @@ ABzEnemyCube::ABzEnemyCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 50.f,100.f,20.f });
+	Renderer->SetScale3D({ 50.f,100.f,50.f });
 	Renderer->SetPivot(PivotType::Bottom);
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
 
@@ -34,8 +36,12 @@ ABzEnemyCube::ABzEnemyCube()
 			//_Other->GetActor()->Destroy();
 			//UEngineDebug::OutPutString("Enter");
 		});
+	
+	Player = std::shared_ptr<ABzPlayerCube>(dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn()));
 
-
+	//Player = std::shared_ptr<APawn>(GetWorld()->GetMainPawn());
+	//PlayerP = static_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
+	//Player = dynamic_cast<ABzPlayerCube*>(pawn);
 }
 
 ABzEnemyCube::~ABzEnemyCube()
@@ -45,6 +51,11 @@ ABzEnemyCube::~ABzEnemyCube()
 void ABzEnemyCube::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	APawn* Ptr = GetWorld()->GetMainPawn();
+	randomResult = GetRandom(2.f);
+
+	//PlayerP = dynamic_cast<APawn*>(GetWorld()->GetMainPawn());
 	pos = GetActorLocation();
 }
 
@@ -54,11 +65,10 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	BzConst::TotalTime += _DeltaTime;
 
 	radius = GetActorTransform().Scale.X;
-	FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
-	//AddActorRotation(RotationDelta);
+	//FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
 
-	Ani_Idle(_DeltaTime);
-	//Physics(_DeltaTime);
+	//Ani_Idle(_DeltaTime);
+	CheckAttackDistance(_DeltaTime , 500.f);
 
 }
 
@@ -72,19 +82,12 @@ void ABzEnemyCube::Ani_Idle(float _DeltaTime)
 
 	float jumpAmplitude = 142.f;
 	float jumpFrequency = 0.05f;
-
 	float normalizedTime = fmod(BzConst::TotalTime * jumpFrequency, 1.0f);
-
-	// 포물선 식 계산
 	float jumpHeight = jumpAmplitude * (-4.f * normalizedTime * (normalizedTime - 1.f));
-
-	// 기준 위치에서 상대적으로 이동
 	FVector currentLocation = GetActorLocation();
 	FVector jumpOffset = FVector(0.f, jumpHeight, 0.f);
 	FVector newLocation = pos + jumpOffset - FVector(0.f, currentLocation.Y - pos.Y, 0.f);
-
-	AddActorLocation(newLocation - currentLocation);
-
+	//AddActorLocation(newLocation - currentLocation);
 }
 
 
@@ -127,4 +130,64 @@ void ABzEnemyCube::Physics(float _DeltaTime)
 		AddActorLocation(pos);
 }
 
+void ABzEnemyCube::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
+{
+	//Player = _name;
+}
 
+bool ABzEnemyCube::CheckAttackDistance(float _DeltaTime, float _speed)
+{
+	if (nullptr != Player)
+	{
+		AttackPlayerPos = Player->GetActorLocation();
+		Attackdir = AttackPlayerPos - GetActorLocation();
+		AttackDistance = Attackdir.Length();
+		Attackdir.Normalize();
+		float speed = randomResult * _speed;
+		//float speed = 100.f;
+
+		{
+			std::string ppp =
+				"AttackDistance: (X: " + std::to_string(AttackDistance);
+			UEngineDebug::OutPutString(ppp);
+		}
+		if (AttackDistance > 250.f)
+		{
+			FVector NormalizedDir = Attackdir;
+			AddActorLocation(NormalizedDir * _DeltaTime * speed);
+			{
+				std::string aaa =
+					"NormalizedDir: (X: " + std::to_string(NormalizedDir.X) +
+					", Y: " + std::to_string(NormalizedDir.Y) +
+					", Z: " + std::to_string(NormalizedDir.Z) + ")";
+				UEngineDebug::OutPutString(aaa);
+			}
+		}
+		//else if (AttackDistance <= 80.f)
+		//{
+		//	SetActorLocation(GetActorLocation());
+		//}
+
+		if (Attackdir.Z != 0.0f || Attackdir.X != 0.0f)
+		{
+			float targetAngle = atan2(-Attackdir.X, Attackdir.Z) * UEngineMath::R2D;
+			float currentAngle = GetActorTransform().Rotation.Y;
+			float deltaAngle = targetAngle - currentAngle;
+			if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+			if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+			// 부드러운 회전
+			float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 1.0f; 
+			AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
+		}
+	}
+	return true;
+}
+
+
+float ABzEnemyCube::GetRandom(float _x) 
+{
+	float x = this->random.Randomfloat(-_x, _x);
+	float y = UEngineMath::Clamp(x, 0.3f, x * 1.f);
+	return y;
+}

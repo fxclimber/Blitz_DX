@@ -1,12 +1,14 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include "BzEnemy.h"
+#include <EngineBase/EngineRandom.h>
 
 class ABzEnemyCube : public ABzEnemy
 {
 public:
 	ABzEnemyCube();
 	~ABzEnemyCube();
+	void SetPlayer(std::shared_ptr<class ABzPlayerCube> _name);
 
 protected:
 	void BeginPlay() override;
@@ -14,11 +16,13 @@ protected:
 	void Ani_Idle(float _DeltaTime);
 
 	void Physics(float _DeltaTime);
-
-
+	bool CheckAttackDistance(float _DeltaTime , float _speed);
+	float GetRandom(float _x);
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UCollision> Collision;
+	std::shared_ptr<class ABzPlayerCube> Player = nullptr;
+	class ABzPlayerCube* PlayerP = nullptr;
 
 	float rotationAngle = 0.f;
 	float jumpHeight = 0.f;
@@ -27,7 +31,12 @@ private:
 	float radius = 0;
 	FVector pos = {};
 
+	float AttackDistance;
+	FVector Attackdir;
+	FVector AttackPlayerPos;
 
+	UEngineRandom random;
+	float randomResult = 0;
 
 };
 

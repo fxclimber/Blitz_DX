@@ -8,7 +8,7 @@
 #include "ContentsEditorGUI.h"
 #include "BzGameMode_Intro.h"
 #include "BzTileMapGameMode.h"
-
+#include "BzPlayerCube.h"
 #include "TileMapGameMode.h"
 
 // 어떤 코어 쓸거니?
@@ -31,7 +31,7 @@ void UBzCore::EngineStart(UEngineInitData& _Data)
 	//---------------------------------------------------------
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ABzGameMode_Intro, APawn>("Play");// 플레이 
+	UEngineCore::CreateLevel<ABzGameMode_Intro, ABzPlayerCube>("Play");// 플레이 
 	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn>("Map_Edit");// 맵 에디터 
 	UEngineCore::CreateLevel<ATileMapGameMode, APawn>("TileMapEditor");// 나중에 스프라이트 선택해서 쓸때 
 	UEngineCore::OpenLevel("Play");

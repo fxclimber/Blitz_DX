@@ -8,7 +8,8 @@ public:
 	ABzGameMode_Intro();
 	~ABzGameMode_Intro();
 
-	void Tick(float _DeltaTime);
+	void BeginPlay()override;
+	void Tick(float _DeltaTime)override;
 
 	std::shared_ptr<class ABzPlayerCube> GetPlayer()
 	{
@@ -22,13 +23,16 @@ public:
 
 
 protected:
+	FVector GetRandomLocation(float _x);
+	void SpawnEnemy(FVector randomLocation);
 
 private:
 	std::shared_ptr<class ABzPlayerCube> PlayerCube;
-	std::shared_ptr<class ABzEnemyCube> EnemyCube;
+	std::vector < std::shared_ptr <class ABzEnemyCube >> EnemyCubes;
+	std::shared_ptr<class ABzEnemyCube> EnemySingleTest;
+
 	std::shared_ptr<class ABzBottomTmp> Bottom;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
-	std::vector < std::shared_ptr <class ABzEnemyCube >> EnemyCubes;
 	UEngineRandom random;
 
 	std::shared_ptr<class ABzProjectile> Proj;
