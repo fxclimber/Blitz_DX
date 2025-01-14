@@ -21,7 +21,7 @@ void ATitleHUD::BeginPlay()
 	Button->SetTexture("BackGround.png");
 	Button->SetDownEvent([]()
 		{
-			UEngineDebug::OutPutString("Click~~~~~~~~~");
+			//UEngineDebug::OutPutString("Click~~~~~~~~~");
 		});
 
 }

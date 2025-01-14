@@ -285,6 +285,11 @@ void ULevel::Collision(float _DeltaTime)
 			{
 				for (std::shared_ptr<class UCollision>& RightCollision : RightList)
 				{
+					if (LeftCollision == RightCollision)
+					{
+						continue;
+					}
+
 					if (false == LeftCollision->IsActive())
 					{
 						continue;
@@ -321,8 +326,6 @@ void ULevel::Release(float _DeltaTime)
 					++StartIter;
 					continue;
 				}
-
-				(*StartIter)->Release();
 
 				// 랜더러는 지울 필요가 없습니다.
 				// (*RenderStartIter) 누가 지울 권한을 가졌느냐.

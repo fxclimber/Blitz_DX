@@ -9,6 +9,7 @@
 #include "BzRendererDefault.h"
 #include <EngineCore/TimeEventComponent.h>
 #include "BzProjectile.h"
+#include "Skl_BzRockfall.h"
 
 
 ABzPlayerCube::ABzPlayerCube()
@@ -19,7 +20,7 @@ ABzPlayerCube::ABzPlayerCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 40.f,120.f,60.f });
+	Renderer->SetScale3D({ 60.f,120.f,60.f });
 	Renderer->SetPivot(PivotType::Bottom);
 
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
@@ -28,6 +29,8 @@ ABzPlayerCube::ABzPlayerCube()
 	RendererFront->SetRotation({0.f,-90.f,0.f});
 	RendererFront->SetRelativeLocation({60.f,140.f,0.f});
 	RendererFront->AddLocalRotation({30.f,0.f,0.f});
+	
+	
 
 	FireRot = RendererFront->GetTransformRef().WorldRotation;
 	//----collision
@@ -132,9 +135,15 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	FVector thisPos = GetActorLocation();
 
-
 	FireRot = RendererFront->GetTransformRef().Rotation;
 
+	if (UEngineInput::IsDown('Q'))
+	{
+		Skl_Rockfall();
+	}
+
+
+	//----test
 	if (UEngineInput::IsDown('F'))
 	{
 		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
@@ -146,7 +155,6 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 {
 	MoveDirection = FVector(0.0f, 0.0f, 0.0f);
 
-	// 키 입력에 따라 이동 방향 설정
 	if (UEngineInput::IsPress('A'))
 	{
 		MoveDirection.X -= MoveSpeed * _DeltaTime;
@@ -166,7 +174,7 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 
 	AddRelativeLocation(MoveDirection);
 
-	// 회전 처리
+	// 회전 
 	if (MoveDirection.X != 0.0f || MoveDirection.Z != 0.0f)
 	{
 		// 목표 각도 계산 (Z 축 반전)
@@ -176,11 +184,26 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 		float deltaAngle = targetAngle - currentAngle;
 		if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
 		if (deltaAngle < -180.0f) deltaAngle += 360.0f;
-		// 부드러운 회전
+
 		float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 5.0f; // 회전 속도 계수
 		AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
 	}
 
 	return MoveDirection;
+}
+
+void ABzPlayerCube::Skl_Rockfall()
+{
+	RendererFront->SetRelativeLocation({ 30.f,220.f,0.f });
+	RendererFront->AddLocalRotation({ 50.f,0.f,0.f });
+
+	FVector pos = RendererFront->GetTransformRef().Location;
+	FVector rot = RendererFront->GetTransformRef().Rotation;
+	FVector MoveDir = GetActorForwardVector();
+
+	std::shared_ptr<ASkl_BzRockfall> Proj = GetWorld()->SpawnActor<ASkl_BzRockfall>();
+	//Proj->SetPlayer(PlayerCube);
+	Proj->SetActorLocation(pos);
+	Proj->SetActorRotation(rot);
 }
 

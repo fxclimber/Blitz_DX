@@ -20,6 +20,7 @@ protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	FVector CalculateMoveDirection(float _DeltaTime);
+	void Skl_Rockfall();
 
 
 private:

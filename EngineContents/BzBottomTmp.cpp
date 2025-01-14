@@ -15,7 +15,7 @@ ABzBottomTmp::ABzBottomTmp()
 	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererBottom->SetupAttachment(RootComponent);
 	RendererBottom->SetMesh("Rect");
-	RendererBottom->SetRelativeScale3D({ 45.f,45.f,1.f });
+	RendererBottom->SetRelativeScale3D({ 100.f,100.f,1.f });
 	RendererBottom->SetRotation({ 90.f,0.f,0.f });
 	RendererBottom->GetRenderUnit().SetMaterial("BzUV");
 	RendererBottom->GetRenderUnit().SetTexture("bz_teXture0","GridWhite.png");

@@ -45,10 +45,13 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->CreateCollisionProfile("Enemy");
     GetWorld()->CreateCollisionProfile("Player");
     GetWorld()->CreateCollisionProfile("Proj");
+    GetWorld()->CreateCollisionProfile("Skl_BzRockfall");
+
 	// 충돌연결 
     GetWorld()->LinkCollisionProfile("Player","Enemy");
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
     GetWorld()->LinkCollisionProfile("Enemy","Enemy");
+    GetWorld()->LinkCollisionProfile("GridBlue.png","Enemy");
 
 	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>().get();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
@@ -83,7 +86,7 @@ void ABzGameMode_Intro::BeginPlay()
 	//-----
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 	TimeEventComponent->AddEvent(
-		.2f,
+		0.5f,
 		[this](float _Delta, float _Acc)
 		{
 			FVector randomLocation(GetRandomLocation(8.f));
@@ -99,6 +102,9 @@ void ABzGameMode_Intro::BeginPlay()
 void ABzGameMode_Intro::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	double fps = 1/ _DeltaTime;
+	UEngineDebug::OutPutString("fps: " + std::to_string(fps) );
 
 	Camera->SetActorLocation(FVector(CamInitPos.X+PlayerCube->GetActorLocation().X, CamInitPos.Y,CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 

@@ -170,6 +170,7 @@
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="Skl_BzRockfall.h" />
     <ClInclude Include="TileMapGameMode.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleHUD.h" />
@@ -202,6 +203,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="BzResourceManager.cpp" />
+    <ClCompile Include="Skl_BzRockfall.cpp" />
     <ClCompile Include="TileMapGameMode.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleHUD.cpp" />

@@ -77,6 +77,9 @@
     <ClInclude Include="BzHUD.h">
       <Filter>Blitz\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Skl_BzRockfall.h">
+      <Filter>Blitz\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="BzHUD.cpp">
       <Filter>Blitz\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Skl_BzRockfall.cpp">
+      <Filter>Blitz\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

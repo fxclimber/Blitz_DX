@@ -10,7 +10,6 @@
 #include <EngineBase/EngineMath.h>
 #include "BzConst.h"
 #include "BzplayerCube.h"
-#include <EngineBase/EngineMath.h>
 
 ABzEnemyCube::ABzEnemyCube()
 {
@@ -28,20 +27,27 @@ ABzEnemyCube::ABzEnemyCube()
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
+	collisionsTest.push_back(Collision.get());
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Enemy");
 	Collision->SetCollisionType(ECollisionType::OBB);
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
+			FVector otherLocation = _Other->GetActor()->GetActorLocation();
+			FVector thisLocation = _This->GetActor()->GetActorLocation();
+			FVector reflectDir = otherLocation - thisLocation;
+			float length = reflectDir.Length();
+
+			if (length < 70.f)
+			{
+				_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
+			}
 			//_Other->GetActor()->Destroy();
 			//UEngineDebug::OutPutString("Enter");
 		});
 	
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 
-	//Player = std::shared_ptr<APawn>(GetWorld()->GetMainPawn());
-	//PlayerP = static_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
-	//Player = dynamic_cast<ABzPlayerCube*>(pawn);
 }
 
 ABzEnemyCube::~ABzEnemyCube()
@@ -65,9 +71,7 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	BzConst::TotalTime += _DeltaTime;
 
 	radius = GetActorTransform().Scale.X;
-	//FVector RotationDelta(0.f, 30.f * _DeltaTime, 0.f); // 초당 100도 회전
 
-	//Ani_Idle(_DeltaTime);
 	CheckAttackDistance(_DeltaTime , 500.f);
 
 }
@@ -87,7 +91,6 @@ void ABzEnemyCube::Ani_Idle(float _DeltaTime)
 	FVector currentLocation = GetActorLocation();
 	FVector jumpOffset = FVector(0.f, jumpHeight, 0.f);
 	FVector newLocation = pos + jumpOffset - FVector(0.f, currentLocation.Y - pos.Y, 0.f);
-	//AddActorLocation(newLocation - currentLocation);
 }
 
 
@@ -139,48 +142,74 @@ bool ABzEnemyCube::CheckAttackDistance(float _DeltaTime, float _speed)
 {
 	if (nullptr != Player)
 	{
+		// 플레이어 위치,방향
 		AttackPlayerPos = Player->GetActorLocation();
 		Attackdir = AttackPlayerPos - GetActorLocation();
 		AttackDistance = Attackdir.Length();
 		Attackdir.Normalize();
 		float speed = randomResult * _speed;
-		//float speed = 100.f;
 
+		// 충돌 체크
+		bool collisionYes = Collision->CollisionCheck("Enemy", AttackPlayerPos, collisionsTest);
+
+		if (collisionYes)
 		{
-			std::string ppp =
-				"AttackDistance: (X: " + std::to_string(AttackDistance);
-			UEngineDebug::OutPutString(ppp);
-		}
-		if (AttackDistance > 250.f)
-		{
-			FVector NormalizedDir = Attackdir;
-			AddActorLocation(NormalizedDir * _DeltaTime * speed);
+			bool isFrontMost = true;
+
+			for (UCollision* other : collisionsTest)
 			{
-				std::string aaa =
-					"NormalizedDir: (X: " + std::to_string(NormalizedDir.X) +
-					", Y: " + std::to_string(NormalizedDir.Y) +
-					", Z: " + std::to_string(NormalizedDir.Z) + ")";
-				UEngineDebug::OutPutString(aaa);
+				FVector otherLocation = other->GetActor()->GetActorLocation();
+				float otherDistance = (AttackPlayerPos - otherLocation).Length();
+
+				if (otherDistance < AttackDistance)
+				{
+					isFrontMost = false;
+					break;
+				}
+			}
+
+			if (isFrontMost)
+			{
+				if (AttackDistance > 300.f)
+				{
+					FVector NormalizedDir = Attackdir;
+					AddActorLocation(NormalizedDir * _DeltaTime * speed);
+				}
+				else
+				{
+					AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
+				}
+			}
+			else
+			{
+				AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
 			}
 		}
-		//else if (AttackDistance <= 80.f)
-		//{
-		//	SetActorLocation(GetActorLocation());
-		//}
-
-		if (Attackdir.Z != 0.0f || Attackdir.X != 0.0f)
+		else
 		{
-			float targetAngle = atan2(-Attackdir.X, Attackdir.Z) * UEngineMath::R2D;
-			float currentAngle = GetActorTransform().Rotation.Y;
-			float deltaAngle = targetAngle - currentAngle;
-			if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-			if (deltaAngle < -180.0f) deltaAngle += 360.0f;
-
-			// 부드러운 회전
-			float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 1.0f; 
-			AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
+			if (AttackDistance > 450.f)
+			{
+				FVector NormalizedDir = Attackdir;
+				AddActorLocation(NormalizedDir * _DeltaTime * speed);
+			}
+			else
+			{
+				AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
+			}
 		}
-	}
+	}			// 이동방향대로 몸체회전 
+			if (Attackdir.Z != 0.0f || Attackdir.X != 0.0f)
+			{
+				float targetAngle = atan2(-Attackdir.X, Attackdir.Z) * UEngineMath::R2D;
+				float currentAngle = GetActorTransform().Rotation.Y;
+				float deltaAngle = targetAngle - currentAngle;
+				if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+				if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+				// 부드러운 회전
+				float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 1.0f;
+				AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
+			}
 	return true;
 }
 

@@ -37,5 +37,6 @@ private:
 	UEngineRandom random;
 	float randomResult = 0;
 
+	std::vector<UCollision*> collisionsTest;
 };
 
