@@ -49,7 +49,7 @@ cbuffer FTransform : register(b0)
     float4x4 WVP;
 };
 
-Input Bz_VS(EngineVertex _Vertex)
+Input CubeTest_VS(EngineVertex _Vertex)
 {
     Input OutPut;
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
@@ -63,15 +63,38 @@ cbuffer FBzColor : register(b0)
     float4 Albedo;
 };
 
-float4 Bz_PS(Input _Vertex) : SV_Target0
+float4 CubeTest_PS(Input _Vertex) : SV_Target0
 {
-    float UVScale = 50;
+    float UVScale = 1;
     float2 scaledUV = _Vertex.UV.xy * UVScale; // UVScaleÀº float2 Å¸ÀÔÀ¸·Î ¹Ýº¹ È½¼ö¸¦ ¼³Á¤
     float4 texColor = bz_texture0.Sample(bz_sampler, frac(scaledUV));
-    float4 multColor = {1,0.6,0,1 };
+    float4 multColor = 1; //{        1, 0.6, 0, 1};
     float4 finalColor = texColor * multColor;
     
-    //return bz_texture0.Sample(bz_sampler, _Vertex.UV.xy);
     return finalColor;
-	
 };
+
+// ¼öÁ¤ÇÊ¼ö
+//float4 CubeTest_PS(Input _Vertex) : SV_Target0
+//{
+//    // UV ¹üÀ§¸¦ Á¤±ÔÈ­
+//    float2 uv = frac(_Vertex.UV.xy);
+
+//    float4 color;
+//    if (uv.x < 0.25 && uv.y > 0.75)        // UV ¼¿ 0
+//        color = float4(1, 0, 0, 1); // »¡°­
+//    else if (uv.x >= 0.25 && uv.x < 0.5 && uv.y > 0.75) // UV ¼¿ 1
+//        color = float4(0, 1, 0, 1); // ÃÊ·Ï
+//    else if (uv.x >= 0.5 && uv.x < 0.75 && uv.y > 0.75) // UV ¼¿ 2
+//        color = float4(0, 0, 1, 1); // ÆÄ¶û
+//    else if (uv.x >= 0.75 && uv.x <= 1.0 && uv.y > 0.75) // UV ¼¿ 3
+//        color = float4(1, 1, 0, 1); // ³ë¶û
+//    else if (uv.x < 0.25 && uv.y <= 0.75 && uv.y > 0.5)  // UV ¼¿ 4
+//        color = float4(0.5, 0, 0.5, 1); // º¸¶ó
+//    else if (uv.x >= 0.25 && uv.x < 0.5 && uv.y <= 0.75 && uv.y > 0.5) // UV ¼¿ 5
+//        color = float4(0, 1, 1, 1); // ÇÏ´Ã»ö
+//    else
+//        color = float4(1, 1, 1, 1); // ±âº» Èò»ö (¿¹¿Ü Ã³¸®)
+
+//    return color;
+//};

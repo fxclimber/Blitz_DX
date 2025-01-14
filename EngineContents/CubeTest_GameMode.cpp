@@ -22,19 +22,13 @@ class UCubeTestPlayWindow : public UEngineGUIWindow
 public:
 	void OnGUI() override
 	{
-		if (true == ImGui::Button("NAN"))
-		{
-			//std::shared_ptr<AMonster> NewMonster = GetWorld()->SpawnActor<AMonster>();
-			//NewMonster->SetActorLocation({ 300.0f, 200.0f, 0.0f });
-		}
-
 		if (true == ImGui::Button("FreeCameraOn"))
 		{
 			GetWorld()->GetMainCamera()->FreeCameraSwitch();
 		}
 
-		ImGui::SameLine(); // ÇÑ°£ ¶ç±â
-		ImGui::Text("CAM");
+		ImGui::SameLine();
+		ImGui::Text("UCubeTestPlayWindow");
 	}
 };
 
@@ -47,6 +41,11 @@ ACubeTest_GameMode::ACubeTest_GameMode()
 	ACameraActor* Camera = GetWorld()->GetMainCamera().get();
 	std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
 	cam->SetProjectionType(EProjectionType::Perspective);
+
+	FVector camPos = { 100.0f, 220.0f, -200.0f, 1.0f };
+	Camera->SetActorLocation(camPos);
+	Camera->SetActorRotation({ 25.f,330.f,0.f });
+
 }
 
 ACubeTest_GameMode::~ACubeTest_GameMode()
@@ -65,4 +64,20 @@ void ACubeTest_GameMode::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 
+}
+
+void ACubeTest_GameMode::LevelChangeStart()
+{
+	UEngineGUI::AllWindowOff();
+
+	{
+		std::shared_ptr<UCubeTestPlayWindow> Window = UEngineGUI::FindGUIWindow<UCubeTestPlayWindow>("UCubeTestPlayWindow");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UCubeTestPlayWindow>("UCubeTestPlayWindow");
+		}
+
+		Window->SetActive(true);
+	}
 }

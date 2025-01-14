@@ -14,7 +14,7 @@ UCubeTest_Renderer::UCubeTest_Renderer()
     SetMaterial("CubeTestMaterial");
     TestColor.Albedo = float4(0.0f, 0.7f, 0.3f, 1.0f);
     GetRenderUnit().ConstantBufferLinkData("FCubeTestColor", TestColor);
-    //GetRenderUnit().SetTexture("bz_texture0", "CheckUV.png");
+    GetRenderUnit().SetTexture("bz_texture0", "num.png");
 }
 void UCubeTest_Renderer::SetPivot(CubeTestPivotType _pivot)
 {
