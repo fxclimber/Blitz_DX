@@ -64,9 +64,9 @@ public:
 		return Context.Get();
 	}
 
-	ENGINEAPI ID3D11RenderTargetView* GetRTV()
+	ENGINEAPI std::shared_ptr<class UEngineRenderTarget> GetBackBufferTarget()
 	{
-		return RTV.Get();
+		return BackBufferTarget;
 	}
 
 protected:
@@ -93,12 +93,7 @@ private:
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
-
-	// 깊이 버퍼 텍스처를 만들어야 한다.
-	std::shared_ptr<class UEngineTexture> DepthTex;
-
+	std::shared_ptr<class UEngineRenderTarget> BackBufferTarget;
 
 	//FVector ClearColor = FVector::BLUE;
 	ENGINEAPI void DefaultResourcesInit();

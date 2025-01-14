@@ -63,7 +63,8 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
 	cam->SetProjectionType(EProjectionType::Perspective);
 
-
+	//-------------
+	
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()

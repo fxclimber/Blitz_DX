@@ -71,6 +71,12 @@
     <ClInclude Include="BzConst.h">
       <Filter>Blitz</Filter>
     </ClInclude>
+    <ClInclude Include="TitleHUD.h">
+      <Filter>Jo</Filter>
+    </ClInclude>
+    <ClInclude Include="BzHUD.h">
+      <Filter>Blitz\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -146,6 +152,12 @@
     <ClCompile Include="BzConst.cpp">
       <Filter>Blitz</Filter>
     </ClCompile>
+    <ClCompile Include="TitleHUD.cpp">
+      <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="BzHUD.cpp">
+      <Filter>Blitz\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -183,6 +195,9 @@
     </Filter>
     <Filter Include="Blitz\Core">
       <UniqueIdentifier>{13c0214c-8b68-4c08-bae7-1eebce191c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\UI">
+      <UniqueIdentifier>{05146978-3e6d-4b62-8634-7746ffd55e42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

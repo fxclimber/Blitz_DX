@@ -55,21 +55,10 @@ void URenderer::SetMaterial(std::string_view _Name, UINT _Index /*= 0*/)
 	Unit.SetMaterial(_Name);
 }
 
-void URenderer::RenderTransUpdate(UEngineCamera* _Camera)
-{
-	// 쉽게 말하면 트랜스폼 
-	// 트랜스폼은 랜더러가 가지고 있습니다.
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-	FTransform& RendererTrans = GetTransformRef();
-	//	// 랜더러는 월드 뷰 프로젝트를 다 세팅받았고
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
-}
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
-	this->RenderTransUpdate(_Camera);
+	this->CameraTransUpdate(_Camera);
 
 	for (size_t i = 0; i < Units.size(); i++)
 	{

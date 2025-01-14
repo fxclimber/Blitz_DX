@@ -7,6 +7,8 @@
 #include "EngineCamera.h"
 #include "CameraActor.h"
 #include "EngineGUI.h"
+#include "HUD.h"
+#include "EngineRenderTarget.h"
 
 // 플레이어 Renderer
 
@@ -32,8 +34,13 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 
 ULevel::ULevel()
 {
-	SpawnCamera(0);
+	SpawnCamera(EEngineCameraType::MainCamera);
 
+	SpawnCamera(EEngineCameraType::UICamera);
+
+	LastRenderTarget = std::make_shared<UEngineRenderTarget>();
+	LastRenderTarget->CreateTarget(UEngineCore::GetScreenScale());
+	LastRenderTarget->CreateDepth();
 }
 
 ULevel::~ULevel()
@@ -120,11 +127,54 @@ void ULevel::Render(float _DeltaTime)
 {
 	UEngineCore::GetDevice().RenderStart();
 
+	LastRenderTarget->Clear();
+
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
+		if (Camera.first == static_cast<int>(EEngineCameraType::UICamera))
+		{
+			continue;
+		}
+
+		if (false == Camera.second->IsActive())
+		{
+			continue;
+		}
+
 		Camera.second->Tick(_DeltaTime);
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
+		// 이 효과는 이 카메라 그려진 대상만 영향을 줄것이다.
+		// Camera.second->PostEffect();
+		// 난 다 그려졌으니 
+		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
 	}
+
+	if (true == Cameras.contains(static_cast<int>(EEngineCameraType::UICamera)))
+	{
+		std::shared_ptr<ACameraActor> CameraActor = Cameras[static_cast<int>(EEngineCameraType::UICamera)];
+		if (true == CameraActor->IsActive())
+		{
+			std::shared_ptr<UEngineCamera> CameraComponent = Cameras[static_cast<int>(EEngineCameraType::UICamera)]->GetCameraComponent();
+
+			CameraActor->Tick(_DeltaTime);
+			CameraComponent->CameraTarget->Clear();
+			CameraComponent->CameraTarget->Setting();
+
+			HUD->UIRender(CameraComponent.get(), _DeltaTime);
+
+			CameraComponent->CameraTarget->MergeTo(LastRenderTarget);
+		}
+
+	}
+	else
+	{
+		MSGASSERT("UI카메라가 존재하지 않습니다. 엔진 오류입니다. UI카메라를 제작해주세요.");
+	}
+
+	// LastRenderTarget->PostEffect();
+
+	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
+	LastRenderTarget->MergeTo(BackBuffer);
 
 
 	{
@@ -309,9 +359,11 @@ void ULevel::Release(float _DeltaTime)
 	}
 }
 
-void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn)
+void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD)
 {
 	GameMode = _GameMode;
 
 	MainPawn = _Pawn;
+
+	HUD = _HUD;
 }

@@ -72,6 +72,17 @@ void UBzCore::ResourceSetting()
 
 		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 	}
+	{// 폴더별 분리된 스프라이트 
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/UI");
+
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
 	//-----------------------
 	// 스프라이트렌더러용 임시, 로직완성후 삭제,변경할것 
 	{

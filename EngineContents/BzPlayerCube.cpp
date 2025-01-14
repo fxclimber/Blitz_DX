@@ -135,7 +135,10 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	FireRot = RendererFront->GetTransformRef().Rotation;
 
-
+	if (UEngineInput::IsDown('F'))
+	{
+		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
+	}
 
 }
 

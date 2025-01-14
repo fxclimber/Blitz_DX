@@ -16,6 +16,8 @@ ATitleLogo::ATitleLogo()
 	// 인벤토리
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
+	// TimeEventComponent = CreateDefaultSubObject<UIRenderer>();
+
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetupAttachment(RootComponent);
 	Renderer->SetTexture("tevi_n_01.png");
@@ -23,7 +25,7 @@ ATitleLogo::ATitleLogo()
 	// Renderer->SetSprite("Test.png", 2);
 	// Renderer->SetAutoScale(true);
 	// Renderer->SetAutoScaleRatio(5.0f);
-	Renderer->SetScale3D({ 200.0f, 200.0f });
+	Renderer->SetScale3D({ 200.0f, 200.0f, 200.0f });
 
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
@@ -36,6 +38,19 @@ ATitleLogo::ATitleLogo()
 			// _Other->Destroy();
 			UEngineDebug::OutPutString("Enter");
 		});
+
+	//Dir =  MonsterPos - Player;
+
+	//std::vector<Monster> ColMonsters;
+	//Collision->CollisionCheck("Monster", Dir * _deltatime * speed, ColMonsters);
+	//if (0 == ColMonsters.size())
+	//{
+	//	AddActorLocation();
+	//}
+	//else 
+	//{
+	//	
+	//}
 
 	//Collision->SetCollisionStay([](UCollision* _This, UCollision* _Other)
 	//	{
@@ -111,8 +126,9 @@ void ATitleLogo::Tick(float _DeltaTime)
 		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
 	}
 
-	if (UEngineInput::IsPress('F'))
+	if (UEngineInput::IsDown('F'))
 	{
+		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
 	}
 
 	if (UEngineInput::IsPress('E'))

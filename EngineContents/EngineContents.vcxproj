@@ -155,6 +155,7 @@
     <ClInclude Include="BzEnemyCubeBig.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
+    <ClInclude Include="BzHUD.h" />
     <ClInclude Include="BzPlayerCube.h" />
     <ClInclude Include="BzProjectile.h" />
     <ClInclude Include="BzRendererDefault.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="TileMapGameMode.h" />
     <ClInclude Include="TitleGameMode.h" />
+    <ClInclude Include="TitleHUD.h" />
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +183,7 @@
     <ClCompile Include="BzEnemyCubeBig.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
+    <ClCompile Include="BzHUD.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />
     <ClCompile Include="BzProjectile.cpp" />
     <ClCompile Include="BzRendererDefault.cpp" />
@@ -201,6 +204,7 @@
     <ClCompile Include="BzResourceManager.cpp" />
     <ClCompile Include="TileMapGameMode.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
+    <ClCompile Include="TitleHUD.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

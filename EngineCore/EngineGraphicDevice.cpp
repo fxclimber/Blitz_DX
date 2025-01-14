@@ -2,7 +2,7 @@
 #include "EngineGraphicDevice.h"
 #include "EngineTexture.h"
 #include "EngineDepthStencilState.h"
-#include <EngineContents/BzCore.h>
+#include "EngineRenderTarget.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -16,8 +16,6 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 void UEngineGraphicDevice::Release()
 {
     MainAdapter = nullptr;
-    DXBackBufferTexture = nullptr;
-    RTV = nullptr;
     SwapChain = nullptr;
     Context = nullptr;
     Device = nullptr;
@@ -218,25 +216,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
     FVector Size = _Window.GetWindowSize();
 
-    // 랜더타겟이라는 구조로 변경될 겁니다. 
-    D3D11_TEXTURE2D_DESC Desc = { 0 };
-    Desc.ArraySize = 1;
-    Desc.Width = Size.iX();
-    Desc.Height = Size.iY();
-    // 3바이트 실수 1바이트 정수를 스탠실 값이라고 합니다.
-    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-    Desc.SampleDesc.Count = 1;
-    Desc.SampleDesc.Quality = 0;
-
-    Desc.MipLevels = 1;
-    Desc.Usage = D3D11_USAGE_DEFAULT;
-    Desc.CPUAccessFlags = 0;
-    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-
-    DepthTex = std::make_shared<UEngineTexture>();
-
-    DepthTex->ResCreate(Desc);
 
 
     DXGI_SWAP_CHAIN_DESC ScInfo = { 0 };
@@ -318,52 +298,47 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // DXBackBufferTexture => 는 BITMAP입니다.
 
     // DXBackBufferTexture
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
 
     };
-
-
     // id3d11texture2d* 이녀석 만으로는 할수 있는게 많이 없습니다.
     // 애는 이미지의 2차원 데이터를 나타낼뿐 수정권한은 없기 때문입니다.
     // 이미지를 수정하거나 사용할수 있는 권한을 id3d11texture2d*을 얻어내야 합니다.
     // WINAPI에서 HDC 얻어내는 것처럼 id3d11texture2d* 수정권한인
     // 텍스처에서 만들어내야 합니다.
 
-    //                             HBITMAP                       HDC
-    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
-    {
-        MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
-    }
+    BackBufferTarget = std::make_shared<UEngineRenderTarget>();
+    BackBufferTarget->CreateTarget(DXBackBufferTexture);
+    BackBufferTarget->CreateDepth();
 
+    // BackBufferTarget->CreateTarget();
 }
 
 
 void UEngineGraphicDevice::RenderStart()
 {
-    UBzCore::BgColor;
-    FVector ClearColor;
-    //ClearColor = FVector(0.5f, 0.5f, 0.5f, 1.0f);
-    ClearColor = UBzCore::BgColor;
+    BackBufferTarget->Clear();
+    BackBufferTarget->Setting();
 
+    //FVector ClearColor;
+    //ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
     // 이미지 파란색으로 채색해줘.
     // 한번 싹지우고
-    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
-    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    //Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
+    //Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-    // 랜더타겟 랜더타겟 랜더타겟
-    // RTV와 DSV를 합친 개념을 랜더타겟이라고 부른다.
-    // 그걸 n장 사용하게 되면 멀티랜더타겟이라고 부른다.
+    //// 랜더타겟 랜더타겟 랜더타겟
+    //// RTV와 DSV를 합친 개념을 랜더타겟이라고 부른다.
+    //// 그걸 n장 사용하게 되면 멀티랜더타겟이라고 부른다.
 
-    // 여기에다가 다시 그려줘
-    ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
-    ID3D11RenderTargetView* ArrRtv[16] = { 0 };
-    ArrRtv[0] = RTV; // SV_Target0
-    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
-
-    std::shared_ptr<UEngineDepthStencilState> DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>("BaseDepth");
-    DepthState->Setting();
+    //// 여기에다가 다시 그려줘
+    //ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
+    //ID3D11RenderTargetView* ArrRtv[16] = { 0 };
+    //ArrRtv[0] = RTV; // SV_Target0
+    //Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
 
     // 뎁스텍스처가 
     // 블랜드 스테이트등과 비슷한 녀석이다.

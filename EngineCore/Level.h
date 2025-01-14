@@ -35,6 +35,12 @@ public:
 		return MainPawn;
 	}
 
+	class AHUD* GetHUD()
+	{
+		return HUD;
+	}
+
+
 
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
@@ -44,6 +50,12 @@ public:
 	std::shared_ptr<class ACameraActor> GetMainCamera()
 	{
 		return GetCamera(0);
+	}
+
+	template<typename EnumType>
+	std::shared_ptr<class ACameraActor> GetCamera(EnumType _Order)
+	{
+		return GetCamera(static_cast<int>(_Order));
 	}
 
 	std::shared_ptr<class ACameraActor> GetCamera(int _Order)
@@ -154,10 +166,11 @@ public:
 protected:
 
 private:
+	class AHUD* HUD = nullptr;
+
 	class AGameMode* GameMode = nullptr;
 
 	class APawn* MainPawn = nullptr;
-	//std::shared_ptr<class APawn> MainPawn = nullptr;
 
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
 
@@ -165,6 +178,8 @@ private:
 
 	// 0번에 mainamera라고 불리는 애를 만든다.
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
+	// 모든 카메라가 바라본 이미지를 섞은 타겟
+	std::shared_ptr<class UEngineRenderTarget> LastRenderTarget;
 
 	// 빌드하기전에 string Hash화 라는 작업을 통해서 다 숫자로 
 	// 면접때 하기 좋은 이야기
@@ -175,6 +190,7 @@ private:
 
 	std::map<std::string, std::list<std::string>> CollisionLinks;
 
-	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn);
+
+	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD);
 };
 
