@@ -7,13 +7,20 @@ UCollision::UCollision()
 {
 }
 
-UCollision::~UCollision()
+void UCollision::Release()
 {
+
+
 	for (UCollision* Other : CollisionCheckSet)
 	{
 		// 너한테서 나를 빼야해를 하고 죽습니다.
-		Other->CollisionCheckSet.erase(this);
+		// Other->CollisionCheckSet.erase(this);
 	}
+}
+
+UCollision::~UCollision()
+{
+
 }
 
 void UCollision::SetCollisionProfileName(std::string_view _ProfileName)

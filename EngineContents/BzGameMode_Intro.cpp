@@ -50,12 +50,12 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
     GetWorld()->LinkCollisionProfile("Enemy","Enemy");
 
-	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>();
+	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>().get();
 	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
 	Bottom->SetActorLocation({0.f,0.f,0.f});
 
 
-	Camera = GetWorld()->GetMainCamera();
+	Camera = GetWorld()->GetMainCamera().get();
 	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
 	Camera->SetActorLocation(CamInitPos);
 	Camera->SetActorRotation({ 35.f,340.f,10.f });
@@ -74,11 +74,11 @@ ABzGameMode_Intro::~ABzGameMode_Intro()
 
 void ABzGameMode_Intro::BeginPlay()
 {
-	PlayerCube = std::shared_ptr<ABzPlayerCube>(dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn()));
+	PlayerCube = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 	PlayerCube->SetActorLocation(FVector{ 200.f,0.f,-500.f });
 	PlayerCube->SetActorRotation(FVector{ 0.f,250.f,0.f });
 
-	EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>();
+	EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>().get();
 	EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
 	//-----
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
@@ -111,7 +111,7 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 		float BulletSpeed = 30000.f;
 		FVector MoveOffset = (MoveDir * _DeltaTime * BulletSpeed);
 
-		Proj = GetWorld()->SpawnActor<ABzProjectile>();
+		std::shared_ptr<ABzProjectile> Proj = GetWorld()->SpawnActor<ABzProjectile>();
 		Proj->SetPlayer(PlayerCube);
 		Proj->SetActorLocation(PlayerCube->GetActorLocation());
 	}
@@ -133,7 +133,7 @@ void ABzGameMode_Intro::SpawnEnemy(FVector randomLocation)
 	if (Enemy) 
 	{
 		Enemy->AddRelativeLocation(randomLocation); 
-		EnemyCubes.push_back(Enemy); // 배열에 추가
+		EnemyCubes.push_back(Enemy.get()); // 배열에 추가
 	}
 }
 

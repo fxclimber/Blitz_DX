@@ -37,7 +37,7 @@ ABzEnemyCube::ABzEnemyCube()
 			//UEngineDebug::OutPutString("Enter");
 		});
 	
-	Player = std::shared_ptr<ABzPlayerCube>(dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn()));
+	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 
 	//Player = std::shared_ptr<APawn>(GetWorld()->GetMainPawn());
 	//PlayerP = static_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());

@@ -11,7 +11,7 @@ public:
 	void BeginPlay()override;
 	void Tick(float _DeltaTime)override;
 
-	std::shared_ptr<class ABzPlayerCube> GetPlayer()
+	class ABzPlayerCube* GetPlayer()
 	{
 		return PlayerCube;
 	}
@@ -27,16 +27,15 @@ protected:
 	void SpawnEnemy(FVector randomLocation);
 
 private:
-	std::shared_ptr<class ABzPlayerCube> PlayerCube;
-	std::vector < std::shared_ptr <class ABzEnemyCube >> EnemyCubes;
-	std::shared_ptr<class ABzEnemyCube> EnemySingleTest;
+	class ABzPlayerCube* PlayerCube;
+	std::vector < class ABzEnemyCube* > EnemyCubes;
+	class ABzEnemyCube* EnemySingleTest;
 
-	std::shared_ptr<class ABzBottomTmp> Bottom;
+	class ABzBottomTmp* Bottom;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 	UEngineRandom random;
 
-	std::shared_ptr<class ABzProjectile> Proj;
-	std::shared_ptr<class ACameraActor> Camera;
+	class ACameraActor* Camera;
 	FVector CamInitPos;
 };
 

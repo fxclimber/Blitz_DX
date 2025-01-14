@@ -42,9 +42,9 @@ void UBzCore::EngineStart(UEngineInitData& _Data)
 	//---------------------------------------------------------
 
 	// 주인공 APawn 상속 받으세요.
-	UEngineCore::CreateLevel<ABzGameMode_Intro, ABzPlayerCube , ABzHUD>("Play");// 플레이 
-	UEngineCore::CreateLevel<ABzTileMapGameMode, APawn , AHUD>("Map_Edit");// 맵 에디터 
-	UEngineCore::CreateLevel<ATileMapGameMode, APawn , AHUD >("TileMapEditor");// 나중에 스프라이트 선택해서 쓸때 
+	UEngineCore::CreateLevel<ABzGameMode_Intro, ABzPlayerCube, ABzHUD>("Play");// 플레이 
+	//UEngineCore::CreateLevel<ABzTileMapGameMode, APawn , AHUD>("Map_Edit");// 맵 에디터 
+	//UEngineCore::CreateLevel<ATileMapGameMode, APawn , AHUD >("TileMapEditor");// 나중에 스프라이트 선택해서 쓸때 
 	UEngineCore::OpenLevel("Play");
 
 	// imgui window------------------------------------------------

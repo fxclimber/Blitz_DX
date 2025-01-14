@@ -6,7 +6,7 @@ class ABzProjectile : public AActor
 public:
 	ABzProjectile();
 	~ABzProjectile(){}
-	void SetPlayer(std::shared_ptr<class ABzPlayerCube> _name);
+	void SetPlayer(class ABzPlayerCube* _name);
 
 
 protected:
@@ -19,7 +19,7 @@ protected:
 
 
 private:
-	std::shared_ptr<class ABzPlayerCube> Player = nullptr;
+	class ABzPlayerCube* Player = nullptr;
 
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UCollision> Collision;

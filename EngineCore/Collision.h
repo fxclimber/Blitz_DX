@@ -30,6 +30,8 @@ public:
 
 	void SetRadius(float _Value);
 
+	void Release();
+
 	// vector인게 왜 vector로 하냐
 	// unreal에서 vector
 	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, std::vector<UCollision*>& _Vector);

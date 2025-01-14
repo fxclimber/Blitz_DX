@@ -21,8 +21,7 @@ protected:
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UCollision> Collision;
-	std::shared_ptr<class ABzPlayerCube> Player = nullptr;
-	class ABzPlayerCube* PlayerP = nullptr;
+	class ABzPlayerCube* Player = nullptr;
 
 	float rotationAngle = 0.f;
 	float jumpHeight = 0.f;

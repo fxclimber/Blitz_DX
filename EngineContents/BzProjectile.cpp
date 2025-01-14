@@ -134,7 +134,7 @@ FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
 	return ForwardDir;
 }
 
-void ABzProjectile::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
+void ABzProjectile::SetPlayer(class ABzPlayerCube* _name)
 {
 	Player = _name;
 }

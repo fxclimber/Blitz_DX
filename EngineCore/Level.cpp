@@ -322,6 +322,34 @@ void ULevel::Release(float _DeltaTime)
 					continue;
 				}
 
+				(*StartIter)->Release();
+
+				// 랜더러는 지울 필요가 없습니다.
+				// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
+				// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+				StartIter = List.erase(StartIter);
+			}
+		}
+	}
+
+	{
+		// 충돌체 릴리즈
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : CheckCollisions)
+		{
+			std::list<std::shared_ptr<UCollision>>& List = Group.second;
+
+			std::list<std::shared_ptr<UCollision>>::iterator StartIter = List.begin();
+			std::list<std::shared_ptr<UCollision>>::iterator EndIter = List.end();
+
+			// 언리얼은 중간에 삭제할수 없어.
+			for (; StartIter != EndIter; )
+			{
+				if (false == (*StartIter)->IsDestroy())
+				{
+					++StartIter;
+					continue;
+				}
+
 				// 랜더러는 지울 필요가 없습니다.
 				// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
 				// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
