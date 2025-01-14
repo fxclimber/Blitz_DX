@@ -163,6 +163,10 @@
     <ClInclude Include="BzEnemy.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ContentsEditorGUI.h" />
+    <ClInclude Include="CubeTest_Core.h" />
+    <ClInclude Include="CubeTest_GameMode.h" />
+    <ClInclude Include="CubeTest_Player.h" />
+    <ClInclude Include="CubeTest_Renderer.h" />
     <ClInclude Include="GMConst.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Monster2.h" />
@@ -193,6 +197,11 @@
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp" />
+    <ClCompile Include="CubeTest_Core.cpp" />
+    <ClCompile Include="CubeTest_GameMode.cpp" />
+    <ClCompile Include="CubeTest_Player.cpp" />
+    <ClCompile Include="CubeTest_Renderer.cpp" />
+    <ClCompile Include="CubeTest_Resource.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Monster2.cpp" />
     <ClCompile Include="MyCustomRenderer.cpp" />

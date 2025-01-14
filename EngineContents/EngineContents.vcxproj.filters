@@ -80,6 +80,18 @@
     <ClInclude Include="Skl_BzRockfall.h">
       <Filter>Blitz\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="CubeTest_GameMode.h">
+      <Filter>CubeTest</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTest_Player.h">
+      <Filter>CubeTest</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTest_Core.h">
+      <Filter>CubeTest</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTest_Renderer.h">
+      <Filter>CubeTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -164,6 +176,21 @@
     <ClCompile Include="Skl_BzRockfall.cpp">
       <Filter>Blitz\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="CubeTest_GameMode.cpp">
+      <Filter>CubeTest</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTest_Resource.cpp">
+      <Filter>CubeTest</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTest_Player.cpp">
+      <Filter>CubeTest</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTest_Core.cpp">
+      <Filter>CubeTest</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTest_Renderer.cpp">
+      <Filter>CubeTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -204,6 +231,9 @@
     </Filter>
     <Filter Include="Blitz\UI">
       <UniqueIdentifier>{05146978-3e6d-4b62-8634-7746ffd55e42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CubeTest">
+      <UniqueIdentifier>{baff60ec-9f31-44d5-8d0b-83b47a0e762a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
