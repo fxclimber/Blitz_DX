@@ -12,10 +12,10 @@ public:
 	ENGINEAPI ~UEngineSerializer();
 
 	// delete Function
-	UEngineSerializer(const UEngineSerializer& _Other) = delete;
-	UEngineSerializer(UEngineSerializer&& _Other) noexcept = delete;
-	UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
-	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
+	//UEngineSerializer(const UEngineSerializer& _Other) = delete;
+	//UEngineSerializer(UEngineSerializer&& _Other) noexcept = delete;
+	//UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
+	//UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
 	// 데이터의 크기
 	ENGINEAPI void Write(const void* _Data, unsigned int _Size);

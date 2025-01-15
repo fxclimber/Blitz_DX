@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "TitleHUD.h"
-#include <EngineCore/Widget.h>
+#include <EngineCore/ImageWidget.h>
+#include <EngineCore/FontWidget.h>
 
 ATitleHUD::ATitleHUD()
 {
@@ -14,15 +15,25 @@ void ATitleHUD::BeginPlay()
 {
 	AHUD::BeginPlay();
 
-	std::shared_ptr<UWidget> Button = CreateWidget<UWidget>(-1);
+	{
+		std::shared_ptr<UImageWidget> Widget = CreateWidget<UImageWidget>(-1);
 
-	Button->SetScale3D({100, 100, 1});
-	Button->SetWorldLocation({ -200, 300 });
-	Button->SetTexture("BackGround.png");
-	Button->SetDownEvent([]()
-		{
-			//UEngineDebug::OutPutString("Click~~~~~~~~~");
-		});
+		Widget->SetScale3D({ 100, 100, 1 });
+		Widget->SetWorldLocation({ -200, 300 });
+		Widget->SetTexture("BackGround.png");
+		Widget->SetDownEvent([]()
+			{
+				UEngineDebug::OutPutString("Click~~~~~~~~~");
+			});
+	}
+
+	{
+		std::shared_ptr<UFontWidget> Widget = CreateWidget<UFontWidget>(1);
+
+		Widget->SetWorldLocation({ 200, 300 });
+		Widget->SetFont("±√º≠");
+		Widget->SetText("æ»≥Á«œººø‰");
+	}
 
 }
 

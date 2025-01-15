@@ -8,6 +8,7 @@
 #include "CameraActor.h"
 #include "EngineGUI.h"
 #include "HUD.h"
+#include "EngineFont.h"
 #include "EngineRenderTarget.h"
 
 // 플레이어 Renderer
@@ -143,8 +144,7 @@ void ULevel::Render(float _DeltaTime)
 
 		Camera.second->Tick(_DeltaTime);
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
-		// 이 효과는 이 카메라 그려진 대상만 영향을 줄것이다.
-		// Camera.second->PostEffect();
+
 		// 난 다 그려졌으니 
 		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
 	}
@@ -161,6 +161,9 @@ void ULevel::Render(float _DeltaTime)
 			CameraComponent->CameraTarget->Setting();
 
 			HUD->UIRender(CameraComponent.get(), _DeltaTime);
+
+
+
 
 			CameraComponent->CameraTarget->MergeTo(LastRenderTarget);
 		}

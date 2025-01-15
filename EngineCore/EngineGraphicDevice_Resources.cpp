@@ -8,6 +8,7 @@
 #include "EngineShader.h"
 #include "EngineMaterial.h"
 #include "EngineTexture.h"
+#include "EngineFont.h"
 #include "EngineDepthStencilState.h"
 
 void UEngineGraphicDevice::DefaultResourcesInit()
@@ -19,6 +20,9 @@ void UEngineGraphicDevice::DefaultResourcesInit()
 	RasterizerStateInit();
 	ShaderInit();
 	MaterialInit();
+
+	// Á÷Á¢ ÀÚ±â ÆùÆ® 
+	UEngineFont::Load("±Ã¼­", "±Ã¼­");
 }
 
 void UEngineGraphicDevice::DepthStencilInit()
@@ -73,6 +77,7 @@ void UEngineGraphicDevice::DepthStencilInit()
 	}
 
 }
+
 
 void UEngineGraphicDevice::TextureInit()
 {
@@ -441,8 +446,6 @@ void UEngineGraphicDevice::BlendInit()
 
 	UEngineBlend::Create("AlphaBlend", Desc);
 }
-
-
 
 void UEngineGraphicDevice::RasterizerStateInit()
 {

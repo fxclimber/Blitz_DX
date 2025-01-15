@@ -29,6 +29,10 @@ public:
 	// 항상 중심을 0,0 으로 보는 마우스 포스 얻는법
 	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
 
+	ENGINEAPI FVector ScreenPosToWorldPos(FVector _Pos);
+
+	ENGINEAPI FVector WorldPosToScreenPos(FVector _Pos);
+
 	ENGINEAPI inline bool IsFreeCamera()
 	{
 		return IsFreeCameraValue;
