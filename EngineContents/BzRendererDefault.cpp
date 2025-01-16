@@ -18,7 +18,7 @@ UBzRendererDefault::UBzRendererDefault()
         SetMaterial("BzDefault");
         TestColor.Albedo = float4(0.0f, 0.7f, 0.3f, 1.0f);
         GetRenderUnit().ConstantBufferLinkData("FBzColor", TestColor);
-        GetRenderUnit().SetTexture("bz_texture0", "CheckUV.png");
+        GetRenderUnit().SetTexture("bz_texture0", "num.png");
     }
 }
 

@@ -6,6 +6,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/EngineCamera.h>
 #include "BzRendererDefault.h"
 #include <EngineCore/TimeEventComponent.h>
 #include "BzProjectile.h"
@@ -147,6 +148,12 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	{
 		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
 	}
+	if (UEngineInput::IsDown('T'))
+	{
+		Camera->GetCameraComponent()->SetFOV(30.f);
+	}
+
+
 
 }
 
