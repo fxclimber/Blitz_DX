@@ -26,13 +26,11 @@ ABzPlayerCube::ABzPlayerCube()
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererFront->SetupAttachment(RootComponent);
 	RendererFront->SetScale3D({ 25.f,25.f,100.f });
-	RendererFront->SetRotation({0.f,-90.f,0.f});
+	RendererFront->SetRotation({30.f,-90.f,0.f});
 	RendererFront->SetRelativeLocation({60.f,140.f,0.f});
-	RendererFront->AddLocalRotation({30.f,0.f,0.f});
-	
-	
 
 	FireRot = RendererFront->GetTransformRef().WorldRotation;
+
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(Renderer);
@@ -45,6 +43,7 @@ ABzPlayerCube::ABzPlayerCube()
 		//UEngineDebug::OutPutString("Enter");
 	});
 
+	Skl_RockfallOn = false;
 
 #ifdef renderer_test
 	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
@@ -192,18 +191,60 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 	return MoveDirection;
 }
 
+//void ABzPlayerCube::Skl_Rockfall()
+//{
+//	if (false == Skl_RockfallOn)
+//	{
+//		RendererFront->SetRelativeLocation({ 30.f,220.f,0.f });
+//		RendererFront->AddLocalRotation({ 50.f,0.f,0.f });
+//
+//		FVector pos = RendererFront->GetTransformRef().Location;
+//		FVector rot = RendererFront->GetTransformRef().Rotation;
+//		FVector MoveDir = GetActorForwardVector();
+//
+//		std::shared_ptr<ASkl_BzRockfall> Proj = GetWorld()->SpawnActor<ASkl_BzRockfall>();
+//		//Proj->SetPlayer(PlayerCube);
+//		Proj->SetActorLocation(pos);
+//		Proj->SetActorRotation(rot);
+//		Skl_RockfallOn = true;
+//	}
+//	if(true == Skl_RockfallOn)
+//	{
+//		RendererFront->SetRotation({ 30.f,-90.f,0.f });
+//		RendererFront->SetRelativeLocation({ 60.f,140.f,0.f });
+//		Skl_RockfallOn = false;
+//	}
+//}
+
 void ABzPlayerCube::Skl_Rockfall()
 {
-	RendererFront->SetRelativeLocation({ 30.f,220.f,0.f });
-	RendererFront->AddLocalRotation({ 50.f,0.f,0.f });
+	// 현재 위치와 회전 저장
+	FVector OriginalLocation = RendererFront->GetRelativeLocation();
+	FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
 
-	FVector pos = RendererFront->GetTransformRef().Location;
-	FVector rot = RendererFront->GetTransformRef().Rotation;
-	FVector MoveDir = GetActorForwardVector();
+	if (false == Skl_RockfallOn)
+	{
+		RendererFront->SetRelativeLocation({ 30.f, 220.f, 0.f });
+		RendererFront->AddLocalRotation({ 50.f, 0.f, 0.f });
 
-	std::shared_ptr<ASkl_BzRockfall> Proj = GetWorld()->SpawnActor<ASkl_BzRockfall>();
-	//Proj->SetPlayer(PlayerCube);
-	Proj->SetActorLocation(pos);
-	Proj->SetActorRotation(rot);
+		FVector pos = RendererFront->GetTransformRef().Location;
+		FVector rot = RendererFront->GetTransformRef().Rotation;
+		FVector MoveDir = GetActorForwardVector();
+
+		std::shared_ptr<ASkl_BzRockfall> Proj = GetWorld()->SpawnActor<ASkl_BzRockfall>();
+		Proj->SetActorLocation(pos);
+		Proj->SetActorRotation(rot);
+		Skl_RockfallOn = true;
+	}
+
+	if (true == Skl_RockfallOn)
+	{
+		RendererFront->SetRotation({ 30.f, -90.f, 0.f });
+		RendererFront->SetRelativeLocation({ 60.f, 140.f, 0.f });
+		Skl_RockfallOn = false;
+	}
+
+	// 원래 위치와 회전으로 복원
+	RendererFront->SetRelativeLocation(OriginalLocation);
+	RendererFront->SetRotation(OriginalRotation);
 }
-

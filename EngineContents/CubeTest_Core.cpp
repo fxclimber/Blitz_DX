@@ -16,7 +16,7 @@
 #include <EngineCore/EngineShader.h>
 #include <EngineCore/EngineMaterial.h>
 
-CreateContentsCoreDefine(UCubeTest_Core);
+//CreateContentsCoreDefine(UCubeTest_Core);
 
 UCubeTest_Core::UCubeTest_Core()
 {
