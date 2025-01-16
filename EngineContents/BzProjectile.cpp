@@ -16,8 +16,9 @@ ABzProjectile::ABzProjectile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 15.f,15.f,85.f });
-	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
+	//Renderer->SetScale3D({ 15.f,15.f,85.f });
+	Renderer->SetScale3D({ 35.f,35.f,85.f });
+	Renderer->GetRenderUnit().SetTexture("bz_texture0", "bulletTest.jpg");
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
