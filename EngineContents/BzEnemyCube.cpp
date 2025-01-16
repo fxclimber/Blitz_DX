@@ -22,7 +22,7 @@ ABzEnemyCube::ABzEnemyCube()
 	Renderer->SetupAttachment(RootComponent);
 	Renderer->SetScale3D({ 50.f,100.f,50.f });
 	Renderer->SetPivot(PivotType::Bottom);
-	Renderer->GetRenderUnit().SetTexture("bz_texture0", "CheckUP.png");
+	Renderer->GetRenderUnit().SetTexture("bz_texture0", "b1.jpg");
 
 
 	//----collision

@@ -21,14 +21,14 @@ ABzPlayerCube::ABzPlayerCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 60.f,120.f,60.f });
+	Renderer->SetScale3D({ 80.f,120.f,80.f });
 	Renderer->SetPivot(PivotType::Bottom);
 
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererFront->SetupAttachment(RootComponent);
 	RendererFront->SetScale3D({ 25.f,25.f,100.f });
 	RendererFront->SetRotation({30.f,-90.f,0.f});
-	RendererFront->SetRelativeLocation({60.f,140.f,0.f});
+	RendererFront->SetRelativeLocation({80.f,140.f,0.f});
 
 	FireRot = RendererFront->GetTransformRef().WorldRotation;
 
