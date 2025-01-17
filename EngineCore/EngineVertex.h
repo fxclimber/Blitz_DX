@@ -5,7 +5,7 @@
 struct FEngineVertex
 {
     friend class EngineVertexInit;
-    static UEngineInputLayOutInfo Info;
+    ENGINEAPI static UEngineInputLayOutInfo Info;
 
     ENGINEAPI static UEngineInputLayOutInfo& GetInfo();
 

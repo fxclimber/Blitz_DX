@@ -5,5 +5,6 @@
     <FxCompile Include="BlitzShaderDefault.hlsl" />
     <FxCompile Include="BzShaderUV.hlsl" />
     <FxCompile Include="CubeTestShaderUV.hlsl" />
+    <FxCompile Include="TestShader2.fx" />
   </ItemGroup>
 </Project>

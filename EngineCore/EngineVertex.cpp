@@ -1,10 +1,9 @@
 #include "PreCompile.h"
 #include "EngineVertex.h"
 
-// 정적 변수의 올바른 정의 (ENGINEAPI 제거)
 UEngineInputLayOutInfo FEngineVertex::Info;
 
-ENGINEAPI UEngineInputLayOutInfo& FEngineVertex::GetInfo()
+UEngineInputLayOutInfo& FEngineVertex::GetInfo()
 {
     return Info;
 }
