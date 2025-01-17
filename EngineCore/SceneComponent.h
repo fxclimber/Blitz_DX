@@ -31,5 +31,6 @@ protected:
 
 
 private:
+	// std::list<std::shared_ptr<>> Child
 };
 

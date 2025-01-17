@@ -37,7 +37,8 @@ ULevel::ULevel()
 {
 	SpawnCamera(EEngineCameraType::MainCamera);
 
-	SpawnCamera(EEngineCameraType::UICamera);
+	std::shared_ptr<ACameraActor> UICamera = SpawnCamera(EEngineCameraType::UICamera);
+	UICamera->GetCameraComponent()->SetProjectionType(EProjectionType::Orthographic);
 
 	LastRenderTarget = std::make_shared<UEngineRenderTarget>();
 	LastRenderTarget->CreateTarget(UEngineCore::GetScreenScale());
@@ -146,6 +147,7 @@ void ULevel::Render(float _DeltaTime)
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 
 		// 난 다 그려졌으니 
+		// MainCamera RenderTarget
 		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
 	}
 

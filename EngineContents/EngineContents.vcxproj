@@ -168,13 +168,17 @@
     <ClInclude Include="CubeTest_Player.h" />
     <ClInclude Include="CubeTest_Renderer.h" />
     <ClInclude Include="GMConst.h" />
+    <ClInclude Include="GMStruct.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Monster2.h" />
     <ClInclude Include="MyCustomRenderer.h" />
+    <ClInclude Include="MyGameInstance.h" />
     <ClInclude Include="MyRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="Skl_BzRockfall.h" />
+    <ClInclude Include="TestActor.h" />
+    <ClInclude Include="TestGameMode.h" />
     <ClInclude Include="TileMapGameMode.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleHUD.h" />
@@ -202,9 +206,11 @@
     <ClCompile Include="CubeTest_Player.cpp" />
     <ClCompile Include="CubeTest_Renderer.cpp" />
     <ClCompile Include="CubeTest_Resource.cpp" />
+    <ClCompile Include="GMStruct.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Monster2.cpp" />
     <ClCompile Include="MyCustomRenderer.cpp" />
+    <ClCompile Include="MyGameInstance.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp">
@@ -213,6 +219,8 @@
     </ClCompile>
     <ClCompile Include="BzResourceManager.cpp" />
     <ClCompile Include="Skl_BzRockfall.cpp" />
+    <ClCompile Include="TestActor.cpp" />
+    <ClCompile Include="TestGameMode.cpp" />
     <ClCompile Include="TileMapGameMode.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleHUD.cpp" />

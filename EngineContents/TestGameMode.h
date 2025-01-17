@@ -1,20 +1,21 @@
 #pragma once
 #include <EngineCore/GameMode.h>
-#include <EngineCore/Widget.h>
+#include <atomic>
+#include <EnginePlatform/EngineThread.h>
 
 // 설명 :
-class ATitleGameMode : public AGameMode
+class ATestGameMode : public AGameMode
 {
 public:
 	// constrcuter destructer
-	ATitleGameMode();
-	~ATitleGameMode();
+	ATestGameMode();
+	~ATestGameMode();
 
 	// delete Function
-	ATitleGameMode(const ATitleGameMode& _Other) = delete;
-	ATitleGameMode(ATitleGameMode&& _Other) noexcept = delete;
-	ATitleGameMode& operator=(const ATitleGameMode& _Other) = delete;
-	ATitleGameMode& operator=(ATitleGameMode&& _Other) noexcept = delete;
+	ATestGameMode(const ATestGameMode& _Other) = delete;
+	ATestGameMode(ATestGameMode&& _Other) noexcept = delete;
+	ATestGameMode& operator=(const ATestGameMode& _Other) = delete;
+	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
 	void Tick(float _DeltaTime);
 
@@ -27,7 +28,9 @@ private:
 	// ATitleLogo* Logo; => 뎅글링 포인터 부활.
 	std::shared_ptr<class ATitleLogo> Logo;
 
-	UWidget* InvenWidget;
+	std::atomic<bool> LoadingEnd = false;
+
+	UEngineThread Thread;
 };
 
 //

@@ -137,6 +137,12 @@ public:
 		return Data.size();
 	}
 
+	// Offset 초기화 함수
+	void ResetOffset()
+	{
+		ReadOffset = 0;
+	}
+
 protected:
 
 private:

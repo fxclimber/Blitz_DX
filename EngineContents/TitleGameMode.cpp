@@ -9,6 +9,7 @@
 #include <EngineCore/imgui.h>
 #include <EngineCore/EngineCamera.h>
 #include "ContentsEditorGUI.h"
+#include "MyGameInstance.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -60,6 +61,8 @@ ATitleGameMode::ATitleGameMode()
 		NewMonster->SetActorLocation({ 300.0f, 0.0f, 0.0f });
 	}
 
+	// InvenWidget = GetWorld()->GetHUD()->CreateWidget<UWidget>();
+
 
 }
 
@@ -83,6 +86,9 @@ void ATitleGameMode::Tick(float _DeltaTime)
 void ATitleGameMode::LevelChangeStart()
 {
 	UEngineGUI::AllWindowOff();
+
+
+	GetGameInstance<MyGameInstance>()->InvenWidget = InvenWidget;
 
 	{
 		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");

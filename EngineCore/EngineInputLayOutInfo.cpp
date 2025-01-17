@@ -9,7 +9,7 @@ UEngineInputLayOutInfo::~UEngineInputLayOutInfo()
 {
 }
 
-UINT UEngineInputLayOutInfo::FormatSize(DXGI_FORMAT _Value)
+ENGINEAPI UINT UEngineInputLayOutInfo::FormatSize(DXGI_FORMAT _Value)
 {
 	switch (_Value)
 	{

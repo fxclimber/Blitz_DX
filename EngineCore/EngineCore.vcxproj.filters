@@ -185,6 +185,7 @@
     <ClInclude Include="ImageWidget.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
+    <ClInclude Include="GameInstance.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -350,6 +351,7 @@
     <ClCompile Include="ImageWidget.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -470,10 +472,6 @@
     <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.dll">
       <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.lib">
-      <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
-    </Library>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.lib" />
   </ItemGroup>
 </Project>

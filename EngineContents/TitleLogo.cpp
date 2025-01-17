@@ -7,6 +7,9 @@
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/Collision.h>
 #include "MyCustomRenderer.h"
+#include <EnginePlatform/EngineWorkThreadPool.h>
+
+#include "MyGameInstance.h"
 
 ATitleLogo::ATitleLogo()
 {
@@ -133,9 +136,20 @@ void ATitleLogo::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('E'))
 	{
+		GetGameInstance<MyGameInstance>()->InvenWidget->SetActive(false);
 	}
 
 	if (UEngineInput::IsPress('R'))
 	{
+
+
+		UEngineCore::GetThreadPool().WorkQueue([]()
+			{
+				UEngineDebug::OutPutString("Thread Work");
+			});
+
+		// GetGameInstance<MyGameInstance>()->InvenWidget->SetActive(true);
 	}
+
+	GetGameInstance<MyGameInstance>()->Status.Hp -= 1;
 }

@@ -22,7 +22,7 @@
 
 
 // 어떤 코어 쓸거니?
-CreateContentsCoreDefine(UBzCore);
+//CreateContentsCoreDefine(UBzCore);
 
 UBzCore::UBzCore()
 {

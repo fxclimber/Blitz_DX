@@ -25,15 +25,35 @@ public:
 	// 내가 교체 당했을때
 	void LevelChangeEnd();
 
+	template<typename Type>
+	Type* GetGameMode()
+	{
+		return dynamic_cast<Type*>(GameMode);
+	}
+
+
 	class AGameMode* GetGameMode()
 	{
 		return GameMode;
+	}
+
+	template<typename Type>
+	Type* GetMainPawn()
+	{
+		return dynamic_cast<Type*>(MainPawn);
 	}
 
 	class APawn* GetMainPawn()
 	{
 		return MainPawn;
 	}
+
+	template<typename Type>
+	Type* GetHUD()
+	{
+		return dynamic_cast<Type*>(HUD);
+	}
+
 
 	class AHUD* GetHUD()
 	{

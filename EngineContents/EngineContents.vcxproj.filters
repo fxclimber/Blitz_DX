@@ -92,6 +92,18 @@
     <ClInclude Include="CubeTest_Renderer.h">
       <Filter>CubeTest</Filter>
     </ClInclude>
+    <ClInclude Include="GMStruct.h">
+      <Filter>Jo</Filter>
+    </ClInclude>
+    <ClInclude Include="TestGameMode.h">
+      <Filter>Jo\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGameInstance.h">
+      <Filter>Jo\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActor.h">
+      <Filter>Jo\Title</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -191,6 +203,18 @@
     <ClCompile Include="CubeTest_Renderer.cpp">
       <Filter>CubeTest</Filter>
     </ClCompile>
+    <ClCompile Include="GMStruct.cpp">
+      <Filter>Jo</Filter>
+    </ClCompile>
+    <ClCompile Include="TestGameMode.cpp">
+      <Filter>Jo\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGameInstance.cpp">
+      <Filter>Jo\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="TestActor.cpp">
+      <Filter>Jo\Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -234,6 +258,9 @@
     </Filter>
     <Filter Include="CubeTest">
       <UniqueIdentifier>{baff60ec-9f31-44d5-8d0b-83b47a0e762a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jo\Global">
+      <UniqueIdentifier>{21e73e1d-6b58-4080-9676-3308b8969b37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

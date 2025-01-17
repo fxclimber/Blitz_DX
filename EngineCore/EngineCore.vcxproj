@@ -225,6 +225,7 @@
     <ClInclude Include="EngineVertexBuffer.h" />
     <ClInclude Include="EngineVertexShader.h" />
     <ClInclude Include="FontWidget.h" />
+    <ClInclude Include="GameInstance.h" />
     <ClInclude Include="GameMode.h">
       <SubType>
       </SubType>
@@ -353,6 +354,7 @@
     <ClCompile Include="EngineVertexBuffer.cpp" />
     <ClCompile Include="EngineVertexShader.cpp" />
     <ClCompile Include="FontWidget.cpp" />
+    <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="GameMode.cpp">
       <SubType>
       </SubType>
