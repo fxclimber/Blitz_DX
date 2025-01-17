@@ -115,6 +115,12 @@ public:
 		RootComponent->SetRelativeScale3D(_Scale);
 	}
 
+
+	void GetActorRelativeScale3D()
+	{
+
+	}
+
 	void AddRelativeLocation(const FVector& _Value)
 	{
 		if (nullptr == RootComponent)

@@ -16,7 +16,7 @@
 #include "MyGameInstance.h"
 
 // #define은 그냥 무조건 복붙
-CreateContentsCoreDefine(UContentsCore);
+//CreateContentsCoreDefine(UContentsCore);
 
 UContentsCore::UContentsCore()
 {

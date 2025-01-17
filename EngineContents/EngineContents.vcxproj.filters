@@ -104,6 +104,9 @@
     <ClInclude Include="TestActor.h">
       <Filter>Jo\Title</Filter>
     </ClInclude>
+    <ClInclude Include="BzHomingProjectile.h">
+      <Filter>Blitz\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="TestActor.cpp">
       <Filter>Jo\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="BzHomingProjectile.cpp">
+      <Filter>Blitz\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

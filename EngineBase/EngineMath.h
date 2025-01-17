@@ -217,6 +217,7 @@ public:
 		_Alpha = UEngineMath::Clamp(_Alpha, 0.0f, 1.0f);
 		Result.X = UEngineMath::Lerp(_A.X, _B.X, _Alpha);
 		Result.Y = UEngineMath::Lerp(_A.Y, _B.Y, _Alpha);
+		Result.Z = UEngineMath::Lerp(_A.Z, _B.Z, _Alpha);
 		return Result;
 	}
 

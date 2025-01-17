@@ -3,6 +3,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/Collision.h>
 
+#include <EngineBase/EngineMath.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
@@ -11,6 +12,7 @@
 #include <EngineCore/TimeEventComponent.h>
 #include "BzProjectile.h"
 #include "Skl_BzRockfall.h"
+#include "BzHomingProjectile.h"
 
 
 ABzPlayerCube::ABzPlayerCube()
@@ -132,6 +134,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	CalculateMoveDirection(_DeltaTime);
+	ApplyRecoilAnimation(MoveDirection, 1.f,_DeltaTime);
 
 	FVector thisPos = GetActorLocation();
 
@@ -153,6 +156,10 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 		Camera->GetCameraComponent()->SetFOV(30.f);
 	}
 
+	if (UEngineInput::IsDown('H'))
+	{
+		Skl_HomingProj();
+	}
 
 
 }
@@ -198,34 +205,9 @@ FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
 	return MoveDirection;
 }
 
-//void ABzPlayerCube::Skl_Rockfall()
-//{
-//	if (false == Skl_RockfallOn)
-//	{
-//		RendererFront->SetRelativeLocation({ 30.f,220.f,0.f });
-//		RendererFront->AddLocalRotation({ 50.f,0.f,0.f });
-//
-//		FVector pos = RendererFront->GetTransformRef().Location;
-//		FVector rot = RendererFront->GetTransformRef().Rotation;
-//		FVector MoveDir = GetActorForwardVector();
-//
-//		std::shared_ptr<ASkl_BzRockfall> Proj = GetWorld()->SpawnActor<ASkl_BzRockfall>();
-//		//Proj->SetPlayer(PlayerCube);
-//		Proj->SetActorLocation(pos);
-//		Proj->SetActorRotation(rot);
-//		Skl_RockfallOn = true;
-//	}
-//	if(true == Skl_RockfallOn)
-//	{
-//		RendererFront->SetRotation({ 30.f,-90.f,0.f });
-//		RendererFront->SetRelativeLocation({ 60.f,140.f,0.f });
-//		Skl_RockfallOn = false;
-//	}
-//}
 
 void ABzPlayerCube::Skl_Rockfall()
 {
-	// 현재 위치와 회전 저장
 	FVector OriginalLocation = RendererFront->GetRelativeLocation();
 	FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
 
@@ -254,4 +236,45 @@ void ABzPlayerCube::Skl_Rockfall()
 	// 원래 위치와 회전으로 복원
 	RendererFront->SetRelativeLocation(OriginalLocation);
 	RendererFront->SetRotation(OriginalRotation);
+}
+
+void ABzPlayerCube::Skl_HomingProj()
+{
+	FVector OriginalLocation = RendererFront->GetRelativeLocation();
+	FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
+
+	FVector pos = RendererFront->GetTransformRef().Location;
+	FVector rot = RendererFront->GetTransformRef().Rotation;
+	FVector MoveDir = GetActorForwardVector();
+
+	std::shared_ptr<ABzHomingProjectile> Proj = GetWorld()->SpawnActor<ABzHomingProjectile>();
+	Proj->SetActorLocation(pos);
+	Proj->SetActorRotation(rot);
+}
+
+
+void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float _DeltaTime)
+{
+	static float Time = 0.0f;
+	const float BaseAmplitude = 0.1f;
+	const float Frequency = 2.0f;
+	const float ScaleFactor = 0.9f;
+	const float RotationFactor = 0.05f;
+	const float Speed = 10.f;
+	FVector orgScale = GetActorTransform().Scale;
+
+	Time += _DeltaTime;
+	float Amplitude = BaseAmplitude * Speed;
+	FVector Offset = -_Direction * (Amplitude * sin(Frequency * Time));
+
+	AddActorLocation(Offset);
+	FVector CurrentScale = GetActorTransform().Scale;
+
+	float dirLength = UEngineMath::Clamp( _Direction.NormalizeReturn().Length(),0.1f,0.5f );
+	FVector TargetScale = FVector(orgScale.X + orgScale.X * dirLength, orgScale.Y, orgScale.Z );
+
+	float T = 1.0f - exp(-5.0f * _DeltaTime);
+	FVector SmoothScale = FVector::Lerp(GetActorTransform().Scale, TargetScale, T);
+
+	SetActorRelativeScale3D(SmoothScale);
 }

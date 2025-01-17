@@ -20,8 +20,9 @@ protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	FVector CalculateMoveDirection(float _DeltaTime);
+	void ApplyRecoilAnimation(FVector _Direction, float _Speed, float _DeltaTime);
 	void Skl_Rockfall();
-
+	void Skl_HomingProj();
 
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;

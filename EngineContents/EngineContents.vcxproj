@@ -155,6 +155,7 @@
     <ClInclude Include="BzEnemyCubeBig.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
+    <ClInclude Include="BzHomingProjectile.h" />
     <ClInclude Include="BzHUD.h" />
     <ClInclude Include="BzPlayerCube.h" />
     <ClInclude Include="BzProjectile.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="BzEnemyCubeBig.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
+    <ClCompile Include="BzHomingProjectile.cpp" />
     <ClCompile Include="BzHUD.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />
     <ClCompile Include="BzProjectile.cpp" />
