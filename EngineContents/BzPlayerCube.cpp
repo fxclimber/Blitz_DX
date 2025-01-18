@@ -47,6 +47,8 @@ ABzPlayerCube::ABzPlayerCube()
 	});
 
 	Skl_RockfallOn = false;
+	OrgScale = GetActorTransform().Scale;
+
 
 #ifdef renderer_test
 	//RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
@@ -256,25 +258,33 @@ void ABzPlayerCube::Skl_HomingProj()
 void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float _DeltaTime)
 {
 	static float Time = 0.0f;
+	Time += _DeltaTime;
 	const float BaseAmplitude = 0.1f;
 	const float Frequency = 2.0f;
 	const float ScaleFactor = 0.9f;
 	const float RotationFactor = 0.05f;
 	const float Speed = 10.f;
-	FVector orgScale = GetActorTransform().Scale;
+	const float Acceleration = 0.2f;
 
-	Time += _DeltaTime;
+	float dynamicspeed = Speed + Acceleration * Time;
+	float dirLength = _Direction.NormalizeReturn().Length() * dynamicspeed;
+
 	float Amplitude = BaseAmplitude * Speed;
-	FVector Offset = -_Direction * (Amplitude * sin(Frequency * Time));
-
+	FVector Offset = _Direction * (Amplitude* dirLength * fabs(sin(Frequency * Time)));
+	Offset.ABSVectorReturn();
 	AddActorLocation(Offset);
-	FVector CurrentScale = GetActorTransform().Scale;
 
-	float dirLength = UEngineMath::Clamp( _Direction.NormalizeReturn().Length(),0.1f,0.5f );
-	FVector TargetScale = FVector(orgScale.X + orgScale.X * dirLength, orgScale.Y, orgScale.Z );
+	FVector TargetScale = FVector(UEngineMath::Clamp((OrgScale.X + OrgScale.X * dirLength),0.9f,1.0f), OrgScale.Y, OrgScale.Z );
+	UEngineDebug::OutPutString("dirLength" + std::to_string(dirLength));
 
-	float T = 1.0f - exp(-5.0f * _DeltaTime);
-	FVector SmoothScale = FVector::Lerp(GetActorTransform().Scale, TargetScale, T);
+	if (1.0f <= dirLength)
+	{
+		AddActorScale3D({ TargetScale.X * 0.02f,0.f,0.f });
+		//SetActorRelativeScale3D(OrgScale + FVector( TargetScale.X * 0.8f,0.f,0.f ));
+	}
+	else
+	{
+		SetActorRelativeScale3D(OrgScale);
+	}
 
-	SetActorRelativeScale3D(SmoothScale);
 }

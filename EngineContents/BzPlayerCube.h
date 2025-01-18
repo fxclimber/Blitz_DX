@@ -36,6 +36,9 @@ private:
 	std::shared_ptr<class ACameraActor> Camera ;
 	FVector diff = { 0.f,0.f,0.f };
 
+
+	FVector OrgScale = { 0.f,0.f,0.f };
+
 	FVector FireRot = {0.f,0.f,0.f};
 	bool Skl_RockfallOn;
 };

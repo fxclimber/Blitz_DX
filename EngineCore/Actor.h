@@ -105,6 +105,15 @@ public:
 		RootComponent->AddWorldLocation(_Value);
 	}
 
+	void AddActorScale3D(const FVector& _Scale)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->AddActorScale3D(_Scale);
+	}
 	void SetActorRelativeScale3D(const FVector& _Scale)
 	{
 		if (nullptr == RootComponent)

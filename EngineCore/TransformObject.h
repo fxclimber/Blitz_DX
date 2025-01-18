@@ -40,6 +40,12 @@ public:
 		TransformUpdate();
 	}
 
+	void AddActorScale3D(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Scale += _Value;
+		TransformUpdate();
+	}
 
 	void AddWorldRotation(const FVector& _Value)
 	{
