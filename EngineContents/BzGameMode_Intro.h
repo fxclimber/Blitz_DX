@@ -20,9 +20,9 @@ public:
 	// (imgui에디터에서 선택) 레벨이동한다	
 	void LevelChangeStart() override;
 
-	std::vector<float>& GetTileHeights()
+	const std::vector<class ABzBottom*>& GetBottomTiles() const
 	{
-		return TileHeights;
+		return BottomTiles;
 	}
 
 
@@ -42,6 +42,8 @@ private:
 	class ACameraActor* Camera;
 	FVector CamInitPos;
 
+
+	std::vector<ABzBottom*> BottomTiles;
 	float TileHeight = 0.f;
 	std::vector<float> TileHeights;
 };

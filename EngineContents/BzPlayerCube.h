@@ -24,6 +24,8 @@ protected:
 	void Skl_Rockfall();
 	void Skl_HomingProj();
 
+	void ApplyTilemap();
+
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UBzRendererDefault> RendererFront;

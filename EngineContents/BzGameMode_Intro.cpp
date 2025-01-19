@@ -60,7 +60,6 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	//----
 
 
-	std::vector<ABzBottom*> BottomTiles;
 
 	const int GridSize = 30;
 	const float TileSize = 200.f;
