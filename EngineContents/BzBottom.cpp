@@ -19,7 +19,7 @@ ABzBottom::ABzBottom()
 
 	//RendererBottom->SetRelativeScale3D({ 1.f,1.f,1.f });
 	RendererBottom->GetRenderUnit().SetMaterial("BzDefault");
-	RendererBottom->GetRenderUnit().SetTexture("bz_teXture0","b1.jpg");
+	RendererBottom->GetRenderUnit().SetTexture("bz_teXture0","test09.png");
 }
 
 ABzBottom::~ABzBottom()

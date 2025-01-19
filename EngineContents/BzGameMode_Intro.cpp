@@ -4,6 +4,7 @@
 #include "BzBottom.h"
 #include "BzEnemyCube.h"
 #include "BzProjectile.h"
+#include "BzRendererDefault.h"
 
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
@@ -59,7 +60,6 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	//Bottom->SetActorLocation({0.f,0.f,0.f});
 	//----
 
-
 	const int GridSize = 30;
 	const float TileSize = 200.f;
 	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
@@ -67,8 +67,9 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 
 	// 장애물로 설정할 타일의 인덱스 지정
 	std::set<std::pair<int, int>> ObstacleIndices = {
-		 {12, 15}, {11, 13}, {16, 15} ,{10,10},{20,6},{18,12},{11,3}
-	}; // 원하는 위치에 장애물 배치
+		{12, 15}, {11, 13}, {16, 15}, {10, 10}, {20, 6}, {18, 12}, {11, 3},
+		{5, 8}, {23, 17}, {7, 22}, {14, 27}, {28, 5}, {19, 24}, {3, 14}, {21, 9}, {26, 18}
+	};
 
 	for (int x = 0; x < GridSize; ++x)
 	{
@@ -85,15 +86,18 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 
 				float HeightFactor = DistanceFromCenter / MaxDistance;
 				float TileHeight = MaxHeight * pow(HeightFactor, 2);
+
+				// 기존 굴곡을 반영한 높이 적용
 				TilePos.Y = TileHeight / 2;
 
-				// 해당 타일이 장애물인지 확인
+				// 장애물인지 확인
 				bool isObstacle = (ObstacleIndices.find({ x, z }) != ObstacleIndices.end());
 
 				if (isObstacle)
 				{
-					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize*2.f, TileSize)); // 크기 증가
-					TilePos.Y =-TileSize;
+					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 1.5f, TileSize)); // 크기 증가
+					TilePos.Y -= TileSize * 0.8f; // 기존 높이에 추가 (덮어쓰기 X)
+					NewBottom->GetRenderer()->GetRenderUnit().SetTexture("bz_teXture0", "test10.png");
 				}
 				else
 				{
@@ -162,16 +166,6 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
-		FVector PlayerPos = PlayerCube->GetActorLocation();
-		FVector offsetPos = {100.f,80.f,0.f};
-		FVector PlayerRot = PlayerCube->GetActorTransform().Rotation;
-		FVector MoveDir = PlayerCube->GetActorForwardVector();
-		float BulletSpeed = 30000.f;
-		FVector MoveOffset = (MoveDir * _DeltaTime * BulletSpeed);
-
-		std::shared_ptr<ABzProjectile> Proj = GetWorld()->SpawnActor<ABzProjectile>();
-		Proj->SetPlayer(PlayerCube);
-		Proj->SetActorLocation(PlayerCube->GetActorLocation());
 	}
 
 }

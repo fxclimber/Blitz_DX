@@ -10,6 +10,9 @@
 #include <EngineBase/EngineMath.h>
 #include "BzConst.h"
 #include "BzplayerCube.h"
+#include "BzGameMode_Intro.h"
+#include "BzBottom.h"
+
 
 ABzEnemyCube::ABzEnemyCube()
 {
@@ -20,9 +23,9 @@ ABzEnemyCube::ABzEnemyCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 50.f,100.f,50.f });
+	Renderer->SetScale3D({ 70.f,120.f,70.f });
 	Renderer->SetPivot(PivotType::Bottom);
-	Renderer->GetRenderUnit().SetTexture("bz_texture0", "b1.jpg");
+	Renderer->GetRenderUnit().SetTexture("bz_texture0", "test11.png");
 
 
 	//----collision
@@ -38,7 +41,7 @@ ABzEnemyCube::ABzEnemyCube()
 			FVector reflectDir = otherLocation - thisLocation;
 			float length = reflectDir.Length();
 
-			if (length < 70.f)
+			if (length < 170.f)
 			{
 				_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
 			}
@@ -219,4 +222,44 @@ float ABzEnemyCube::GetRandom(float _x)
 	float x = this->random.Randomfloat(-_x, _x);
 	float y = UEngineMath::Clamp(x, 0.3f, x * 1.f);
 	return y;
+}
+
+void ABzEnemyCube::ApplyTilemap()
+{
+	FVector pos = GetActorLocation();
+
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	if (!GM)
+	{
+		return;
+	}
+
+	const std::vector<ABzBottom*>& BottomTiles = GM->GetBottomTiles(); // 타일맵 가져오기
+
+	if (BottomTiles.empty())
+	{
+		return; // 타일이 없으면 종료
+	}
+
+	// 가장 가까운 타일 찾기
+	ABzBottom* ClosestTile = nullptr;
+	float MinDistance = FLT_MAX;
+
+	for (ABzBottom* Tile : BottomTiles)
+	{
+		if (!Tile) continue;
+
+		float Distance = (Tile->GetActorLocation() - pos).Length();
+		if (Distance < MinDistance)
+		{
+			MinDistance = Distance;
+			ClosestTile = Tile;
+		}
+	}
+
+	if (ClosestTile)
+	{
+		FVector TilePos = ClosestTile->GetActorLocation();
+		SetActorLocation(FVector(pos.X, TilePos.Y, pos.Z));
+	}
 }

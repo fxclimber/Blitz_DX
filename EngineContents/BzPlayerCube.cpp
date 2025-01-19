@@ -25,7 +25,7 @@ ABzPlayerCube::ABzPlayerCube()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 80.f,120.f,80.f });
+	Renderer->SetScale3D({ 80.f,130.f,100.f });
 	Renderer->SetPivot(PivotType::Bottom);
 
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
@@ -148,6 +148,10 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	{
 		Skl_Rockfall();
 	}
+	if (UEngineInput::IsPress('E'))
+	{
+		AddActorRotation(FVector{0.f,1.f,0.f});
+	}
 
 
 	//----test
@@ -168,6 +172,13 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	//------------지형높이따라 y값조절 테스트 
 	ApplyTilemap();
+
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		std::shared_ptr<ABzProjectile> Proj = GetWorld()->SpawnActor<ABzProjectile>();
+		Proj->SetPlayer(this);
+		Proj->SetActorLocation(GetActorLocation());
+	}
 
 
 

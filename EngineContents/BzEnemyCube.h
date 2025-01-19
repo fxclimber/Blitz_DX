@@ -18,6 +18,9 @@ protected:
 	void Physics(float _DeltaTime);
 	bool CheckAttackDistance(float _DeltaTime , float _speed);
 	float GetRandom(float _x);
+
+	void ApplyTilemap();
+
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
 	std::shared_ptr<class UCollision> Collision;
