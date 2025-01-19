@@ -59,7 +59,9 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	//Bottom->SetActorLocation({0.f,0.f,0.f});
 	//----
 
+
 	std::vector<ABzBottom*> BottomTiles;
+
 	const int GridSize = 30;
 	const float TileSize = 200.f;
 	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
@@ -75,16 +77,16 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 			{
 				FVector TilePos = FVector(x * TileSize, 0.f, z * TileSize) - Offset;
 
-				// 중앙에서의 거리 계산
 				float DistanceFromCenter = FVector(x - GridSize / 2, 0.f, z - GridSize / 2).Length();
 				float MaxDistance = FVector(GridSize / 2, 0.f, GridSize / 2).Length();
 
-				// 선형 높이 증가 방식
 				float HeightFactor = DistanceFromCenter / MaxDistance;
-				//float TileHeight = MaxHeight * HeightFactor; // 선형 변화
-				float TileHeight = MaxHeight * pow(HeightFactor, 2); // 곡선 변화 (완만하게 증가)
+				float TileHeight = MaxHeight * pow(HeightFactor, 2); 
 
-				TilePos.Y = TileHeight; // Y축 높이 반영
+				TilePos.Y = TileHeight; 
+
+				// 높이 저장
+				TileHeights.push_back(TileHeight);
 
 				NewBottom->SetActorLocation(TilePos);
 				NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize));
@@ -93,6 +95,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 			}
 		}
 	}
+
 
 
 

@@ -20,6 +20,10 @@ public:
 	// (imgui에디터에서 선택) 레벨이동한다	
 	void LevelChangeStart() override;
 
+	std::vector<float>& GetTileHeights()
+	{
+		return TileHeights;
+	}
 
 
 protected:
@@ -38,6 +42,7 @@ private:
 	class ACameraActor* Camera;
 	FVector CamInitPos;
 
-
+	float TileHeight = 0.f;
+	std::vector<float> TileHeights;
 };
 

@@ -14,6 +14,7 @@
 #include "Skl_BzRockfall.h"
 #include "BzHomingProjectile.h"
 
+#include "BzGameMode_Intro.h"
 
 ABzPlayerCube::ABzPlayerCube()
 {
@@ -162,6 +163,17 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	{
 		Skl_HomingProj();
 	}
+
+
+	//------------지형높이따라 y값조절 테스트 
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	std::vector<float> height = GM->GetTileHeights();
+
+
+
+
+
+
 
 
 }
