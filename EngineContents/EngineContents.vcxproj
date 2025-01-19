@@ -153,6 +153,7 @@
     <ClInclude Include="BzConst.h" />
     <ClInclude Include="BzEnemyCube.h" />
     <ClInclude Include="BzEnemyCubeBig.h" />
+    <ClInclude Include="BzFSMManager.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
     <ClInclude Include="BzHomingProjectile.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="MyCustomRenderer.h" />
     <ClInclude Include="MyGameInstance.h" />
     <ClInclude Include="MyRenderer.h" />
+    <ClInclude Include="PathFindAstar.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="Skl_BzRockfall.h" />
@@ -191,6 +193,7 @@
     <ClCompile Include="BzConst.cpp" />
     <ClCompile Include="BzEnemyCube.cpp" />
     <ClCompile Include="BzEnemyCubeBig.cpp" />
+    <ClCompile Include="BzFSMManager.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
     <ClCompile Include="BzHomingProjectile.cpp" />
@@ -214,6 +217,7 @@
     <ClCompile Include="MyCustomRenderer.cpp" />
     <ClCompile Include="MyGameInstance.cpp" />
     <ClCompile Include="MyRenderer.cpp" />
+    <ClCompile Include="PathFindAstar.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

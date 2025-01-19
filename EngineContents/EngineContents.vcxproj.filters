@@ -107,6 +107,12 @@
     <ClInclude Include="BzHomingProjectile.h">
       <Filter>Blitz\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="BzFSMManager.h">
+      <Filter>Blitz\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindAstar.h">
+      <Filter>Blitz\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -221,6 +227,12 @@
     <ClCompile Include="BzHomingProjectile.cpp">
       <Filter>Blitz\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="BzFSMManager.cpp">
+      <Filter>Blitz\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindAstar.cpp">
+      <Filter>Blitz\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Blitz">
@@ -267,6 +279,9 @@
     </Filter>
     <Filter Include="Jo\Global">
       <UniqueIdentifier>{21e73e1d-6b58-4080-9676-3308b8969b37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\FSM">
+      <UniqueIdentifier>{e0ea33dd-df4b-475b-b93e-9bf75cc290d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
