@@ -15,11 +15,11 @@ ABzBottom::ABzBottom()
 	RendererBottom = CreateDefaultSubObject<UBzRendererDefault>();
 	RendererBottom->SetupAttachment(RootComponent);
 	RendererBottom->SetMesh("cube");
-	RendererBottom->SetPivot(PivotType::Top);
+	RendererBottom->SetPivot(PivotType::Bottom);
 
 	//RendererBottom->SetRelativeScale3D({ 1.f,1.f,1.f });
 	RendererBottom->GetRenderUnit().SetMaterial("BzDefault");
-	RendererBottom->GetRenderUnit().SetTexture("bz_teXture0","num.png");
+	RendererBottom->GetRenderUnit().SetTexture("bz_teXture0","b1.jpg");
 }
 
 ABzBottom::~ABzBottom()

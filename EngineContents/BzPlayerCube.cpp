@@ -138,7 +138,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	CalculateMoveDirection(_DeltaTime);
-	ApplyRecoilAnimation(MoveDirection, 1.f,_DeltaTime);
+	ApplyRecoilAnimation(MoveDirection, 8.f,_DeltaTime);
 
 	FVector thisPos = GetActorLocation();
 
@@ -314,7 +314,7 @@ void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float
 	const float Frequency = 2.0f;
 	const float ScaleFactor = 0.9f;
 	const float RotationFactor = 0.05f;
-	const float Speed = 10.f;
+	const float Speed = _Speed;
 	const float Acceleration = 0.2f;
 
 	float dynamicspeed = Speed + Acceleration * Time;
@@ -326,11 +326,11 @@ void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float
 	AddActorLocation(Offset);
 
 	FVector TargetScale = FVector(UEngineMath::Clamp((OrgScale.X + OrgScale.X * dirLength),0.9f,1.0f), OrgScale.Y, OrgScale.Z );
-	UEngineDebug::OutPutString("dirLength" + std::to_string(dirLength));
+	//UEngineDebug::OutPutString("dirLength" + std::to_string(dirLength));
 
 	if (1.0f <= dirLength)
 	{
-		AddActorScale3D({ TargetScale.X * 0.02f,0.f,0.f });
+		AddActorScale3D({ TargetScale.X * 0.01f,0.f,0.f });
 		//SetActorRelativeScale3D(OrgScale + FVector( TargetScale.X * 0.8f,0.f,0.f ));
 	}
 	else

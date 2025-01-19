@@ -17,7 +17,7 @@
 
 #include "ContentsEditorGUI.h"
 #include <map>
-
+#include <set>
 
 class UPlayWindow : public UEngineGUIWindow
 {
@@ -60,11 +60,15 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	//----
 
 
-
 	const int GridSize = 30;
 	const float TileSize = 200.f;
 	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
 	FVector Offset = FVector((GridSize * TileSize) / 2, 0.f, (GridSize * TileSize) / 2);
+
+	// 장애물로 설정할 타일의 인덱스 지정
+	std::set<std::pair<int, int>> ObstacleIndices = {
+		 {12, 15}, {11, 13}, {16, 15} ,{10,10},{20,6},{18,12},{11,3}
+	}; // 원하는 위치에 장애물 배치
 
 	for (int x = 0; x < GridSize; ++x)
 	{
@@ -80,16 +84,23 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 				float MaxDistance = FVector(GridSize / 2, 0.f, GridSize / 2).Length();
 
 				float HeightFactor = DistanceFromCenter / MaxDistance;
-				float TileHeight = MaxHeight * pow(HeightFactor, 2); 
+				float TileHeight = MaxHeight * pow(HeightFactor, 2);
+				TilePos.Y = TileHeight / 2;
 
-				TilePos.Y = TileHeight; 
+				// 해당 타일이 장애물인지 확인
+				bool isObstacle = (ObstacleIndices.find({ x, z }) != ObstacleIndices.end());
 
-				// 높이 저장
-				TileHeights.push_back(TileHeight);
+				if (isObstacle)
+				{
+					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize*2.f, TileSize)); // 크기 증가
+					TilePos.Y =-TileSize;
+				}
+				else
+				{
+					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize)); // 기본 크기
+				}
 
 				NewBottom->SetActorLocation(TilePos);
-				NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize));
-
 				BottomTiles.push_back(NewBottom);
 			}
 		}
