@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "BzGameMode_Intro.h"
 #include "BzPlayerCube.h"
-#include "BzBottomTmp.h"
+#include "BzBottom.h"
 #include "BzEnemyCube.h"
 #include "BzProjectile.h"
 
@@ -10,13 +10,14 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
-
+#include <EngineBase/EngineRandom.h>
 #include <EngineCore/imgui.h>
 #include <EngineCore/TimeEventComponent.h>
-#include <EngineBase/EngineRandom.h>
 #include <EnginePlatform/EngineInput.h>
 
 #include "ContentsEditorGUI.h"
+#include <map>
+
 
 class UPlayWindow : public UEngineGUIWindow
 {
@@ -52,12 +53,50 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
     GetWorld()->LinkCollisionProfile("Enemy","Enemy");
     GetWorld()->LinkCollisionProfile("GridBlue.png","Enemy");
+	//----bottom tile 
+	//Bottom = GetWorld()->SpawnActor<ABzBottom>().get();
+	//Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
+	//Bottom->SetActorLocation({0.f,0.f,0.f});
+	//----
 
-	Bottom = GetWorld()->SpawnActor<ABzBottomTmp>().get();
-	Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
-	Bottom->SetActorLocation({0.f,0.f,0.f});
+	std::vector<ABzBottom*> BottomTiles;
+	const int GridSize = 30;
+	const float TileSize = 200.f;
+	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
+	FVector Offset = FVector((GridSize * TileSize) / 2, 0.f, (GridSize * TileSize) / 2);
+
+	for (int x = 0; x < GridSize; ++x)
+	{
+		for (int z = 0; z < GridSize; ++z)
+		{
+			ABzBottom* NewBottom = GetWorld()->SpawnActor<ABzBottom>().get();
+
+			if (NewBottom)
+			{
+				FVector TilePos = FVector(x * TileSize, 0.f, z * TileSize) - Offset;
+
+				// 중앙에서의 거리 계산
+				float DistanceFromCenter = FVector(x - GridSize / 2, 0.f, z - GridSize / 2).Length();
+				float MaxDistance = FVector(GridSize / 2, 0.f, GridSize / 2).Length();
+
+				// 선형 높이 증가 방식
+				float HeightFactor = DistanceFromCenter / MaxDistance;
+				//float TileHeight = MaxHeight * HeightFactor; // 선형 변화
+				float TileHeight = MaxHeight * pow(HeightFactor, 2); // 곡선 변화 (완만하게 증가)
+
+				TilePos.Y = TileHeight; // Y축 높이 반영
+
+				NewBottom->SetActorLocation(TilePos);
+				NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize));
+
+				BottomTiles.push_back(NewBottom);
+			}
+		}
+	}
 
 
+
+	//----
 	Camera = GetWorld()->GetMainCamera().get();
 	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
 	Camera->SetActorLocation(CamInitPos);
@@ -187,5 +226,4 @@ void ABzGameMode_Intro::LevelChangeStart()
 		Window->SetActive(true);
 	}
 }
-
 

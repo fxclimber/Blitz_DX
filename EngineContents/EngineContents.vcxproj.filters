@@ -39,7 +39,7 @@
       <Filter>Jo\Title</Filter>
     </ClInclude>
     <ClInclude Include="BzBottomTmp.h">
-      <Filter>Blitz\Tmp</Filter>
+      <Filter>Blitz\Map</Filter>
     </ClInclude>
     <ClInclude Include="BzCore.h">
       <Filter>Blitz\Core</Filter>
@@ -108,10 +108,16 @@
       <Filter>Blitz\Skill</Filter>
     </ClInclude>
     <ClInclude Include="BzFSMManager.h">
-      <Filter>Blitz\Core</Filter>
+      <Filter>Blitz\Core\FSM</Filter>
     </ClInclude>
     <ClInclude Include="PathFindAstar.h">
-      <Filter>Blitz\Core</Filter>
+      <Filter>Blitz\Core\A_Star</Filter>
+    </ClInclude>
+    <ClInclude Include="BzBottomTileRenderer.h">
+      <Filter>Blitz\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="BzBottom.h">
+      <Filter>Blitz\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +159,7 @@
       <Filter>Jo\Title</Filter>
     </ClCompile>
     <ClCompile Include="BzBottomTmp.cpp">
-      <Filter>Blitz\Tmp</Filter>
+      <Filter>Blitz\Map</Filter>
     </ClCompile>
     <ClCompile Include="BzCore.cpp">
       <Filter>Blitz\Core</Filter>
@@ -228,10 +234,16 @@
       <Filter>Blitz\Skill</Filter>
     </ClCompile>
     <ClCompile Include="BzFSMManager.cpp">
-      <Filter>Blitz\Core</Filter>
+      <Filter>Blitz\Core\FSM</Filter>
     </ClCompile>
     <ClCompile Include="PathFindAstar.cpp">
-      <Filter>Blitz\Core</Filter>
+      <Filter>Blitz\Core\A_Star</Filter>
+    </ClCompile>
+    <ClCompile Include="BzBottomTileRenderer.cpp">
+      <Filter>Blitz\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="BzBottom.cpp">
+      <Filter>Blitz\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,9 +277,6 @@
     <Filter Include="Blitz\Resource">
       <UniqueIdentifier>{039eba00-2467-43f5-84d0-b163106c73d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Blitz\Tmp">
-      <UniqueIdentifier>{ce29f663-ec0d-4d9c-b4dd-396347df977e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Blitz\Core">
       <UniqueIdentifier>{13c0214c-8b68-4c08-bae7-1eebce191c51}</UniqueIdentifier>
     </Filter>
@@ -280,8 +289,14 @@
     <Filter Include="Jo\Global">
       <UniqueIdentifier>{21e73e1d-6b58-4080-9676-3308b8969b37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Blitz\FSM">
+    <Filter Include="Blitz\Core\FSM">
       <UniqueIdentifier>{e0ea33dd-df4b-475b-b93e-9bf75cc290d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Core\A_Star">
+      <UniqueIdentifier>{b49c33a3-40f3-4444-a0ea-d8e1c18211f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blitz\Map">
+      <UniqueIdentifier>{ce29f663-ec0d-4d9c-b4dd-396347df977e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

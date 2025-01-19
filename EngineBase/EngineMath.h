@@ -256,6 +256,10 @@ public:
 	{
 		return static_cast<int>(Y);
 	}
+	int iZ() const
+	{
+		return static_cast<int>(Z);
+	}
 
 	float hX() const
 	{

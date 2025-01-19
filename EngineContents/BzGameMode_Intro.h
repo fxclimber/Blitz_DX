@@ -31,11 +31,13 @@ private:
 	std::vector < class ABzEnemyCube* > EnemyCubes;
 	class ABzEnemyCube* EnemySingleTest;
 
-	class ABzBottomTmp* Bottom;
+	class ABzBottom* Bottom;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 	UEngineRandom random;
 
 	class ACameraActor* Camera;
 	FVector CamInitPos;
+
+
 };
 

@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AMon.h" />
+    <ClInclude Include="BzBottom.h" />
     <ClInclude Include="BzBottomTmp.h" />
     <ClInclude Include="BzConst.h" />
     <ClInclude Include="BzEnemyCube.h" />
@@ -183,12 +184,14 @@
     <ClInclude Include="TestActor.h" />
     <ClInclude Include="TestGameMode.h" />
     <ClInclude Include="TileMapGameMode.h" />
+    <ClInclude Include="BzBottomTileRenderer.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleHUD.h" />
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AMon.cpp" />
+    <ClCompile Include="BzBottom.cpp" />
     <ClCompile Include="BzBottomTmp.cpp" />
     <ClCompile Include="BzConst.cpp" />
     <ClCompile Include="BzEnemyCube.cpp" />
@@ -228,6 +231,7 @@
     <ClCompile Include="TestActor.cpp" />
     <ClCompile Include="TestGameMode.cpp" />
     <ClCompile Include="TileMapGameMode.cpp" />
+    <ClCompile Include="BzBottomTileRenderer.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleHUD.cpp" />
     <ClCompile Include="TitleLogo.cpp" />

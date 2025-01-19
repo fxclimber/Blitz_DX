@@ -18,11 +18,7 @@ protected:
 	void LevelChangeStart() override;
 
 private:
-	std::shared_ptr<class UTileMap> TileMapWindow;//게임모드에서 윈도우 갖고있게
+	std::shared_ptr<class UTileMap> TileMapWindow;//게임모드가 가진,타일맵 에디터윈도우
 
-	std::shared_ptr<class USpriteRenderer> PivotSpriteRenderer;
-
-	std::shared_ptr<class UTileMapRenderer> TileMapRenderer;
-
-	std::shared_ptr<class UBzRendererDefault> BzRendererDefault;
+	std::shared_ptr<class UBzBottomTileRenderer> BzBottomTileRenderer;
 };

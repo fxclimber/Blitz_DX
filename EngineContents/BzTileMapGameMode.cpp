@@ -16,9 +16,7 @@
 
 #include "BzBottomTmp.h"
 #include "BzEnemyCube.h"
-#include "BzEnemy.h"
-#include "BzEnemyCube.h"
-#include "BzEnemyCubeBig.h"
+#include "BzBottomTileRenderer.h"
 
 enum class ESpawnList
 {
@@ -37,59 +35,29 @@ class UTileMap : public UEngineGUIWindow
 public:
 	int SelectItem = 0;
 	int ObjectItem = -1;
-	UTileMapRenderer* TileMapRenderer = nullptr;
+	UBzBottomTileRenderer* BzBottomTileRenderer = nullptr;
 	EEditMode Mode = EEditMode::TileMap;
 
-	// std::list<std::shared_ptr<AMon>> AllMonsterList;
 	int TileCountX = 10;
-	int TileCountY = 10;
+	int TileCountY = 1;
+	int TileCountZ = 10;
 	int SelectTileIndex = 0;
 
 	void TileMapMode()
 	{
 		{
-			UEngineSprite* Sprite = TileMapRenderer->GetSprite();
-
-			for (size_t i = 0; i < Sprite->GetSpriteCount(); i++)
-			{
-				UEngineTexture* Texture = Sprite->GetTexture(i);
-				FSpriteData Data = Sprite->GetSpriteData(i);
-
-				//SRV입니다
-				ImTextureID SRV = reinterpret_cast<ImTextureID>(Texture->GetSRV());
-
-				std::string Text = std::to_string(i);
-
-				if (i != 0)
-				{
-					if (0 != (i % 10))
-					{
-						ImGui::SameLine();
-					}
-				}
-
-
-				ImVec2 Pos = { Data.CuttingPos.X, Data.CuttingPos.Y };
-				ImVec2 Size = { Data.CuttingPos.X + Data.CuttingSize.X, Data.CuttingPos.Y + Data.CuttingSize.Y };
-
-				if (ImGui::ImageButton(Text.c_str(), SRV, { 60, 60 }, Pos, Size))
-				{
-					SelectTileIndex = static_cast<int>(i);
-				}
-				// 엔터를 치지 않는개념.
-			}
-
-
 			ImGui::InputInt("TileMapX", &TileCountX);
-			ImGui::InputInt("TileMapY", &TileCountY);
+			ImGui::InputInt("TileMapZ", &TileCountZ);
 
 			if (ImGui::Button("TileMap Create"))
 			{
-				for (int y = 0; y < TileCountY; y++)
+				for (int z = 0; z < TileCountZ; z++)
 				{
 					for (int x = 0; x < TileCountX; x++)
 					{
-						TileMapRenderer->SetTile(x, y, SelectTileIndex);
+						{
+							BzBottomTileRenderer->SetTile({10,1,10}, SelectTileIndex);
+						}
 					}
 				}
 			}
@@ -99,14 +67,14 @@ public:
 			{
 				FVector ScreenPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPos();
 
-				TileMapRenderer->SetTile(ScreenPos, SelectTileIndex);
+				BzBottomTileRenderer->SetTile(ScreenPos, SelectTileIndex);
 			}
 
 			if (true == UEngineInput::IsPress(VK_RBUTTON))
 			{
 				FVector ScreenPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPos();
 
-				TileMapRenderer->RemoveTile(ScreenPos);
+				BzBottomTileRenderer->RemoveTile(ScreenPos);
 			}
 		}
 	}
@@ -134,17 +102,16 @@ public:
 				Bottom->SetActorLocation({ 0.f,0.f,0.f });
 
 				FVector Pos = Camera->ScreenMousePosToWorldPos();
-				//Pos.Z = 0.0f;
 
-				std::shared_ptr<ABzEnemy> enemy;
+				std::shared_ptr<ABzEnemyCube> enemy;
 
 				switch (SelectMonster)
 				{
 				case ESpawnList::ABzEnemyCube:
-					enemy = GetWorld()->SpawnActor<ABzEnemyCube>("ABzEnemyCube");
+					enemy = GetWorld()->SpawnActor<ABzEnemyCube>("enemy1");
 					break;
 				case ESpawnList::ABzEnemyCubeBig:
-					enemy = GetWorld()->SpawnActor<ABzEnemyCubeBig>("ABzEnemyCubeBig");
+					enemy = GetWorld()->SpawnActor<ABzEnemyCube>("enemy2");
 					break;
 				default:
 					break;
@@ -244,7 +211,7 @@ public:
 					Actor->Serialize(Ser);
 				}
 
-				TileMapRenderer->Serialize(Ser);
+				BzBottomTileRenderer->Serialize(Ser);
 
 				UEngineFile NewFile = Dir.GetFile(ofn.lpstrFile);
 				NewFile.FileOpen("wb");
@@ -315,7 +282,7 @@ public:
 					NewMon->DeSerialize(Ser);
 				}
 
-				TileMapRenderer->DeSerialize(Ser);
+				BzBottomTileRenderer->DeSerialize(Ser);
 
 			}
 		}
@@ -360,21 +327,16 @@ ABzTileMapGameMode::ABzTileMapGameMode()
 {
 	GetWorld()->CreateCollisionProfile("Enemy");
 
-
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	PivotSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	PivotSpriteRenderer->SetupAttachment(RootComponent);
-	PivotSpriteRenderer->SetRelativeScale3D({ 50.0f, 50.0f, 1.0f });
-
-	TileMapRenderer = CreateDefaultSubObject<UTileMapRenderer>();
-	TileMapRenderer->SetupAttachment(RootComponent);
-	TileMapRenderer->SetTileSetting(ETileMapType::Iso, "TileMap.png", { 128.0f, 63.0f }, { 128.0f, 192.0f }, { 0.0f, 0.0f });
+	BzBottomTileRenderer = CreateDefaultSubObject<UBzBottomTileRenderer>();
+	BzBottomTileRenderer->SetupAttachment(RootComponent);
+	BzBottomTileRenderer->SetTileSetting("b22.jpg", {100.f,10.f,100.f});
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
-	Camera->GetCameraComponent()->SetZSort(0, true);
+	Camera->SetActorLocation({ 0.0f, 2000.0f, 0.0f, 1.0f });
+	//Camera->GetCameraComponent()->SetZSort(0, true);
 }
 
 void ABzTileMapGameMode::Tick(float _DeltaTime)
@@ -407,6 +369,6 @@ void ABzTileMapGameMode::LevelChangeStart()
 		}
 
 		TileMapWindow->SetActive(true);
-		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
+		TileMapWindow->BzBottomTileRenderer = BzBottomTileRenderer.get();
 	}
 }
