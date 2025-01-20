@@ -60,6 +60,7 @@ private:
 
 	// pool방식, 미리만들고,지우지않는다 
 	std::vector<UPathFindNode> NodePool;
+
 	int PoolCount = 0;
 
 	void NodeClear()// A 탐색을 초기화
@@ -74,28 +75,8 @@ private:
 
 	// 새로운 노드할당,F,G,H계산 , 부모노드가 있으면 G업데이트, 계산된 노드를 OpenList에 추가해서 탐색진행 
 	// PathFind() 에서 사용됨 
-	UPathFindNode* GetNewNode(FVector _Point, UPathFindNode* _ParentNode)
-	{
-		UPathFindNode* NewNode = &NodePool[PoolCount]; // 미리 할당된 노드 풀에서 가져옴
-		NewNode->pos = _Point;
-		NewNode->ParentNode = _ParentNode;
+	UPathFindNode* GetNewNode(FVector _Point, UPathFindNode* _ParentNode);
 
-		FVector ThisPos = NewNode->GetPointToVector();
-
-		if (nullptr != _ParentNode)
-		{
-			FVector ParentPos = _ParentNode->GetPointToVector();
-			NewNode->G = _ParentNode->G + (ThisPos - ParentPos).Length(); // G 계산
-		}
-
-		FVector EndPos = { EndPoint.X, 0.f , EndPoint.Z }; // 목표점 좌표
-		NewNode->H = (EndPos - ThisPos).Length(); // H 계산
-		NewNode->F = NewNode->H + NewNode->G; // F = G + H
-
-		OpenList.push_back(NewNode); // OpenList에 추가
-		++PoolCount;
-		return NewNode;
-	}
 
 };
 

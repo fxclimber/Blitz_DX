@@ -11,7 +11,7 @@
 #include "BzConst.h"
 #include "BzplayerCube.h"
 #include "BzGameMode_Intro.h"
-#include "BzBottom.h"
+#include "BzTileMap.h"
 
 
 ABzEnemyCube::ABzEnemyCube()
@@ -45,8 +45,6 @@ ABzEnemyCube::ABzEnemyCube()
 			{
 				_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
 			}
-			//_Other->GetActor()->Destroy();
-			//UEngineDebug::OutPutString("Enter");
 		});
 	
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
@@ -64,7 +62,6 @@ void ABzEnemyCube::BeginPlay()
 	APawn* Ptr = GetWorld()->GetMainPawn();
 	randomResult = GetRandom(2.f);
 
-	//PlayerP = dynamic_cast<APawn*>(GetWorld()->GetMainPawn());
 	pos = GetActorLocation();
 }
 
@@ -76,7 +73,8 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	radius = GetActorTransform().Scale.X;
 
 	CheckAttackDistance(_DeltaTime , 500.f);
-
+	ApplyTilemap();
+	//MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
 }
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)
@@ -227,25 +225,26 @@ float ABzEnemyCube::GetRandom(float _x)
 void ABzEnemyCube::ApplyTilemap()
 {
 	FVector pos = GetActorLocation();
-
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+
 	if (!GM)
 	{
 		return;
 	}
 
-	const std::vector<ABzBottom*>& BottomTiles = GM->GetBottomTiles(); // 타일맵 가져오기
+	// 타일맵의 올바른 변수명 사용
+	const std::vector<ABzTile*>& BottomTiles = GM->map->BottomTiles;
 
 	if (BottomTiles.empty())
 	{
-		return; // 타일이 없으면 종료
+		return;
 	}
 
 	// 가장 가까운 타일 찾기
-	ABzBottom* ClosestTile = nullptr;
+	ABzTile* ClosestTile = nullptr;
 	float MinDistance = FLT_MAX;
 
-	for (ABzBottom* Tile : BottomTiles)
+	for (ABzTile* Tile : BottomTiles)
 	{
 		if (!Tile) continue;
 
@@ -261,5 +260,23 @@ void ABzEnemyCube::ApplyTilemap()
 	{
 		FVector TilePos = ClosestTile->GetActorLocation();
 		SetActorLocation(FVector(pos.X, TilePos.Y, pos.Z));
+	}
+}
+
+
+void ABzEnemyCube::MoveAlongPath(float DeltaTime)
+{
+	if (AStarPath.empty()) return;
+
+	FVector CurrentPos = GetActorLocation();
+	FVector TargetPos = AStarPath.front();
+
+	float Speed = 200.f;
+	FVector Direction = (TargetPos - CurrentPos).NormalizeReturn();
+	SetActorLocation(CurrentPos + Direction * Speed * DeltaTime);
+
+	if ((CurrentPos - TargetPos).Length() < 10.f)
+	{
+		AStarPath.pop_front();
 	}
 }

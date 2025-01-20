@@ -1,6 +1,8 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineBase/EngineRandom.h>
+#include "PathFindAstar.h"
+
 
 class ABzGameMode_Intro : public AGameMode
 {
@@ -20,10 +22,19 @@ public:
 	// (imgui에디터에서 선택) 레벨이동한다	
 	void LevelChangeStart() override;
 
-	const std::vector<class ABzBottom*>& GetBottomTiles() const
-	{
-		return BottomTiles;
-	}
+	//const std::vector<class ABzBottom*>& GetBottomTiles() const
+	//{
+	//	return BottomTiles;
+	//}
+
+	void PathFind();
+
+	//ABzTileMap* GetMap()
+	//{
+	//	return map;
+	//}
+
+	class ABzTileMap* map = nullptr;
 
 
 protected:
@@ -43,8 +54,12 @@ private:
 	FVector CamInitPos;
 
 
-	std::vector<ABzBottom*> BottomTiles;
-	float TileHeight = 0.f;
-	std::vector<float> TileHeights;
+	//std::vector<ABzBottom*> BottomTiles;
+	//float TileHeight = 0.f;
+	//std::vector<float> TileHeights;
+
+	UPathFindAStar PathFinder;
+	UEngineRandom Random;
+
 };
 

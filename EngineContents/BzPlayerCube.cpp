@@ -15,7 +15,7 @@
 #include "BzHomingProjectile.h"
 
 #include "BzGameMode_Intro.h"
-#include "BzBottom.h"
+#include "BzTileMap.h"
 
 ABzPlayerCube::ABzPlayerCube()
 {
@@ -278,30 +278,31 @@ void ABzPlayerCube::Skl_HomingProj()
 
 void ABzPlayerCube::ApplyTilemap()
 {
-	FVector PlayerPos = GetActorLocation();
-
+	FVector pos = GetActorLocation();
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+
 	if (!GM)
 	{
-		return; 
+		return;
 	}
 
-	const std::vector<ABzBottom*>& BottomTiles = GM->GetBottomTiles(); // 타일맵 가져오기
+	// 타일맵의 올바른 변수명 사용
+	const std::vector<ABzTile*>& BottomTiles = GM->map->BottomTiles;
 
 	if (BottomTiles.empty())
 	{
-		return; // 타일이 없으면 종료
+		return;
 	}
 
 	// 가장 가까운 타일 찾기
-	ABzBottom* ClosestTile = nullptr;
+	ABzTile* ClosestTile = nullptr;
 	float MinDistance = FLT_MAX;
 
-	for (ABzBottom* Tile : BottomTiles)
+	for (ABzTile* Tile : BottomTiles)
 	{
 		if (!Tile) continue;
 
-		float Distance = (Tile->GetActorLocation()-PlayerPos).Length();
+		float Distance = (Tile->GetActorLocation() - pos).Length();
 		if (Distance < MinDistance)
 		{
 			MinDistance = Distance;
@@ -312,7 +313,7 @@ void ABzPlayerCube::ApplyTilemap()
 	if (ClosestTile)
 	{
 		FVector TilePos = ClosestTile->GetActorLocation();
-		SetActorLocation(FVector(PlayerPos.X, TilePos.Y, PlayerPos.Z));
+		SetActorLocation(FVector(pos.X, TilePos.Y, pos.Z));
 	}
 }
 

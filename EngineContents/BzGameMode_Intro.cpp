@@ -5,6 +5,7 @@
 #include "BzEnemyCube.h"
 #include "BzProjectile.h"
 #include "BzRendererDefault.h"
+#include "BzTileMap.h"
 
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
@@ -43,6 +44,9 @@ public:
 
 ABzGameMode_Intro::ABzGameMode_Intro()
 {
+	map = GetWorld()->SpawnActor<ABzTileMap>().get();
+	PathFinder.SetData(map);
+
     // collision profile name
     GetWorld()->CreateCollisionProfile("Enemy");
     GetWorld()->CreateCollisionProfile("Player");
@@ -54,65 +58,6 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
     GetWorld()->LinkCollisionProfile("Enemy","Enemy");
     GetWorld()->LinkCollisionProfile("GridBlue.png","Enemy");
-	//----bottom tile 
-	//Bottom = GetWorld()->SpawnActor<ABzBottom>().get();
-	//Bottom->SetActorRelativeScale3D({ 100.f,100.f ,100.f });
-	//Bottom->SetActorLocation({0.f,0.f,0.f});
-	//----
-
-	const int GridSize = 30;
-	const float TileSize = 200.f;
-	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
-	FVector Offset = FVector((GridSize * TileSize) / 2, 0.f, (GridSize * TileSize) / 2);
-
-	// 장애물로 설정할 타일의 인덱스 지정
-	std::set<std::pair<int, int>> ObstacleIndices = {
-		{12, 15}, {11, 13}, {16, 15}, {10, 10}, {20, 6}, {18, 12}, {11, 3},
-		{5, 8}, {23, 17}, {7, 22}, {14, 27}, {28, 5}, {19, 24}, {3, 14}, {21, 9}, {26, 18}
-	};
-
-	for (int x = 0; x < GridSize; ++x)
-	{
-		for (int z = 0; z < GridSize; ++z)
-		{
-			ABzBottom* NewBottom = GetWorld()->SpawnActor<ABzBottom>().get();
-
-			if (NewBottom)
-			{
-				FVector TilePos = FVector(x * TileSize, 0.f, z * TileSize) - Offset;
-
-				float DistanceFromCenter = FVector(x - GridSize / 2, 0.f, z - GridSize / 2).Length();
-				float MaxDistance = FVector(GridSize / 2, 0.f, GridSize / 2).Length();
-
-				float HeightFactor = DistanceFromCenter / MaxDistance;
-				float TileHeight = MaxHeight * pow(HeightFactor, 2);
-
-				// 기존 굴곡을 반영한 높이 적용
-				TilePos.Y = TileHeight / 2;
-
-				// 장애물인지 확인
-				bool isObstacle = (ObstacleIndices.find({ x, z }) != ObstacleIndices.end());
-
-				if (isObstacle)
-				{
-					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 1.5f, TileSize)); // 크기 증가
-					TilePos.Y -= TileSize * 0.8f; // 기존 높이에 추가 (덮어쓰기 X)
-					NewBottom->GetRenderer()->GetRenderUnit().SetTexture("bz_teXture0", "test10.png");
-				}
-				else
-				{
-					NewBottom->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize)); // 기본 크기
-				}
-
-				NewBottom->SetActorLocation(TilePos);
-				BottomTiles.push_back(NewBottom);
-			}
-		}
-	}
-
-
-
-
 	//----
 	Camera = GetWorld()->GetMainCamera().get();
 	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
@@ -133,6 +78,8 @@ ABzGameMode_Intro::~ABzGameMode_Intro()
 
 void ABzGameMode_Intro::BeginPlay()
 {
+	AActor::BeginPlay();
+
 	PlayerCube = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 	PlayerCube->SetActorLocation(FVector{ 200.f,0.f,-500.f });
 	PlayerCube->SetActorRotation(FVector{ 0.f,250.f,0.f });
@@ -142,10 +89,10 @@ void ABzGameMode_Intro::BeginPlay()
 	//-----
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 	TimeEventComponent->AddEvent(
-		0.5f,
+		0.01f,
 		[this](float _Delta, float _Acc)
 		{
-			FVector randomLocation(GetRandomLocation(8.f));
+			FVector randomLocation(GetRandomLocation(28.f));
 			SpawnEnemy(randomLocation);
 		},
 		[this]()
@@ -153,6 +100,9 @@ void ABzGameMode_Intro::BeginPlay()
 		},
 		false // 반복 여부
 		);
+
+
+
 }
 
 void ABzGameMode_Intro::Tick(float _DeltaTime)
@@ -164,10 +114,11 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 
 	Camera->SetActorLocation(FVector(CamInitPos.X+PlayerCube->GetActorLocation().X, CamInitPos.Y,CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 
-	if (UEngineInput::IsDown(VK_LBUTTON))
-	{
-	}
+	//if (UEngineInput::IsDown(VK_LBUTTON))
+	//{
+	//}
 
+	//PathFind();
 }
 
 
@@ -233,4 +184,30 @@ void ABzGameMode_Intro::LevelChangeStart()
 		Window->SetActive(true);
 	}
 }
+
+void ABzGameMode_Intro::PathFind()
+{
+	if (EnemyCubes.empty()) return;
+
+	std::vector<FVector> EnemyTiles;
+	float TileSize = map->TileSize;
+
+	FVector PlayerTilePos = FVector(round(PlayerCube->GetActorLocation().X / TileSize) * TileSize,0.f,round(PlayerCube->GetActorLocation().Z / TileSize) * TileSize	);
+	UPathFindNode* PlayerNode = map->GetNode(PlayerTilePos);// 타일노드리턴 
+	FVector PlayerNodePos = PlayerNode->pos;
+
+	for (ABzEnemyCube* Enemy : EnemyCubes)
+	{
+		FVector EnemyTilePos = FVector(round(Enemy->GetActorLocation().X / TileSize) * TileSize,0.f,round(Enemy->GetActorLocation().Z / TileSize) * TileSize);
+		UPathFindNode* EnemyNode = map->GetNode(EnemyTilePos);
+		if (EnemyNode) EnemyTiles.push_back(EnemyNode->pos);
+		PathFinder.PathFind(EnemyTilePos, PlayerNodePos);
+		//std::list<FVector> Path = PathFinder.PathFind(EnemyTilePos, PlayerNodePos);
+
+		//Enemy->SetPath(Path);
+	}
+
+
+
+} 
 

@@ -119,6 +119,12 @@
     <ClInclude Include="BzBottom.h">
       <Filter>Blitz\Map</Filter>
     </ClInclude>
+    <ClInclude Include="BzTileMap.h">
+      <Filter>Blitz\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BzClassManager.h">
+      <Filter>Blitz\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -244,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="BzBottom.cpp">
       <Filter>Blitz\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="BzTileMap.cpp">
+      <Filter>Blitz\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="BzClassManager.cpp">
+      <Filter>Blitz\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

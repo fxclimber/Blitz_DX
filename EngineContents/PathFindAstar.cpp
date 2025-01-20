@@ -5,7 +5,7 @@
 UPathFindAStar::UPathFindAStar()
 {
 	NodePool.resize(1000);
-
+	PoolCount = 0;
 	WayDir = {
 		{1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1}, // 상하좌우
 		{1, 0, 1}, {1, 0, -1}, {-1, 0, 1}, {-1, 0, -1} // 대각선 이동
@@ -143,4 +143,33 @@ bool UPathFindAStar::FindCloseNode(FVector _Point)
 		}
 	}
 	return false;
+}
+
+UPathFindNode* UPathFindAStar::GetNewNode(FVector _Point, UPathFindNode* _ParentNode)
+{
+
+	//if (PoolCount >= NodePool.size())
+	//{
+	//	return nullptr;
+	//}
+	UPathFindNode* NewNode = &NodePool[PoolCount]; // 미리 할당된 노드 풀에서 가져옴
+	NewNode->ParentNode = nullptr;
+	NewNode->pos = _Point;
+	NewNode->ParentNode = _ParentNode;
+
+	FVector ThisPos = NewNode->GetPointToVector();
+
+	if (nullptr != _ParentNode)
+	{
+		FVector ParentPos = _ParentNode->GetPointToVector();
+		NewNode->G = _ParentNode->G + (ThisPos - ParentPos).Length(); // G 계산
+	}
+
+	FVector EndPos = { EndPoint.X, 0.f , EndPoint.Z }; // 목표점 좌표
+	NewNode->H = (EndPos - ThisPos).Length(); // H 계산
+	NewNode->F = NewNode->H + NewNode->G; // F = G + H
+
+	OpenList.push_back(NewNode); // OpenList에 추가
+	++PoolCount;
+	return NewNode;
 }
