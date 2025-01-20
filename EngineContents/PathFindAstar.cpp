@@ -145,6 +145,7 @@ bool UPathFindAStar::FindCloseNode(FVector _Point)
 	return false;
 }
 
+
 UPathFindNode* UPathFindAStar::GetNewNode(FVector _Point, UPathFindNode* _ParentNode)
 {
 
@@ -173,3 +174,4 @@ UPathFindNode* UPathFindAStar::GetNewNode(FVector _Point, UPathFindNode* _Parent
 	++PoolCount;
 	return NewNode;
 }
+

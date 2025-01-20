@@ -4,7 +4,6 @@
 #include <EngineBase/EngineRandom.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EnginePlatform/EngineWindow.h>
-#include "BzTileMap.h"
 
 
 ABzClassManager::ABzClassManager()
@@ -19,7 +18,6 @@ void ABzClassManager::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	PathFinder.SetData(map);
 
 }
 

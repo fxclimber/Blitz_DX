@@ -9,6 +9,9 @@
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineBase/EngineMath.h>
 
+#include "BzEnemyCube.h"
+
+
 ABzProjectile::ABzProjectile()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
@@ -16,8 +19,8 @@ ABzProjectile::ABzProjectile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	//Renderer->SetScale3D({ 15.f,15.f,85.f });
-	Renderer->SetScale3D({ 35.f,35.f,85.f });
+	Renderer->SetScale3D({ 10.f,10.f,55.f });
+	//Renderer->SetScale3D({ 35.f,35.f,85.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "bulletTest.jpg");
 
 	//----collision
@@ -70,6 +73,8 @@ void ABzProjectile::Tick(float _DeltaTime)
 	CalculateMoveAcceleration(_DeltaTime);
 	ForwardDir += Gravity *_DeltaTime;
 	AddActorLocation(ForwardDir * _DeltaTime * Speed);
+
+	//-------------------------------------
 	std::string fireRotString =
 		"FireRot: (X: " + std::to_string(ForwardDir.X) +
 		", Y: " + std::to_string(ForwardDir.Y) +
@@ -124,11 +129,31 @@ FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
 		FVector newRotation(lerpedPitch, lerpedYaw, currentRotation.Z); // Roll °íÁ¤
 		SetActorRotation(newRotation);
 	}
-
-
-
-
+	
 	return ForwardDir;
+}
+
+void ABzProjectile::Differenciate(ABzClassManager& manager)
+{
+	if (false != bActive)
+	{
+		return;
+	}
+
+	Pos = GetActorLocation();
+	ABzEnemyCube* target = manager.GetClosestEnemy(Pos);
+
+	if (target && IsColliding(target))
+	{
+		target->TakeDamage();
+		manager.RemoveEnemy(target);
+		bActive = false;
+	}
+}
+
+bool ABzProjectile::IsColliding(ABzEnemy* enemy)
+{
+	return (Pos - enemy->GetActorLocation()).Length() < 3.f;
 }
 
 void ABzProjectile::SetPlayer(class ABzPlayerCube* _name)

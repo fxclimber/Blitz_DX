@@ -12,29 +12,33 @@
 #include "BzplayerCube.h"
 #include "BzGameMode_Intro.h"
 #include "BzTileMap.h"
-
+#include "BzClassManager.h"
 
 ABzEnemyCube::ABzEnemyCube()
 {
 	EEnemyTypeValue = EEnemyType::BzEnemyCube;
+
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	Manager = GM->Manager;
+	Manager->RegisterEnemy(this);
 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 70.f,120.f,70.f });
+	Renderer->SetScale3D(Scale);
 	Renderer->SetPivot(PivotType::Bottom);
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "test11.png");
 
 
 	//----collision
 	Collision = CreateDefaultSubObject<UCollision>();
-	collisionsTest.push_back(Collision.get());
+	collisionList.push_back(Collision.get());
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Enemy");
 	Collision->SetCollisionType(ECollisionType::OBB);
-	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+	Collision->SetCollisionStay([](UCollision* _This, UCollision* _Other)
 		{
 			FVector otherLocation = _Other->GetActor()->GetActorLocation();
 			FVector thisLocation = _This->GetActor()->GetActorLocation();
@@ -53,6 +57,8 @@ ABzEnemyCube::ABzEnemyCube()
 
 ABzEnemyCube::~ABzEnemyCube()
 {
+	Manager->RemoveEnemy(this);
+
 }
 
 void ABzEnemyCube::BeginPlay()
@@ -72,6 +78,7 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 
 	radius = GetActorTransform().Scale.X;
 
+	AvoidWall(_DeltaTime);// very strange !!!! 
 	CheckAttackDistance(_DeltaTime , 500.f);
 	ApplyTilemap();
 	//MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
@@ -141,78 +148,109 @@ void ABzEnemyCube::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
 
 bool ABzEnemyCube::CheckAttackDistance(float _DeltaTime, float _speed)
 {
-	if (nullptr != Player)
+	if (nullptr == Player) return false;
+
+	// 플레이어 위치, 방향 계산
+	AttackPlayerPos = Player->GetActorLocation();
+	Attackdir = AttackPlayerPos - GetActorLocation();
+	AttackDistance = Attackdir.Length();
+	Attackdir.Normalize();
+	float speed = randomResult * _speed;
+	float Gap = 300.f;
+
+	// 충돌 체크
+	bool collisionYes = Collision->CollisionCheck("Enemy", AttackPlayerPos, collisionList);
+	bool isFrontMost = true; 
+
+		// 적들 간 거리 유지 검사
+	for (UCollision* other : collisionList)
 	{
-		// 플레이어 위치,방향
-		AttackPlayerPos = Player->GetActorLocation();
-		Attackdir = AttackPlayerPos - GetActorLocation();
-		AttackDistance = Attackdir.Length();
-		Attackdir.Normalize();
-		float speed = randomResult * _speed;
+		FVector otherLocation = other->GetActor()->GetActorLocation();
+		float otherDistance = (otherLocation - GetActorLocation()).Length();
 
-		// 충돌 체크
-		bool collisionYes = Collision->CollisionCheck("Enemy", AttackPlayerPos, collisionsTest);
-
-		if (collisionYes)
+		// 너무 가까우면 밀어냄
+		if (otherDistance < Scale.X * 2.0f)
 		{
-			bool isFrontMost = true;
-
-			for (UCollision* other : collisionsTest)
-			{
-				FVector otherLocation = other->GetActor()->GetActorLocation();
-				float otherDistance = (AttackPlayerPos - otherLocation).Length();
-
-				if (otherDistance < AttackDistance)
-				{
-					isFrontMost = false;
-					break;
-				}
-			}
-
-			if (isFrontMost)
-			{
-				if (AttackDistance > 300.f)
-				{
-					FVector NormalizedDir = Attackdir;
-					AddActorLocation(NormalizedDir * _DeltaTime * speed);
-				}
-				else
-				{
-					AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
-				}
-			}
-			else
-			{
-				AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
-			}
+			FVector PushDir = (GetActorLocation() - otherLocation).NormalizeReturn();
+			AddActorLocation(PushDir *  speed ); // 반대 방향으로 밀어냄
 		}
-		else
+
+		// 가장 앞에 있는지 체크
+		float otherToPlayerDist = (AttackPlayerPos - otherLocation).Length();
+		if (otherToPlayerDist < AttackDistance)
 		{
-			if (AttackDistance > 450.f)
-			{
-				FVector NormalizedDir = Attackdir;
-				AddActorLocation(NormalizedDir * _DeltaTime * speed);
-			}
-			else
-			{
-				AddActorLocation(FVector(0.f, 0.f, 0.f)); // 멈춤
-			}
+			isFrontMost = false;
+			break;
 		}
-	}			// 이동방향대로 몸체회전 
-			if (Attackdir.Z != 0.0f || Attackdir.X != 0.0f)
-			{
-				float targetAngle = atan2(-Attackdir.X, Attackdir.Z) * UEngineMath::R2D;
-				float currentAngle = GetActorTransform().Rotation.Y;
-				float deltaAngle = targetAngle - currentAngle;
-				if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-				if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+	}
+	// 2. 플레이어와 거리 유지 검사
+	//float PlayerRadius = Player->GetActorTransform().WorldScale.X;
+	float MinDistanceToPlayer = 200.f;// *PlayerRadius; // 플레이어와 유지할 거리
+	float DistanceToPlayer = (GetActorLocation() - AttackPlayerPos).Length();
 
-				// 부드러운 회전
-				float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 1.0f;
-				AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
-			}
+	if (DistanceToPlayer < MinDistanceToPlayer)
+	{
+		// 플레이어와 너무 가까우면 반대 방향으로 밀어냄
+		FVector PushDir = (GetActorLocation() - AttackPlayerPos).NormalizeReturn();
+		AddActorLocation(PushDir * _DeltaTime * speed * 0.5f);
+	}
+
+
+
+	// 플레이어에게 이동 
+	if (true == isFrontMost)
+	{
+		if (AttackDistance > Gap){
+			AddActorLocation(Attackdir * _DeltaTime * speed);
+		}
+		else{
+			AddActorLocation(FVector::ZERO); // 멈춤
+		}
+	}
+
+	// 이동 방향대로 몸체 회전
+	if (Attackdir.Z != 0.0f || Attackdir.X != 0.0f)
+	{
+		float targetAngle = atan2(-Attackdir.X, Attackdir.Z) * UEngineMath::R2D;
+		float currentAngle = GetActorTransform().Rotation.Y;
+		float deltaAngle = targetAngle - currentAngle;
+		if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+		if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+		// 부드러운 회전
+		float lerpedAngle = currentAngle + deltaAngle * _DeltaTime * 1.0f;
+		AddActorRotation(FVector(0.0f, lerpedAngle - currentAngle, 0.0f));
+	}
+
 	return true;
 }
+
+void ABzEnemyCube::AvoidWall(float _DeltaTime)
+{
+	FVector pos = GetActorLocation();
+	float radius = 300.f;
+
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	const std::vector<ABzTile*>& wall = GM->map->BottomTiles;
+
+	for (ABzTile* Tile : wall)
+	{
+		FVector tilePos = Tile->GetActorLocation();
+		float distance = (tilePos - pos).Length();
+
+		if (true == Tile->GetWalkable() &&  distance < radius)
+		{
+			FVector avoidDir = (pos - tilePos).NormalizeReturn();
+			SetActorRotation(FVector{0.f,60.f,0.f});
+			AddActorLocation(avoidDir * _DeltaTime * 20.f);
+			break;
+		}
+	}
+
+
+
+}
+
 
 
 float ABzEnemyCube::GetRandom(float _x) 
@@ -279,4 +317,9 @@ void ABzEnemyCube::MoveAlongPath(float DeltaTime)
 	{
 		AStarPath.pop_front();
 	}
+}
+
+void ABzEnemyCube::TakeDamage()
+{
+	UEngineDebug::OutPutString("Enemy is damaged");
 }

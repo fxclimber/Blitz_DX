@@ -2,7 +2,7 @@
 #include <EngineCore/Actor.h>
 #include "BzRendererDefault.h"
 #include <EngineCore/DefaultSceneComponent.h>
-
+#include <EngineCore/Collision.h>
 #include "PathFindAstar.h"
 
 #include <map>
@@ -33,6 +33,7 @@ public:
 		BzTileRenderer->SetPivot(PivotType::Bottom);
 		BzTileRenderer->GetRenderUnit().SetMaterial("BzDefault");
 		BzTileRenderer->GetRenderUnit().SetTexture("bz_teXture0", "test09.png");
+
 	}
 
 	std::shared_ptr<class UBzRendererDefault> GetRenderer()
@@ -44,11 +45,14 @@ public:
 	void SetPos(const FVector& _newPos) { TilePos = _newPos; }
 	bool IsWalkable() const { return bIsWalkable;  }
 	void SetWalkable(bool _bWalkable) { bIsWalkable = _bWalkable; }
+	bool GetWalkable() { return bIsWalkable; }
+
+	std::shared_ptr<class UCollision> Collision;
+	std::shared_ptr<class UBzRendererDefault> BzTileRenderer;
 
 protected:
 
 private:
-	std::shared_ptr<class UBzRendererDefault> BzTileRenderer;
 	FVector TilePos;
 	bool bIsWalkable;
 

@@ -10,6 +10,7 @@ public:
 	~ABzEnemyCube();
 	void SetPlayer(std::shared_ptr<class ABzPlayerCube> _name);
 	void SetPath(const std::list<FVector>& NewPath)	{		AStarPath = NewPath;	}
+	void TakeDamage();
 
 protected:
 	void BeginPlay() override;
@@ -18,6 +19,7 @@ protected:
 
 	void Physics(float _DeltaTime);
 	bool CheckAttackDistance(float _DeltaTime , float _speed);
+	void AvoidWall(float _DeltaTime);
 	float GetRandom(float _x);
 
 	void ApplyTilemap();
@@ -43,8 +45,10 @@ private:
 	UEngineRandom random;
 	float randomResult = 0;
 
-	std::vector<UCollision*> collisionsTest;
+	std::vector<UCollision*> collisionList;
 	std::list<FVector> AStarPath;
 
+	FVector Scale = { 70.f,120.f,70.f };
+	class ABzClassManager* Manager;
 };
 

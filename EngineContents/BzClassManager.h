@@ -1,10 +1,11 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 #include <Enginebase/EngineRandom.h>
+#include <EngineCore/ACtor.h>
 #include "PathFindAstar.h"
+#include "BzEnemyCube.h"
 
-
-class ABzClassManager : public AGameMode
+class ABzClassManager : public AActor
 {
 public:
 	ABzClassManager();
@@ -16,13 +17,40 @@ public:
 	virtual void Tick(float _DeltaTime) override;
 
 
-	UPathFindAStar PathFinder;
+	//UPathFindAStar PathFinder;
 	UEngineRandom Random;
+
+	std::vector<class ABzEnemyCube*> Enemies;
+
+	void RegisterEnemy(class ABzEnemyCube* _enemy) {
+		Enemies.push_back(_enemy);
+	}
+
+	void RemoveEnemy(class ABzEnemyCube* _enemy) {
+		Enemies.erase(std::remove(Enemies.begin(), Enemies.end(), _enemy), Enemies.end());
+	}
+
+	class ABzEnemyCube* GetClosestEnemy(const FVector& projectilePos) {
+		class ABzEnemyCube* closest = nullptr;
+		float minDist = FLT_MAX;
+
+		for (class ABzEnemyCube* enemy : Enemies) 
+		{
+			FVector diff = enemy->GetActorLocation() - projectilePos;
+			float dist = diff.Length();
+
+			if (dist < minDist) 
+			{
+				minDist = dist;
+				closest = enemy;
+			}
+		}
+		return closest;
+	}
 
 protected:
 
 private:
-	class ABzTileMap* map = nullptr;
 
 };
 

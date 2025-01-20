@@ -3,7 +3,6 @@
 #include "BzRendererDefault.h"
 #include "PathFindAstar.h"
 #include <EngineCore/DefaultSceneComponent.h>
-
 #include <set>
 
 
@@ -48,10 +47,18 @@ ABzTileMap::ABzTileMap()
 					BottomTile->SetActorRelativeScale3D(FVector(TileSize, TileSize * 1.5f, TileSize)); // 크기 증가
 					TilePos.Y -= TileSize * 0.8f; // 기존 높이에 추가 (덮어쓰기 X)
 					BottomTile->GetRenderer()->GetRenderUnit().SetTexture("bz_teXture0", "test10.png");
+					BottomTile->SetWalkable(false);
+					// 터진다
+					//BottomTile->Collision = CreateDefaultSubObject<UCollision>();
+					//BottomTile->Collision->SetupAttachment(BottomTile->BzTileRenderer);
+					//BottomTile->Collision->SetCollisionProfileName("Wall");
+					//BottomTile->Collision->SetCollisionType(ECollisionType::OBB);
+
 				}
 				else
 				{
 					BottomTile->SetActorRelativeScale3D(FVector(TileSize, TileSize * 0.2f, TileSize)); // 기본 크기
+					BottomTile->SetWalkable(true);
 				}
 
 				BottomTile->SetActorLocation(TilePos);

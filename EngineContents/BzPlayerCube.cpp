@@ -138,7 +138,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	CalculateMoveDirection(_DeltaTime);
-	ApplyRecoilAnimation(MoveDirection, 8.f,_DeltaTime);
+	ApplyRecoilAnimation(MoveDirection, 4.f,_DeltaTime);
 
 	FVector thisPos = GetActorLocation();
 

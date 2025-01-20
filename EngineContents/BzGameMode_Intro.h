@@ -35,14 +35,18 @@ public:
 	//}
 
 	class ABzTileMap* map = nullptr;
+	class ABzClassManager* Manager;
 
 
 protected:
 	FVector GetRandomLocation(float _x);
 	void SpawnEnemy(FVector randomLocation);
+	void UpdateGame();
 
 private:
 	class ABzPlayerCube* PlayerCube;
+	//std::vector<ABzProjectile*> Bullets;
+
 	std::vector < class ABzEnemyCube* > EnemyCubes;
 	class ABzEnemyCube* EnemySingleTest;
 
@@ -60,6 +64,5 @@ private:
 
 	UPathFindAStar PathFinder;
 	UEngineRandom Random;
-
 };
 

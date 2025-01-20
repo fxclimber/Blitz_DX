@@ -6,6 +6,7 @@
 #include "BzProjectile.h"
 #include "BzRendererDefault.h"
 #include "BzTileMap.h"
+#include "BzClassManager.h"
 
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
@@ -47,22 +48,25 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	map = GetWorld()->SpawnActor<ABzTileMap>().get();
 	PathFinder.SetData(map);
 
+	Manager = GetWorld()->SpawnActor<ABzClassManager>().get();
+
     // collision profile name
     GetWorld()->CreateCollisionProfile("Enemy");
     GetWorld()->CreateCollisionProfile("Player");
     GetWorld()->CreateCollisionProfile("Proj");
     GetWorld()->CreateCollisionProfile("Skl_BzRockfall");
+    GetWorld()->CreateCollisionProfile("Wall");
 
 	// 충돌연결 
     GetWorld()->LinkCollisionProfile("Player","Enemy");
     GetWorld()->LinkCollisionProfile("Proj","Enemy");
     GetWorld()->LinkCollisionProfile("Enemy","Enemy");
-    GetWorld()->LinkCollisionProfile("GridBlue.png","Enemy");
+    GetWorld()->LinkCollisionProfile("Wall","Enemy");
 	//----
 	Camera = GetWorld()->GetMainCamera().get();
 	CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
 	Camera->SetActorLocation(CamInitPos);
-	Camera->SetActorRotation({ 35.f,340.f,10.f });
+	Camera->SetActorRotation({ 30.f,330.f,0.f });
 
 	std::shared_ptr<class UEngineCamera> cam = Camera->GetCameraComponent();
 	cam->SetProjectionType(EProjectionType::Perspective);
@@ -82,14 +86,14 @@ void ABzGameMode_Intro::BeginPlay()
 
 	PlayerCube = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 	PlayerCube->SetActorLocation(FVector{ 200.f,0.f,-500.f });
-	PlayerCube->SetActorRotation(FVector{ 0.f,250.f,0.f });
+	PlayerCube->SetActorRotation(FVector{ 0.f,290.f,0.f });
 
-	EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>().get();
-	EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
+	//EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>().get();
+	//EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
 	//-----
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 	TimeEventComponent->AddEvent(
-		0.01f,
+		0.6f,
 		[this](float _Delta, float _Acc)
 		{
 			FVector randomLocation(GetRandomLocation(28.f));
@@ -138,6 +142,10 @@ void ABzGameMode_Intro::SpawnEnemy(FVector randomLocation)
 		Enemy->AddRelativeLocation(randomLocation); 
 		EnemyCubes.push_back(Enemy.get()); // 배열에 추가
 	}
+}
+
+void ABzGameMode_Intro::UpdateGame()
+{
 }
 
 

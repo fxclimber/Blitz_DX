@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include "BzClassManager.h"
 
 class ABzProjectile : public AActor
 {
@@ -8,6 +9,8 @@ public:
 	~ABzProjectile(){}
 	void SetPlayer(class ABzPlayerCube* _name);
 
+	FVector Pos = FVector::ZERO;
+	bool bActive = true;
 
 protected:
 	void BeginPlay() override;
@@ -17,6 +20,8 @@ protected:
 	FVector CalculateMoveAcceleration(float _DeltaTime);
 	//void ForceGravity(const float& dt);
 
+	void Differenciate(ABzClassManager& manager);
+	bool IsColliding(class ABzEnemy* enemy);
 
 private:
 	class ABzPlayerCube* Player = nullptr;
