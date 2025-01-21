@@ -16,7 +16,7 @@
 
 ABzEnemyCube::ABzEnemyCube()
 {
-	EEnemyTypeValue = EEnemyType::BzEnemyCube;
+	//EEnemyTypeValue = EEnemyType::BzEnemyCube;
 
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
 	Manager = GM->Manager;

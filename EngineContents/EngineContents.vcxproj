@@ -160,6 +160,7 @@
     <ClInclude Include="BzCore.h" />
     <ClInclude Include="BzHomingProjectile.h" />
     <ClInclude Include="BzHUD.h" />
+    <ClInclude Include="BzMissile.h" />
     <ClInclude Include="BzPlayerCube.h" />
     <ClInclude Include="BzProjectile.h" />
     <ClInclude Include="BzRendererDefault.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="BzCore.cpp" />
     <ClCompile Include="BzHomingProjectile.cpp" />
     <ClCompile Include="BzHUD.cpp" />
+    <ClCompile Include="BzMissile.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />
     <ClCompile Include="BzProjectile.cpp" />
     <ClCompile Include="BzRendererDefault.cpp" />

@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "BzHomingProjectile.h"
+
 #include <EngineCore/Collision.h>
 #include "BzPlayerCube.h"
 #include <EnginePlatform/EngineInput.h>
@@ -8,8 +9,15 @@
 #include "BzRendererDefault.h"
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineBase/EngineMath.h>
-#include "BzEnemyCube.h"
+#include <algorithm>
 
+#include "BzEnemyCube.h"
+#include "BzPlayerCube.h"
+#include "BzGameMode_Intro.h"
+#include "BzClassManager.h"
+
+#include <DirectXMath.h>
+using namespace DirectX;
 
 ABzHomingProjectile::ABzHomingProjectile()
 {
@@ -33,11 +41,16 @@ ABzHomingProjectile::ABzHomingProjectile()
 			//UEngineDebug::OutPutString("Enter");
 		});
 
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	Manager = GM->Manager;
+
 }
 
 void ABzHomingProjectile::BeginPlay()
 {
 	AActor::BeginPlay();
+	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
+	TargetEnemy = SetTargetEnemy();
 
 
 }
@@ -47,27 +60,24 @@ void ABzHomingProjectile::BeginPlay()
 void ABzHomingProjectile::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+	//UpdatePositionAndOrientation(_DeltaTime);
 
-	CalculateMoveAcceleration(_DeltaTime);
-	ForwardDir += Gravity *_DeltaTime;
-	AddActorLocation(ForwardDir * _DeltaTime * Speed);
-	std::string fireRotString =
-		"FireRot: (X: " + std::to_string(ForwardDir.X) +
-		", Y: " + std::to_string(ForwardDir.Y) +
-		", Z: " + std::to_string(ForwardDir.Z) + ")";
-	//UEngineDebug::OutPutString(fireRotString);
+	//CalculateMoveAcceleration(_DeltaTime);
+	//ForwardDir += Gravity *_DeltaTime;
+	//AddActorLocation(ForwardDir * _DeltaTime * Speed);
 
-	auto Enemy = GetWorld()->GetAllActorListByClass<ABzEnemyCube>();
-	
-	for (auto& enemy : Enemy) {
-		if (enemy) {
-			UpdatePositionAndOrientation(_DeltaTime); // 원하는 함수 호출
-		}
+	{
+		std::string fireRotString =
+			"FireRot: (X: " + std::to_string(ForwardDir.X) +
+			", Y: " + std::to_string(ForwardDir.Y) +
+			", Z: " + std::to_string(ForwardDir.Z) + ")";
+		//UEngineDebug::OutPutString(fireRotString);
 	}
+
 
 }
 
-
+// 사용안하는중
 FVector ABzHomingProjectile::CalculateMoveAcceleration(float _DeltaTime)
 {
 	FVector pos = GetActorLocation();
@@ -115,9 +125,6 @@ FVector ABzHomingProjectile::CalculateMoveAcceleration(float _DeltaTime)
 		SetActorRotation(newRotation);
 	}
 
-
-
-
 	return ForwardDir;
 }
 
@@ -129,57 +136,55 @@ void ABzHomingProjectile::SetPlayer(class ABzPlayerCube* _name)
 
 void ABzHomingProjectile::UpdatePositionAndOrientation(float _DeltaTime)
 {
-	float fDeltaTime = _DeltaTime;
+	float turnRate = 120.0f;
+	float speed = 100.f;
+	FVector targetPos = TargetEnemy->GetActorLocation();
+	FVector projPos = GetActorLocation();
+		
+		// 목표까지의 방향 벡터 계산
+		FVector toTarget = (targetPos - projPos).NormalizeReturn();//타겟벡터
+		FVector direction = GetActorForwardVector().NormalizeReturn();//전방벡터
+		float dotProduct = UEngineMath::Clamp(FVector::Dot(direction, toTarget),-1.0f,1.0f);
+		// 회전 각도 계산
+		float angleToTarget = acosf(dotProduct);
+		float turnAngle = UEngineMath::ClampMax((turnRate * _DeltaTime), angleToTarget);
 
-	//m_fLastUpdateTime = fTime;
-	//if (fDeltaTime > 1.0f)
-	//{
-	//	return;
-	//}
+		// 회전 축 계산 (현재 방향과 목표 방향의 외적)
+		FVector rotationAxis = (FVector::Cross(direction, toTarget)).NormalizeReturn();
 
-	FVector pos, targetdir, targetPos;
-	//NiPoint3 kTrans, kTargetVector, kTargetTrans;
-	pos = GetActorLocation();
+		// 이동방향으로 회전시키는 공식인데, dx함수와 현재엔진함수 못섞겠어...
+		//XMVECTOR rotationQuat = XMQuaternionRotationAxis(XMLoadFloat3(&rotationAxis), turnAngle);
+		//direction = rotationQuat.RotateVector(direction);//?
+		//direction.Normalize();
 
-	//kTrans = m_pkMissileNode->GetTranslate();
+		projPos = direction * speed * _DeltaTime;
+		//SetActorLocation(projPos);
+		//AddActorRotation(rotationAxis* turnAngle);
 
-	FVector rot;
-	//NiMatrix3 kTargetRot;
-	FVector currentRot = GetActorTransform().Rotation;
-
-	//NiMatrix3 kRotation = m_pkMissileNode->GetRotate();
-	//NiPoint3 kHeading;
-
-	FVector forDir = GetActorForwardVector();
-	forDir.Normalize();
-
-	//kHeading = kRotation * NiPoint3(0.f, -1.f, 0.f);
-	//kHeading.Unitize();
-
-	//if (nullptr != Enemy1)
-	{
-		//targetPos = Enemy->
-	}
+		FVector Attackdir = toTarget;
+		//AddActorLocation(projPos * _DeltaTime * speed);
 
 
-	//if (m_pkTargetObject)
-	//{
-	//	kTargetTrans = m_pkTargetObject->GetWorldTranslate();
-	//	kTargetVector = kTargetTrans - kTrans;
 
-	//	if (kTargetVector.Dot(kHeading) > 0.f)
-	//	{
-	//		float fTheta = 0.2f * fDeltaTime;
-	//		NiPoint3 kAxis = kTargetVector.Cross(kHeading);
-	//		kAxis.Unitize();
-	//		NiMatrix3 kChangeRot;
-	//		kChangeRot.MakeRotation(fTheta, kAxis);
-	//		kRotation = kChangeRot * kRotation;
-	//		m_pkMissileNode->SetRotate(kRotation);
-	//		kHeading = kRotation * NiPoint3(0.f, -1.f, 0.f);
-	//		kHeading.Unitize();
-	//	}
-	//}
-	//kHeading = MISSILE_SPEED * fDeltaTime * kHeading;
-	//m_pkMissileNode->SetTranslate(kHeading + kTrans);
 }
+
+ABzEnemyCube* ABzHomingProjectile::SetTargetEnemy()
+{
+	// 매니저를 만들었는데 엔진에 기능있었네 
+	//auto Enemy = GetWorld()->GetAllActorListByClass<ABzEnemyCube>();
+
+	auto& enemyList = Manager->Enemies;
+
+	if (enemyList.empty()) return nullptr; // 적이 없으면 nullptr 반환
+
+	static size_t currentIndex = 0; // 현재 선택된 적의 인덱스
+
+	// 현재 인덱스의 적 선택
+	ABzEnemyCube* selectedEnemy = enemyList[currentIndex];
+
+	// 다음 선택을 위해 인덱스 증가 (순환 구조)
+	currentIndex = (currentIndex + 1) % enemyList.size();
+
+	return selectedEnemy;
+}
+

@@ -13,9 +13,12 @@
 #include "BzProjectile.h"
 #include "Skl_BzRockfall.h"
 #include "BzHomingProjectile.h"
+#include "BzMissile.h"
 
 #include "BzGameMode_Intro.h"
 #include "BzTileMap.h"
+
+
 
 ABzPlayerCube::ABzPlayerCube()
 {
@@ -185,7 +188,6 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 
 
-
 }
 
 FVector ABzPlayerCube::CalculateMoveDirection(float _DeltaTime)
@@ -264,16 +266,23 @@ void ABzPlayerCube::Skl_Rockfall()
 
 void ABzPlayerCube::Skl_HomingProj()
 {
-	FVector OriginalLocation = RendererFront->GetRelativeLocation();
-	FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
+	//FVector OriginalLocation = RendererFront->GetRelativeLocation();
+	//FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
 
-	FVector pos = RendererFront->GetTransformRef().Location;
-	FVector rot = RendererFront->GetTransformRef().Rotation;
-	FVector MoveDir = GetActorForwardVector();
+	//FVector pos = RendererFront->GetTransformRef().Location;
+	//FVector rot = RendererFront->GetTransformRef().Rotation;
+	//FVector MoveDir = GetActorForwardVector();
 
-	std::shared_ptr<ABzHomingProjectile> Proj = GetWorld()->SpawnActor<ABzHomingProjectile>();
-	Proj->SetActorLocation(pos);
-	Proj->SetActorRotation(rot);
+	//std::shared_ptr<ABzHomingProjectile> Proj = GetWorld()->SpawnActor<ABzHomingProjectile>();
+	//Proj->SetActorLocation(pos);
+	//Proj->SetActorRotation(rot);
+
+
+
+	std::shared_ptr<ABzMissile> Proj = GetWorld()->SpawnActor<ABzMissile>();
+	Proj->SetPlayer(this);
+	Proj->SetActorLocation(GetActorLocation());
+
 }
 
 void ABzPlayerCube::ApplyTilemap()

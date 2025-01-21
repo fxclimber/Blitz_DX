@@ -1,21 +1,33 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include "BzClassManager.h"
 
-class ABzHomingProjectile : public AActor
+class ABzMissile : public AActor
 {
 public:
-	ABzHomingProjectile();
-	~ABzHomingProjectile(){}
+	ABzMissile();
+	~ABzMissile(){}
 	void SetPlayer(class ABzPlayerCube* _name);
 
+	FVector Pos = FVector::ZERO;
+	bool bActive = true;
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-
+	//FVector CalculateMoveDirection(float _DeltaTime);
+	//FVector CalculateMoveVelocity(float _DeltaTime);
 	FVector CalculateMoveAcceleration(float _DeltaTime);
+	//void ForceGravity(const float& dt);
+
 	void UpdatePositionAndOrientation(float _DeltaTime);
-	class ABzEnemyCube* SetTargetEnemy();
+	ABzEnemyCube* SetTargetEnemy();
+
+
+
+
+	void Differenciate(ABzClassManager& manager);
+	bool IsColliding(class ABzEnemy* enemy);
 
 private:
 	class ABzPlayerCube* Player = nullptr;

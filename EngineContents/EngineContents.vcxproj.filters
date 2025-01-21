@@ -125,6 +125,9 @@
     <ClInclude Include="BzClassManager.h">
       <Filter>Blitz\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="BzMissile.h">
+      <Filter>Blitz\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="BzClassManager.cpp">
       <Filter>Blitz\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="BzMissile.cpp">
+      <Filter>Blitz\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

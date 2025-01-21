@@ -88,12 +88,12 @@ void ABzGameMode_Intro::BeginPlay()
 	PlayerCube->SetActorLocation(FVector{ 200.f,0.f,-500.f });
 	PlayerCube->SetActorRotation(FVector{ 0.f,290.f,0.f });
 
-	//EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>().get();
-	//EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
+	EnemySingleTest = GetWorld()->SpawnActor<ABzEnemyCube>().get();
+	EnemySingleTest->SetActorLocation({300.f,0.f,600.f});
 	//-----
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 	TimeEventComponent->AddEvent(
-		0.6f,
+		1.0f,
 		[this](float _Delta, float _Acc)
 		{
 			FVector randomLocation(GetRandomLocation(28.f));
