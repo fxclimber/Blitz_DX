@@ -47,7 +47,7 @@ public:
 		ChangeState(static_cast<int>(_Key));
 	}
 
-	void ChageState(int _Key)
+	void ChangeState(int _Key)
 	{
 		if (false == States.contains(_Key))
 		{

@@ -147,10 +147,16 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	FireRot = RendererFront->GetTransformRef().Rotation;
 
-	if (UEngineInput::IsDown('Q'))
+	if (UEngineInput::IsDown('R'))
 	{
-		Skl_Rockfall();
+		Skl_Rockfall();//다시해야함 
 	}
+
+	if (UEngineInput::IsDown('H'))
+	{
+		Skl_HomingProj();
+	}
+
 	if (UEngineInput::IsPress('E'))
 	{
 		AddActorRotation(FVector{0.f,1.f,0.f});
@@ -167,10 +173,6 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 		Camera->GetCameraComponent()->SetFOV(30.f);
 	}
 
-	if (UEngineInput::IsDown('H'))
-	{
-		Skl_HomingProj();
-	}
 
 
 	//------------지형높이따라 y값조절 테스트 
