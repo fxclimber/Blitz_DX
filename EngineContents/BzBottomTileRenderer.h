@@ -37,7 +37,7 @@ public:
 	ENGINEAPI UBzBottomTileRenderer();
 	ENGINEAPI ~UBzBottomTileRenderer();
 
-	ENGINEAPI void SetTileSetting( std::string_view _Name, FVector _TileSize);
+	ENGINEAPI void SetTileSetting( std::string_view _Name, FVector _TileScale);
 	ENGINEAPI void SetTile(FVector _Pos, int _Index);
 	ENGINEAPI void RemoveTile(FVector _Pos);
 	// 없으면 만들어요.
@@ -64,7 +64,7 @@ private:
 	bool IsAutoScale = true;
 	float AutoScaleRatio = 1.0f;
 
-	FVector TileSize;
+	FVector TileScale;
 	FVector TilePivot;
 
 	std::unordered_map<__int64, BzFTileData> Tiles;

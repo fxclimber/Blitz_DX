@@ -44,7 +44,7 @@ ABzPlayerCube::ABzPlayerCube()
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Player");
 	Collision->SetCollisionType(ECollisionType::OBB);
-
+	
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 	{
 		//_Other->GetActor()->Destroy();
@@ -139,6 +139,9 @@ void ABzPlayerCube::BeginPlay()
 void ABzPlayerCube::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	UEngineCamera* CameraP = Camera->GetCameraComponent().get();
+
 
 	CalculateMoveDirection(_DeltaTime);
 	ApplyRecoilAnimation(MoveDirection, 4.f,_DeltaTime);

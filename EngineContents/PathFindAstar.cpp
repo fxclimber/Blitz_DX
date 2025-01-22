@@ -149,10 +149,10 @@ bool UPathFindAStar::FindCloseNode(FVector _Point)
 UPathFindNode* UPathFindAStar::GetNewNode(FVector _Point, UPathFindNode* _ParentNode)
 {
 
-	//if (PoolCount >= NodePool.size())
-	//{
-	//	return nullptr;
-	//}
+	if (PoolCount >= NodePool.size())
+	{
+		return nullptr;
+	}
 	UPathFindNode* NewNode = &NodePool[PoolCount]; // 미리 할당된 노드 풀에서 가져옴
 	NewNode->ParentNode = nullptr;
 	NewNode->pos = _Point;

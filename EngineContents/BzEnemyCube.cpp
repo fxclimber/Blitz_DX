@@ -79,9 +79,9 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	radius = GetActorTransform().Scale.X;
 
 	AvoidWall(_DeltaTime);// very strange !!!! 
-	CheckAttackDistance(_DeltaTime , 500.f);
+	//CheckAttackDistance(_DeltaTime , 500.f);
 	ApplyTilemap();
-	//MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
+	MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
 }
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)
@@ -238,7 +238,7 @@ void ABzEnemyCube::AvoidWall(float _DeltaTime)
 		FVector tilePos = Tile->GetActorLocation();
 		float distance = (tilePos - pos).Length();
 
-		if (true == Tile->GetWalkable() &&  distance < radius)
+		if (true == Tile->IsWalkable() &&  distance < radius)
 		{
 			FVector avoidDir = (pos - tilePos).NormalizeReturn();
 			SetActorRotation(FVector{0.f,60.f,0.f});

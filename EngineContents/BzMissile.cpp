@@ -32,6 +32,7 @@ ABzMissile::ABzMissile()
 	Collision->SetCollisionProfileName("Proj");
 	Collision->SetCollisionType(ECollisionType::OBB);
 
+
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
 			_Other->GetActor()->Destroy();

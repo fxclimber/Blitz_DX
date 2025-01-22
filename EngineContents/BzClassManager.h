@@ -27,7 +27,7 @@ public:
 	}
 
 	void RemoveEnemy(class ABzEnemyCube* _enemy) {
-		Enemies.erase(std::remove(Enemies.begin(), Enemies.end(), _enemy), Enemies.end());
+		//Enemies.erase(std::remove(Enemies.begin(), Enemies.end(), _enemy), Enemies.end());
 	}
 
 	class ABzEnemyCube* GetClosestEnemy(const FVector& projectilePos) {

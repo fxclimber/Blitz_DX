@@ -45,7 +45,7 @@ public:
 	void SetPos(const FVector& _newPos) { TilePos = _newPos; }
 	bool IsWalkable() const { return bIsWalkable;  }
 	void SetWalkable(bool _bWalkable) { bIsWalkable = _bWalkable; }
-	bool GetWalkable() { return bIsWalkable; }
+	//bool GetWalkable() { return bIsWalkable; }
 
 	std::shared_ptr<class UCollision> Collision;
 	std::shared_ptr<class UBzRendererDefault> BzTileRenderer;
@@ -55,7 +55,7 @@ protected:
 private:
 	FVector TilePos;
 	bool bIsWalkable;
-
+	int Index;
 };
 
 
@@ -69,11 +69,14 @@ public:
 	bool IsMove(const FVector& _Point) override;
 	UPathFindNode* GetNode(const FVector& _Point);
 
-	const int GridSize = 30;
-	const float TileSize = 200.f;
+	const int GridCount = 30;
+	const float TileScale = 200.f;
 	const float MaxHeight = 1500.f; // 외곽에서 최대 높이
 
+	FVector MapOffset = FVector::ZERO;
+
 	std::vector<ABzTile*> BottomTiles;
+	//std::vector<std::vector<ABzTile*>> Tiles;
 
 
 protected:

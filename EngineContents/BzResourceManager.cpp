@@ -32,6 +32,8 @@ void UBzCore::ResourceSetting()
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("BzDefault");
 		Mat->SetVertexShader("BlitzShaderDefault.hlsl");
 		Mat->SetPixelShader("BlitzShaderDefault.hlsl");
+		//Mat->SetVertexShader("BzOutline.hlsl");
+		//Mat->SetPixelShader("BzOutline.hlsl");
 	}
 	{
 		// uv Material 

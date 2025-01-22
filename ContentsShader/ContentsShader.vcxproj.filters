@@ -6,5 +6,6 @@
     <FxCompile Include="BzShaderUV.hlsl" />
     <FxCompile Include="CubeTestShaderUV.hlsl" />
     <FxCompile Include="TestShader2.fx" />
+    <FxCompile Include="BzOutline.hlsl" />
   </ItemGroup>
 </Project>

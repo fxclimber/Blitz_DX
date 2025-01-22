@@ -22,11 +22,11 @@ UBzBottomTileRenderer::~UBzBottomTileRenderer()
 {
 }
 
-void UBzBottomTileRenderer::SetTileSetting(std::string_view _Name, FVector _TileSize)
+void UBzBottomTileRenderer::SetTileSetting(std::string_view _Name, FVector _TileScale)
 {
 	GetRenderUnit().ConstantBufferLinkData("FBzColor", TestColor);
 
-	TileSize = _TileSize;
+	TileScale = _TileScale;
 }
 
 void UBzBottomTileRenderer::BeginPlay()
@@ -39,7 +39,7 @@ BzFTileIndex UBzBottomTileRenderer::WorldPosToTileIndex(FVector _Pos)
 {
 	BzFTileIndex Result = BzFTileIndex();
 
-		FVector ConvertVector = _Pos /= TileSize;
+		FVector ConvertVector = _Pos /= TileScale;
 		//Result.X = ConvertVector.iX();
 		//Result.Y = ConvertVector.iY();
 		//Result.Z = ConvertVector.iZ();
@@ -53,9 +53,9 @@ BzFTileIndex UBzBottomTileRenderer::WorldPosToTileIndex(FVector _Pos)
 FVector UBzBottomTileRenderer::TileIndexToWorldPos(BzFTileIndex _Index)
 {
 	FVector Result;
-		Result.X = _Index.X * TileSize.X;
-		Result.Y = _Index.Y * TileSize.Y;
-		Result.Z = _Index.Z * TileSize.Z;
+		Result.X = _Index.X * TileScale.X;
+		Result.Y = _Index.Y * TileScale.Y;
+		Result.Z = _Index.Z * TileScale.Z;
 
 	return Result;
 }
@@ -175,7 +175,7 @@ void UBzBottomTileRenderer::SetPivot(PivotType _pivot)
 
 void UBzBottomTileRenderer::Serialize(UEngineSerializer& _Ser)
 {
-	_Ser << TileSize;
+	_Ser << TileScale;
 	_Ser << TilePivot;
 
 	_Ser << static_cast<int>(Tiles.size());
@@ -190,7 +190,7 @@ void UBzBottomTileRenderer::DeSerialize(UEngineSerializer& _Ser)
 	Tiles.clear();
 
 	//_Ser.Read(&TileMapType, sizeof(int));
-	_Ser >> TileSize;
+	_Ser >> TileScale;
 	_Ser >> TilePivot;
 
 
