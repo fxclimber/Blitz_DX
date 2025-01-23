@@ -31,6 +31,8 @@ private:
 	std::shared_ptr<class UCollision> Collision;
 	class ABzPlayerCube* Player = nullptr;
 
+	float DistFromPlayer = 0.f;
+
 	float rotationAngle = 0.f;
 	float jumpHeight = 0.f;
 	FVector gravity = { 0.f,-2.f,0.f };
@@ -44,6 +46,7 @@ private:
 
 	UEngineRandom random;
 	float randomResult = 0;
+	class UTimeEventComponent* TimeEventComponent;
 
 	std::vector<UCollision*> collisionList;
 	std::list<FVector> AStarPath;

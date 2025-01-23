@@ -16,8 +16,6 @@
 
 ABzEnemyCube::ABzEnemyCube()
 {
-	//EEnemyTypeValue = EEnemyType::BzEnemyCube;
-
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
 	Manager = GM->Manager;
 	Manager->RegisterEnemy(this);
@@ -37,7 +35,7 @@ ABzEnemyCube::ABzEnemyCube()
 	collisionList.push_back(Collision.get());
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Enemy");
-	Collision->SetCollisionType(ECollisionType::AABB);
+	Collision->SetCollisionType(ECollisionType::OBB);
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
 			//FVector otherLocation = _Other->GetActor()->GetActorLocation();
@@ -57,7 +55,7 @@ ABzEnemyCube::ABzEnemyCube()
 
 ABzEnemyCube::~ABzEnemyCube()
 {
-	Manager->RemoveEnemy(this);
+	//Manager->RemoveEnemy(this);
 
 }
 
@@ -69,6 +67,23 @@ void ABzEnemyCube::BeginPlay()
 	randomResult = GetRandom(2.f);
 
 	pos = GetActorLocation();
+
+
+// 플레이어와 거리
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>().get();
+	TimeEventComponent->AddEvent(
+		15.f,
+		[this](float _Delta, float _Acc)
+		{
+			AttackPlayerPos = Player->GetActorLocation();
+			DistFromPlayer = (AttackPlayerPos - pos).Length();
+		},
+		[this]()
+		{
+
+		},
+		true // 반복 여부
+		);
 
 
 }

@@ -43,7 +43,7 @@ ABzPlayerCube::ABzPlayerCube()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Player");
-	Collision->SetCollisionType(ECollisionType::AABB);
+	Collision->SetCollisionType(ECollisionType::OBB);
 	
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 	{

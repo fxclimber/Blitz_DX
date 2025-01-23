@@ -16,9 +16,10 @@ protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	//FVector CalculateMoveDirection(float _DeltaTime);
-	FVector CalculateMoveVelocity(float _DeltaTime);
+	//FVector CalculateMoveVelocity(float _DeltaTime);
 	FVector CalculateMoveAcceleration(float _DeltaTime);
-	//void ForceGravity(const float& dt);
+
+	void KillEnemy();
 
 	void Differenciate(ABzClassManager& manager);
 	bool IsColliding(class ABzEnemy* enemy);
@@ -27,7 +28,9 @@ private:
 	class ABzPlayerCube* Player = nullptr;
 
 	std::shared_ptr<class UBzRendererDefault> Renderer;
-	std::shared_ptr<class UCollision> Collision;
+	//std::shared_ptr<class UCollision> Collision;
+
+	class UCollision* Collision;
 
 	float Speed = 1000.f;
 	FVector ForwardDir = {0.f,0.f,0.f};

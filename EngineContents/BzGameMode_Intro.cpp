@@ -94,7 +94,7 @@ void ABzGameMode_Intro::BeginPlay()
 	//-----길찾기 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>().get();
 	TimeEventComponent->AddEvent(
-		1.f,
+		20.f,
 		[this](float _Delta, float _Acc)
 		{
 			//PathFind();
@@ -103,7 +103,7 @@ void ABzGameMode_Intro::BeginPlay()
 				FVector randomLocation(GetRandomLocation(28.f));
 				ABzEnemyCube* enemy = GetWorld()->SpawnActor<ABzEnemyCube>().get();
 				enemy->SetActorLocation(randomLocation);
-				EnemyCubes.push_back(enemy);
+				EnemyCubesList.push_back(enemy);
 			}
 			Count++;// 배열에 추가
 
@@ -140,6 +140,8 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 	UEngineDebug::OutPutString("fps: " + std::to_string(fps));
 
 	Camera->SetActorLocation(FVector(CamInitPos.X + PlayerCube->GetActorLocation().X, CamInitPos.Y, CamInitPos.Z + PlayerCube->GetActorLocation().Z));
+	// 몬스터갯수 확인 
+	//UEngineDebug::OutPutString("EnemyCubesList: " + std::to_string(EnemyCubesList.size()));
 
 
 }
@@ -159,7 +161,7 @@ void ABzGameMode_Intro::SpawnEnemy(FVector randomLocation, int _num)
 	{
 		ABzEnemyCube* enemy = GetWorld()->SpawnActor<ABzEnemyCube>().get();
 		enemy->SetActorLocation(randomLocation);
-		EnemyCubes.push_back(enemy); // 배열에 추가
+		EnemyCubesList.push_back(enemy); // 배열에 추가
 	}
 }
 
@@ -207,7 +209,7 @@ void ABzGameMode_Intro::LevelChangeStart()
 
 void ABzGameMode_Intro::PathFind()
 {
-	if (EnemyCubes.empty()) return;
+	if (EnemyCubesList.empty()) return;
 
 	std::vector<FVector> EnemyTiles;
 	float TileScale = map->TileScale;
@@ -216,7 +218,7 @@ void ABzGameMode_Intro::PathFind()
 	UPathFindNode* PlayerNode = map->GetNode(PlayerTilePos);// 타일노드리턴 
 	FVector PlayerNodePos = PlayerNode->pos;
 
-	for (ABzEnemyCube* Enemy : EnemyCubes)
+	for (ABzEnemyCube* Enemy : EnemyCubesList)
 	{
 		FVector EnemyTilePos = FVector(round(Enemy->GetActorLocation().X / TileScale) * TileScale, 0.f, round(Enemy->GetActorLocation().Z / TileScale) * TileScale);
 		UPathFindNode* EnemyNode = map->GetNode(EnemyTilePos);

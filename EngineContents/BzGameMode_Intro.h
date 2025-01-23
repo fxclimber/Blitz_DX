@@ -23,6 +23,11 @@ public:
 
 	void PathFind();
 
+	std::vector<class ABzEnemyCube*> GetEnemyCubesList()
+	{
+		return EnemyCubesList;
+	}
+
 
 	class ABzTileMap* map = nullptr;
 	class ABzClassManager* Manager;
@@ -37,10 +42,11 @@ private:
 	int MaxCount = 50;
 	class ABzPlayerCube* PlayerCube;
 	class ABzBottom* Bottom;
-	std::vector<class ABzEnemyCube*> EnemyCubes;
+	std::vector<class ABzEnemyCube*> EnemyCubesList;
 
 	class UTimeEventComponent* TimeEventComponent;
 	UEngineRandom random;
+
 
 	class ACameraActor* Camera;
 	FVector CamInitPos;

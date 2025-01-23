@@ -30,7 +30,7 @@ ABzMissile::ABzMissile()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetCollisionType(ECollisionType::AABB);
+	Collision->SetCollisionType(ECollisionType::OBB);
 
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
@@ -84,7 +84,6 @@ void ABzMissile::Tick(float _DeltaTime)
 	//------------
 	TargetEnemy = SetTargetEnemy();
 	UpdatePositionAndOrientation(_DeltaTime);
-
 
 
 }
@@ -173,29 +172,26 @@ void ABzMissile::UpdatePositionAndOrientation(float _DeltaTime)
 {
 	float turnRate = 120.0f;
 	float speed = 400.f;
-	FVector targetPos = TargetEnemy->GetActorLocation();
-	FVector projPos = GetActorLocation();
+	if (nullptr != TargetEnemy)
+	{
+		FVector targetPos = TargetEnemy->GetActorLocation();
+		FVector projPos = GetActorLocation();
+		// 목표까지의 방향 벡터 계산
+		FVector toTarget = (targetPos - projPos).NormalizeReturn();//타겟벡터
+		FVector direction = GetActorForwardVector().NormalizeReturn();//전방벡터
+		float dotProduct = UEngineMath::Clamp(FVector::Dot(direction, toTarget), -1.0f, 1.0f);
+		// 회전 각도 계산
+		float angleToTarget = acosf(dotProduct);
+		float turnAngle = UEngineMath::ClampMax((turnRate * _DeltaTime), angleToTarget);
+		// 회전 축 계산 (현재 방향과 목표 방향의 외적)
+		FVector rotationAxis = (FVector::Cross(direction, toTarget)).NormalizeReturn();
 
-	// 목표까지의 방향 벡터 계산
-	FVector toTarget = (targetPos - projPos).NormalizeReturn();//타겟벡터
-	FVector direction = GetActorForwardVector().NormalizeReturn();//전방벡터
-	float dotProduct = UEngineMath::Clamp(FVector::Dot(direction, toTarget), -1.0f, 1.0f);
-	// 회전 각도 계산
-	float angleToTarget = acosf(dotProduct);
-	float turnAngle = UEngineMath::ClampMax((turnRate * _DeltaTime), angleToTarget);
-	// 회전 축 계산 (현재 방향과 목표 방향의 외적)
-	FVector rotationAxis = (FVector::Cross(direction, toTarget)).NormalizeReturn();
+		projPos = direction * speed * _DeltaTime;
+		AddActorLocation(projPos);
+		AddActorRotation(rotationAxis* turnAngle);
+	}
 
-	// 이동방향으로 회전시키는 공식인데, dx함수와 현재엔진함수 못섞겠어...
-	//XMVECTOR rotationQuat = XMQuaternionRotationAxis(XMLoadFloat3(&rotationAxis), turnAngle);
-	//direction = rotationQuat.RotateVector(direction);//?
-	//direction.Normalize();
 
-	projPos = direction * speed * _DeltaTime;
-	AddActorLocation(projPos);
-	AddActorRotation(rotationAxis* turnAngle);
-
-	//AddActorLocation(toTarget * _DeltaTime * speed * 0.5f);
 
 }
 

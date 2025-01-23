@@ -20,19 +20,17 @@ ABzProjectile::ABzProjectile()
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
 	Renderer->SetScale3D({ 10.f,10.f,55.f });
-	//Renderer->SetScale3D({ 35.f,35.f,85.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "bulletTest.jpg");
 
 	//----collision
-	Collision = CreateDefaultSubObject<UCollision>();
+	Collision = CreateDefaultSubObject<UCollision>().get();
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetCollisionType(ECollisionType::AABB);
+	Collision->SetCollisionType(ECollisionType::OBB);
 
-	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 		{
-			_Other->GetActor()->Destroy();
-			//UEngineDebug::OutPutString("Enter");
+			KillEnemy();
 		});
 
 }
@@ -131,6 +129,16 @@ FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
 	}
 	
 	return ForwardDir;
+}
+
+void ABzProjectile::KillEnemy()
+{
+	std::vector<UCollision*> col;
+	if (true == Collision->CollisionCheck("Enemy", col))
+	{
+		col[0]->GetActor()->Destroy();
+		Destroy();
+	}
 }
 
 void ABzProjectile::Differenciate(ABzClassManager& manager)
