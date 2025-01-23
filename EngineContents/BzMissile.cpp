@@ -197,30 +197,12 @@ void ABzMissile::UpdatePositionAndOrientation(float _DeltaTime)
 
 ABzEnemyCube* ABzMissile::SetTargetEnemy()
 {
-	// 매니저를 만들었는데 엔진에 기능있었네 
-	//auto enemyList = GetWorld()->GetAllActorListByClass<ABzEnemyCube>();
+	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
+	std::vector<class ABzEnemyCube*> list = GM->GetEnemyCubesList();
 
-	if (!this) return nullptr; // this가 nullptr이면 함수 종료
-	if (!Manager) return nullptr; // Manager가 nullptr이면 함수 종료
-
-	auto& enemyList = Manager->Enemies;
-	if (enemyList.empty()) return nullptr; // 적이 없으면 nullptr 반환
-
-	static size_t currentIndex = 0; // 현재 선택된 적의 인덱스
-
-	// 현재 인덱스가 유효한지 확인
-	if (currentIndex >= enemyList.size()) {
-		currentIndex = 0; // 범위를 벗어나면 처음부터 다시 시작
+	size_t size = list.size();
+	if (0 != size)
+	{
+		return list[0];
 	}
-
-	// NULL이 아닌 유효한 적을 찾을 때까지 반복
-	size_t startIndex = currentIndex; // 시작 위치 저장
-	ABzEnemyCube* selectedEnemy = nullptr;
-
-	do {
-		selectedEnemy = enemyList[currentIndex];
-		currentIndex = (currentIndex + 1) % enemyList.size(); // 다음 인덱스로 이동
-	} while (!selectedEnemy && currentIndex != startIndex);
-
-	return selectedEnemy; // 유효한 적 반환 (없으면 nullptr)
 }
