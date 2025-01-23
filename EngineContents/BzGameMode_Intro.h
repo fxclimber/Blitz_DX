@@ -19,21 +19,10 @@ public:
 	}
 	void ZoomCameraByMoving(class ACameraActor* CameraActor, AActor* TargetActor, float ZoomAmount);
 
-	// (imgui에디터에서 선택) 레벨이동한다	
 	void LevelChangeStart() override;
-
-	//const std::vector<class ABzBottom*>& GetBottomTiles() const
-	//{
-	//	return BottomTiles;
-	//}
 
 	void PathFind();
 
-
-	//ABzTileMap* GetMap()
-	//{
-	//	return map;
-	//}
 
 	class ABzTileMap* map = nullptr;
 	class ABzClassManager* Manager;
@@ -41,28 +30,20 @@ public:
 
 protected:
 	FVector GetRandomLocation(float _x);
-	void SpawnEnemy(FVector randomLocation);
-	void UpdateGame();
+	void SpawnEnemy(FVector randomLocation, int _num);
 
 private:
+	int Count = 0;
+	int MaxCount = 50;
 	class ABzPlayerCube* PlayerCube;
-	//std::vector<ABzProjectile*> Bullets;
-
-	std::vector<class ABzEnemyCube*> EnemyCubes;
-	class ABzEnemyCube* EnemySingleTest;
-
 	class ABzBottom* Bottom;
-	//std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
+	std::vector<class ABzEnemyCube*> EnemyCubes;
+
 	class UTimeEventComponent* TimeEventComponent;
 	UEngineRandom random;
 
 	class ACameraActor* Camera;
 	FVector CamInitPos;
-
-
-	//std::vector<ABzBottom*> BottomTiles;
-	//float TileHeight = 0.f;
-	//std::vector<float> TileHeights;
 
 	UPathFindAStar PathFinder;
 	UEngineRandom Random;

@@ -61,6 +61,7 @@ public:
 	ABzTileMap();
 	~ABzTileMap();
 	bool IsMove(const FVector& _Point) override;
+	// fvector 를 타일 인덱스로 변경해주는 함수 
 	UPathFindNode* GetNode(const FVector& _Point);
 
 	//const int GridCount = 1;

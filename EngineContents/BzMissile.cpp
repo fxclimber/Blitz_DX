@@ -30,7 +30,7 @@ ABzMissile::ABzMissile()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Proj");
-	Collision->SetCollisionType(ECollisionType::OBB);
+	Collision->SetCollisionType(ECollisionType::AABB);
 
 
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)

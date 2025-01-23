@@ -50,5 +50,6 @@ private:
 
 	FVector Scale = { 70.f,120.f,70.f };
 	class ABzClassManager* Manager;
+
 };
 

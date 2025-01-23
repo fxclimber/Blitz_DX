@@ -117,11 +117,11 @@ bool ABzTileMap::IsMove(const FVector& _Point)
 	return true;
 }
 
-UPathFindNode* ABzTileMap::GetNode(const FVector& _Point)
+UPathFindNode* ABzTileMap::GetNode(const FVector& _pos)
 {
 	float TileScale = ABzTileMap::TileScale;
-	FVector TileCoord = FVector(round(_Point.X / TileScale) * TileScale, 0.f, round(_Point.Z / TileScale) * TileScale);
-	auto it = TileNodes.find(TileCoord);
+	FVector TilePos= FVector(round(_pos.X / TileScale) * TileScale, 0.f, round(_pos.Z / TileScale) * TileScale);
+	auto it = TileNodes.find(TilePos);
 
 	if (it != TileNodes.end()) { return it->second; }
 

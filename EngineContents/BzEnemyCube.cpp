@@ -37,18 +37,18 @@ ABzEnemyCube::ABzEnemyCube()
 	collisionList.push_back(Collision.get());
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Enemy");
-	Collision->SetCollisionType(ECollisionType::OBB);
-	Collision->SetCollisionStay([](UCollision* _This, UCollision* _Other)
+	Collision->SetCollisionType(ECollisionType::AABB);
+	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
-			FVector otherLocation = _Other->GetActor()->GetActorLocation();
-			FVector thisLocation = _This->GetActor()->GetActorLocation();
-			FVector reflectDir = otherLocation - thisLocation;
-			float length = reflectDir.Length();
+			//FVector otherLocation = _Other->GetActor()->GetActorLocation();
+			//FVector thisLocation = _This->GetActor()->GetActorLocation();
+			//FVector reflectDir = otherLocation - thisLocation;
+			//float length = reflectDir.Length();
 
-			if (length < 170.f)
-			{
-				_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
-			}
+			//if (length < 170.f)
+			//{
+			//	_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
+			//}
 		});
 	
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
@@ -69,6 +69,8 @@ void ABzEnemyCube::BeginPlay()
 	randomResult = GetRandom(2.f);
 
 	pos = GetActorLocation();
+
+
 }
 
 void ABzEnemyCube::Tick(float _DeltaTime)
@@ -82,6 +84,7 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	CheckAttackDistance(_DeltaTime , 200.f);
 	ApplyTilemap();
 	//MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
+
 }
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)
