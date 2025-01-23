@@ -79,9 +79,9 @@ void ABzEnemyCube::Tick(float _DeltaTime)
 	radius = GetActorTransform().Scale.X;
 
 	AvoidWall(_DeltaTime);// very strange !!!! 
-	//CheckAttackDistance(_DeltaTime , 500.f);
+	CheckAttackDistance(_DeltaTime , 200.f);
 	ApplyTilemap();
-	MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
+	//MoveAlongPath(_DeltaTime);// 좌표가 이상하게 들어와 
 }
 
 void ABzEnemyCube::Ani_Idle(float _DeltaTime)

@@ -18,7 +18,7 @@ public:
 
 
 	//UPathFindAStar PathFinder;
-	UEngineRandom Random;
+	//UEngineRandom Random;
 
 	std::vector<class ABzEnemyCube*> Enemies;
 

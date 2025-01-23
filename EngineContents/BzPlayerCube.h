@@ -6,7 +6,7 @@ class ABzPlayerCube : public APawn
 public:
 	ABzPlayerCube();
 	~ABzPlayerCube();
-	std::shared_ptr<class UBzRendererDefault> GetFire()
+	class UBzRendererDefault* GetFire()
 	{
 		return RendererFront;
 	}
@@ -28,14 +28,14 @@ protected:
 
 private:
 	std::shared_ptr<class UBzRendererDefault> Renderer;
-	std::shared_ptr<class UBzRendererDefault> RendererFront;
-	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
-
 	std::shared_ptr<class UCollision> Collision;
+	class UBzRendererDefault* RendererFront;
+	class UTimeEventComponent* TimeEventComponent;
+
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
 	float MoveSpeed =300.f;
 	FVector forwardVector = GetActorForwardVector();
-	std::shared_ptr<class ACameraActor> Camera ;
+	class ACameraActor* Camera ;
 	FVector diff = { 0.f,0.f,0.f };
 
 

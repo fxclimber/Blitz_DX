@@ -13,7 +13,6 @@ ABzTileMap::ABzTileMap()
 
 	// 게임모드에서 원점을 중심으로 하도록 캐릭터,카메라 옵셋시킬 값
 	MapOffset = FVector((GridCount * TileScale) / 2, MaxHeight, (GridCount * TileScale) / 2);
-	//MapOffset = FVector::ZERO;
 	FVector Offset = FVector::ZERO;
 
 	// 장애물로 설정할 타일의 인덱스 지정
@@ -49,7 +48,7 @@ ABzTileMap::ABzTileMap()
 				{
 					BottomTile->SetActorRelativeScale3D(FVector(TileScale, TileScale * 1.5f, TileScale)); // 크기 증가
 					TilePos.Y -= TileScale * 0.8f; // 기존 높이에 추가 (덮어쓰기 X)
-					BottomTile->GetRenderer()->GetRenderUnit().SetTexture("bz_teXture0", "test10.png");
+					BottomTile->BzTileRenderer->GetRenderUnit().SetTexture("bz_teXture0", "test10.png");
 					BottomTile->SetWalkable(false);
 					// 터진다
 					//BottomTile->Collision = CreateDefaultSubObject<UCollision>();
@@ -97,14 +96,19 @@ ABzTileMap::ABzTileMap()
 
 }
 
-ABzTileMap::~ABzTileMap() {}
+ABzTileMap::~ABzTileMap() {
+	for (auto NodePair : TileNodes)
+	{
+		delete NodePair.second;
+	}
+}
 
 bool ABzTileMap::IsMove(const FVector& _Point)
 {
 	FVector CheckPos = _Point;
 	int X = std::floor(_Point.X / TileScale); 
 	int Z = std::floor(_Point.Z / TileScale); 	
-	//ABzTile* aa = BottomTiles[X];
+	// BottomTiles 자료구조 잘못만들었다.그래서 이 조건식은 잘못된 상태다.고쳐라 
 	bool move = BottomTiles[X][Z].IsWalkable();
 	if (false == move)
 	{

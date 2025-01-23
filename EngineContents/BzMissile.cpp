@@ -54,9 +54,9 @@ void ABzMissile::BeginPlay()
 		MoveDirection = Player->GetActorTransform().Rotation;
 
 		auto fire = Player->GetFire();
-		const auto& pos = fire.get()->GetTransformRef().WorldLocation;
-		const auto& scale = fire.get()->GetTransformRef().WorldScale;
-		const auto& rotRender = fire.get()->GetTransformRef().Rotation;
+		const auto& pos = fire->GetTransformRef().WorldLocation;
+		const auto& scale = fire->GetTransformRef().WorldScale;
+		const auto& rotRender = fire->GetTransformRef().Rotation;
 		FVector rot = Player->GetActorTransform().Rotation;
 		rot -= rotRender;
 
@@ -64,7 +64,7 @@ void ABzMissile::BeginPlay()
 		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
 		FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
 
-		fire.get()->GetTransformRef().Location;
+		fire->GetTransformRef().Location;
 		SetActorRotation(rot);
 		SetActorLocation(SpawnPos);
 		ForwardDir = GetActorForwardVector();

@@ -64,7 +64,6 @@ ABzGameMode_Intro::ABzGameMode_Intro()
     GetWorld()->LinkCollisionProfile("Wall","Enemy");
 	//----
 	Camera = GetWorld()->GetMainCamera().get();
-	//CamInitPos = { 500.0f, 680.0f, -900.0f, 1.0f };
 	CamInitPos = { -2000.f,400.f,-4500.f,1.0f };
 	CamInitPos += map->MapOffset;
 	Camera->SetActorLocation(CamInitPos);
@@ -96,9 +95,9 @@ void ABzGameMode_Intro::BeginPlay()
 	FVector EnemySingleTestPos = map->MapOffset + FVector{ 300.f,0.f,600.f };
 	EnemySingleTest->SetActorLocation(EnemySingleTestPos);
 	//-----
-	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>().get();
 	TimeEventComponent->AddEvent(
-		0.01f,
+		0.5f,
 		[this](float _Delta, float _Acc)
 		{
 			FVector randomLocation(GetRandomLocation(28.f));
@@ -118,21 +117,13 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	FVector One =FVector::ZERO;
-	FVector pp = PlayerCube->GetActorLocation();
-	FVector dir = (One - pp).NormalizeReturn();
-	PlayerCube->AddActorLocation((dir)*_DeltaTime * 300.f);
-
 	double fps = 1/ _DeltaTime;
 	UEngineDebug::OutPutString("fps: " + std::to_string(fps) );
 
 	Camera->SetActorLocation(FVector(CamInitPos.X+PlayerCube->GetActorLocation().X, CamInitPos.Y,CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 
-	//if (UEngineInput::IsDown(VK_LBUTTON))
-	//{
-	//}
-
-	PathFind();
+	// not tick 
+	//PathFind(); 
 }
 
 

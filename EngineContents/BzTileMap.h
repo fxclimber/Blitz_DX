@@ -36,16 +36,10 @@ public:
 
 	}
 
-	std::shared_ptr<class UBzRendererDefault> GetRenderer()
-	{
-		return BzTileRenderer;
-	}
-
 	FVector GetPos() const { return TilePos; }
 	void SetPos(const FVector& _newPos) { TilePos = _newPos; }
 	bool IsWalkable() const { return bIsWalkable;  }
 	void SetWalkable(bool _bWalkable) { bIsWalkable = _bWalkable; }
-	//bool GetWalkable() { return bIsWalkable; }
 
 	std::shared_ptr<class UCollision> Collision;
 	std::shared_ptr<class UBzRendererDefault> BzTileRenderer;
@@ -69,6 +63,7 @@ public:
 	bool IsMove(const FVector& _Point) override;
 	UPathFindNode* GetNode(const FVector& _Point);
 
+	//const int GridCount = 1;
 	const int GridCount = 30;
 	const float TileScale = 200.f;
 	const float MaxHeight = 1500.f; // 외곽에서 최대 높이

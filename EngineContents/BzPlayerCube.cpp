@@ -31,7 +31,7 @@ ABzPlayerCube::ABzPlayerCube()
 	Renderer->SetScale3D({ 80.f,130.f,100.f });
 	Renderer->SetPivot(PivotType::Bottom);
 
-	RendererFront = CreateDefaultSubObject<UBzRendererDefault>();
+	RendererFront = CreateDefaultSubObject<UBzRendererDefault>().get();
 	RendererFront->SetupAttachment(RootComponent);
 	RendererFront->SetScale3D({ 25.f,25.f,100.f });
 	RendererFront->SetRotation({30.f,-90.f,0.f});
@@ -129,7 +129,7 @@ void ABzPlayerCube::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	Camera = GetWorld()->GetCamera(0);
+	Camera = GetWorld()->GetCamera(0).get();
 	FVector thisPos = GetActorLocation();
 	FVector camPos = Camera->GetActorLocation();
 	diff = camPos - thisPos;
