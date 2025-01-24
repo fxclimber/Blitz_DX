@@ -34,16 +34,6 @@ ABzMissile::ABzMissile()
 	Collision->SetCollisionProfileName("Proj");
 	Collision->SetCollisionType(ECollisionType::OBB);
 
-
-	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
-		{
-			_Other->GetActor()->Destroy();
-			_This->Destroy();
-		});
-
-	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
-	Manager = GM->Manager;
-
 }
 
 void ABzMissile::BeginPlay()
@@ -62,17 +52,14 @@ void ABzMissile::BeginPlay()
 		FVector rot = Player->GetActorTransform().Rotation;
 		//rot -= rotRender;
 
-
 		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
 		FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
 
 		fire->GetTransformRef().Location;
-		SetActorRotation(rot);
 		SetActorLocation(SpawnPos);
 		ForwardDir = GetActorForwardVector();
-
 	}
-	//Velocity = ForwardDir * Speed;
+	TargetEnemy = FindTarget();
 }
 
 
@@ -81,36 +68,21 @@ void ABzMissile::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	//CalculateMoveAcceleration(_DeltaTime);
-	//AddActorLocation(ForwardDir * _DeltaTime * Speed);
-	//------------
-	TargetEnemy = SetTargetEnemy();
-	//UpdatePositionAndOrientation(_DeltaTime);
+	MoveDirection = GetActorForwardVector();
 
-	float RotationSpeed = 500.f;
+
+	if (nullptr == TargetEnemy)
+	{
+		return;
+	}
+	else
+	{
+		TargetEnemy = FindTarget();
+		ComputeHomingRotation(_DeltaTime);
+	}
+
 	
 
-	XMVECTOR Velocity = GetActorForwardVector().NormalizeReturn().DirectVector;
-	XMVECTOR ProjectilePos = GetActorLocation().DirectVector;
-	//XMVECTOR TargetPos = Player->GetActorLocation().DirectVector;
-	XMVECTOR TargetPos =FVector(0.f,1300.f,0.f).DirectVector;
-
-	XMVECTOR CurrentDir = XMVector3Normalize(Velocity);
-	XMVECTOR TargetDir = XMVectorSubtract(TargetPos, ProjectilePos);
-	TargetDir = XMVector3Normalize(TargetDir);
-	FVector HomingRotation = ComputeHomingRotation(CurrentDir, TargetDir, RotationSpeed, _DeltaTime);
-
-	//FVector TargetPosF = Player->GetActorLocation();
-	FVector TargetPosF = FVector(0.f, 1300.f, 0.f);
-	FVector  TargetDirF = (TargetPosF - GetActorLocation()).NormalizeReturn();
-	FVector move = TargetDirF * _DeltaTime * RotationSpeed;
-	AddActorLocation(move);
-	AddActorRotation(HomingRotation);
-
-	if (TargetPosF == GetActorLocation())
-	{
-		AddActorLocation(FVector::ZERO);
-	}
 
 }
 
@@ -194,94 +166,95 @@ void ABzMissile::SetPlayer(class ABzPlayerCube* _name)
 }
 
 
-void ABzMissile::UpdatePositionAndOrientation(float _DeltaTime)
-{
-	float turnRate = 120.0f;
-	float speed = 400.f;
-	if (nullptr != TargetEnemy)
-	{
-		FVector targetPos = TargetEnemy->GetActorLocation();
-		FVector projPos = GetActorLocation();
-		// 목표까지의 방향 벡터 계산
-		FVector toTarget = (targetPos - projPos).NormalizeReturn();//타겟벡터
-		FVector direction = GetActorForwardVector().NormalizeReturn();//전방벡터
-		float dotProduct = UEngineMath::Clamp(FVector::Dot(direction, toTarget), -1.0f, 1.0f);
-		// 회전 각도 계산
-		float angleToTarget = acosf(dotProduct);
-		float turnAngle = UEngineMath::ClampMax((turnRate * _DeltaTime), angleToTarget);
-		// 회전 축 계산 (현재 방향과 목표 방향의 외적)
-		FVector rotationAxis = (FVector::Cross(direction, toTarget)).NormalizeReturn();
 
-		projPos = direction * speed * _DeltaTime;
-		AddActorLocation(projPos);
-		AddActorRotation(rotationAxis* turnAngle);
-	}
 
-}
-
-ABzEnemyCube* ABzMissile::SetTargetEnemy()
+ABzEnemyCube* ABzMissile::FindTarget()
 {
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
-	std::vector<class ABzEnemyCube*> list = GM->GetEnemyCubesList();
-
-	size_t size = list.size();
-	if (0 != size)
-	{
-		return list[0];
-	}
+	std::vector<class ABzEnemyCube*> enemiesList = GM->GetEnemyCubesList();
+	return enemiesList[0];
 }
 
-//XMMATRIX ABzMissile::ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime)
-//{
-//	// 벡터 정규화
-//	//CurrentDir = XMVector3Normalize(CurrentDir);
-//	//TargetDir = XMVector3Normalize(TargetDir);
-//
-//	// 회전 축 계산 (Cross Product)
-//	XMVECTOR RotationAxis = XMVector3Cross(CurrentDir, TargetDir);
-//	float Dot = XMVectorGetX(XMVector3Dot(CurrentDir, TargetDir));
-//
-//	// 클램핑하여 안정화
-//	Dot = max(-1.0f, min(1.0f, Dot));
-//
-//	// 두 벡터 사이의 회전 각도 (Arc Cosine)
-//	float Angle = acosf(Dot);
-//	Angle *= RotationSpeed * DeltaTime; // 회전 속도 조절
-//
-//	// 회전 Quaternion 생성
-//	XMVECTOR RotationQuat = XMQuaternionRotationAxis(RotationAxis, Angle);
-//
-//	// 회전 행렬 반환
-//	return XMMatrixRotationQuaternion(RotationQuat);
-//}
 
-
-FVector ABzMissile::ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime)
+void ABzMissile::ComputeHomingRotation(float DeltaTime)
 {
-	// 벡터 정규화
-	CurrentDir = XMVector3Normalize(CurrentDir);
-	TargetDir = XMVector3Normalize(TargetDir);
+	{
 
+		FVector TargetPosF = TargetEnemy->GetActorLocation();
+		TargetPosF += {0.f, 200.f, 0.f};
+		FVector  TargetDirF = (TargetPosF - GetActorLocation()).NormalizeReturn();
+		FVector move = TargetDirF * DeltaTime * 400.f;
+		AddActorLocation(move);
+
+	// 방향 벡터 정규화
+	FVector currentDir = GetActorForwardVector();
+	FVector targetDir = TargetEnemy->GetActorLocation() - GetActorLocation();
+	float RotationSpeed = 5500.f;
+
+	XMVECTOR CurrentDir = XMVector3Normalize(currentDir.DirectVector);
+	XMVECTOR TargetDir = XMVector3Normalize(targetDir.DirectVector);
 	// 회전 축 계산 (Cross Product)
 	XMVECTOR RotationAxis = XMVector3Cross(CurrentDir, TargetDir);
 	float Dot = XMVectorGetX(XMVector3Dot(CurrentDir, TargetDir));
 
-	// 안정화
+	// 안정화 (각도 범위 보정)
 	Dot = max(-1.0f, min(1.0f, Dot));
 
-	// 두 벡터 사이의 회전 각도
 	float Angle = acosf(Dot);
-	Angle *= RotationSpeed * DeltaTime; // 회전 속도 적용
-
-	// 회전 Quaternion 생성
-	XMVECTOR RotationQuat = XMQuaternionRotationAxis(RotationAxis, Angle);
-
-	// 회전 적용된 벡터 반환
-	XMVECTOR NewDir = XMVector3Rotate(CurrentDir, RotationQuat);
-
-	// XMVECTOR → FVector 변환
+	float RotateAmount = RotationSpeed * DeltaTime;
+	//Angle = min(Angle, RotateAmount); // 한 번에 너무 많이 돌지 않도록 제한
+	Angle *= RotateAmount;
+	// 회전 적용 (Axis-Angle 회전)
+	XMVECTOR NewDir = XMVector3TransformNormal(CurrentDir, XMMatrixRotationAxis(TargetDir, Angle));
 	FVector Result;
 	XMStoreFloat3(&Result.DirectFloat3, NewDir);
 
-	return Result;
+	AddActorRotation(Result);
+
+}
+
+	{
+		// 그냥 z로컬로만 회전
+		//if (!TargetEnemy) return;
+
+		//// 현재 위치 및 목표 방향 계산
+		//FVector TargetPos = TargetEnemy->GetActorLocation();
+		//FVector MoveDirection = (TargetPos - GetActorLocation()).NormalizeReturn();
+
+		//// 현재 방향 벡터 가져오기
+		//FVector CurrentDir = GetActorForwardVector();
+
+		//// 목표 방향과 현재 방향의 Yaw 각도 계산
+		//float targetAngle = atan2(-MoveDirection.Y, MoveDirection.X) * UEngineMath::R2D;
+		//float currentAngle = atan2(-CurrentDir.Y, CurrentDir.X) * UEngineMath::R2D;
+
+		//// 각도 차이 계산 및 보정 (-180 ~ 180도)
+		//float deltaAngle = targetAngle - currentAngle;
+		//if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+		//if (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+		//// 회전 속도 조절
+		//float RotationSpeed = 20.f;
+		//float RotationAmountZ = deltaAngle * DeltaTime * RotationSpeed;
+
+		//// 로컬 Z축 회전 적용
+		//AddActorRotation(FVector(0.0f, 0.0f, RotationAmountZ));
+
+		//// 이동 적용
+		//FVector move = MoveDirection * DeltaTime * 100.f;
+		//AddActorLocation(move);
+
+	}
+
+}
+
+
+void ABzMissile::KillEnemy()
+{
+	std::vector<UCollision*> col;
+	if (true == Collision->CollisionCheck("Enemy", col))
+	{
+		col[0]->GetActor()->Destroy();
+		Destroy();
+	}
 }

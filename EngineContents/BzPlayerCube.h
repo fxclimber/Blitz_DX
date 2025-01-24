@@ -33,7 +33,7 @@ private:
 	class UTimeEventComponent* TimeEventComponent;
 
 	FVector MoveDirection = FVector(0.0f, 0.0f, 0.0f);
-	float MoveSpeed =300.f;
+	float MoveSpeed =500.f;
 	FVector forwardVector = GetActorForwardVector();
 	class ACameraActor* Camera ;
 	FVector diff = { 0.f,0.f,0.f };

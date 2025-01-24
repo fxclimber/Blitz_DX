@@ -19,16 +19,13 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-	//FVector CalculateMoveDirection(float _DeltaTime);
-	//FVector CalculateMoveVelocity(float _DeltaTime);
+
+	void KillEnemy();
+
 	FVector CalculateMoveAcceleration(float _DeltaTime);
-	//void ForceGravity(const float& dt);
 
-	void UpdatePositionAndOrientation(float _DeltaTime);
-	ABzEnemyCube* SetTargetEnemy();
-
-	//XMMATRIX ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime);
-	FVector ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime);
+	ABzEnemyCube* FindTarget();
+	void ComputeHomingRotation(float DeltaTime);
 
 	void Differenciate(ABzClassManager& manager);
 	bool IsColliding(class ABzEnemy* enemy);
