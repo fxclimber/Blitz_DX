@@ -104,9 +104,6 @@
     <ClInclude Include="TestActor.h">
       <Filter>Jo\Title</Filter>
     </ClInclude>
-    <ClInclude Include="BzHomingProjectile.h">
-      <Filter>Blitz\Skill</Filter>
-    </ClInclude>
     <ClInclude Include="BzFSMManager.h">
       <Filter>Blitz\Core\FSM</Filter>
     </ClInclude>
@@ -126,6 +123,9 @@
       <Filter>Blitz\Resource</Filter>
     </ClInclude>
     <ClInclude Include="BzMissile.h">
+      <Filter>Blitz\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="BzArcStone.h">
       <Filter>Blitz\Skill</Filter>
     </ClInclude>
   </ItemGroup>
@@ -239,9 +239,6 @@
     <ClCompile Include="TestActor.cpp">
       <Filter>Jo\Title</Filter>
     </ClCompile>
-    <ClCompile Include="BzHomingProjectile.cpp">
-      <Filter>Blitz\Skill</Filter>
-    </ClCompile>
     <ClCompile Include="BzFSMManager.cpp">
       <Filter>Blitz\Core\FSM</Filter>
     </ClCompile>
@@ -261,6 +258,9 @@
       <Filter>Blitz\Resource</Filter>
     </ClCompile>
     <ClCompile Include="BzMissile.cpp">
+      <Filter>Blitz\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="BzArcStone.cpp">
       <Filter>Blitz\Skill</Filter>
     </ClCompile>
   </ItemGroup>

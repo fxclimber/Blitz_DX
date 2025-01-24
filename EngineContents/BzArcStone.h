@@ -1,33 +1,38 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include "BzClassManager.h"
 
-class ABzHomingProjectile : public AActor
+class ABzArcStone : public AActor
 {
 public:
-	ABzHomingProjectile();
-	~ABzHomingProjectile(){}
+	ABzArcStone();
+	~ABzArcStone(){}
 	void SetPlayer(class ABzPlayerCube* _name);
 
+	FVector Pos = FVector::ZERO;
+	bool bActive = true;
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-
 	FVector CalculateMoveAcceleration(float _DeltaTime);
-	void UpdatePositionAndOrientation(float _DeltaTime);
-	class ABzEnemyCube* SetTargetEnemy();
+
+	void KillEnemy();
+
+	void Differenciate(ABzClassManager& manager);
+	bool IsColliding(class ABzEnemy* enemy);
 
 private:
 	class ABzPlayerCube* Player = nullptr;
-	class ABzEnemyCube* TargetEnemy = nullptr;
-	class ABzClassManager* Manager = nullptr;
 
 	std::shared_ptr<class UBzRendererDefault> Renderer;
-	std::shared_ptr<class UCollision> Collision;
+	//std::shared_ptr<class UCollision> Collision;
 
-	float Speed = 1000.f;
+	class UCollision* Collision;
+
+	float Speed = 2000.f;
 	FVector ForwardDir = {0.f,0.f,0.f};
 	FVector MoveDirection = {0.f,0.f,0.f};
-	FVector Gravity = FVector(0.0f, -3.8f, 0.0f);
+	FVector Gravity = FVector(0.0f, -5.8f, 0.0f);
 };
 

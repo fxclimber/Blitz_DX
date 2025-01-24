@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "BzProjectile.h"
+#include "BzArcStone.h"
 #include <EngineCore/Collision.h>
 #include "BzPlayerCube.h"
 #include <EnginePlatform/EngineInput.h>
@@ -12,14 +12,14 @@
 #include "BzEnemyCube.h"
 
 
-ABzProjectile::ABzProjectile()
+ABzArcStone::ABzArcStone()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 10.f,10.f,55.f });
+	Renderer->SetScale3D({ 170.f,70.f,170.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "bulletTest.jpg");
 
 	//----collision
@@ -35,7 +35,7 @@ ABzProjectile::ABzProjectile()
 
 }
 
-void ABzProjectile::BeginPlay()
+void ABzArcStone::BeginPlay()
 {
 	AActor::BeginPlay();
 
@@ -62,25 +62,17 @@ void ABzProjectile::BeginPlay()
 }
 
 
-void ABzProjectile::Tick(float _DeltaTime)
+void ABzArcStone::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	//CalculateMoveAcceleration(_DeltaTime);
-	//ForwardDir += Gravity *_DeltaTime;
-	ForwardDir = GetActorForwardVector().NormalizeReturn();
+	CalculateMoveAcceleration(_DeltaTime);
+	ForwardDir += Gravity *_DeltaTime;
 	AddActorLocation(ForwardDir * _DeltaTime * Speed);
-
-	//-------------------------------------
-	std::string fireRotString =
-		"FireRot: (X: " + std::to_string(ForwardDir.X) +
-		", Y: " + std::to_string(ForwardDir.Y) +
-		", Z: " + std::to_string(ForwardDir.Z) + ")";
-	//UEngineDebug::OutPutString(fireRotString);
 }
 
 
-FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
+FVector ABzArcStone::CalculateMoveAcceleration(float _DeltaTime)
 {
 	FVector pos = GetActorLocation();
 	static const float coef_res = 0.6f;      
@@ -130,7 +122,7 @@ FVector ABzProjectile::CalculateMoveAcceleration(float _DeltaTime)
 	return ForwardDir;
 }
 
-void ABzProjectile::KillEnemy()
+void ABzArcStone::KillEnemy()
 {
 	std::vector<UCollision*> col;
 	if (true == Collision->CollisionCheck("Enemy", col))
@@ -140,7 +132,7 @@ void ABzProjectile::KillEnemy()
 	}
 }
 
-void ABzProjectile::Differenciate(ABzClassManager& manager)
+void ABzArcStone::Differenciate(ABzClassManager& manager)
 {
 	if (false != bActive)
 	{
@@ -158,12 +150,12 @@ void ABzProjectile::Differenciate(ABzClassManager& manager)
 	}
 }
 
-bool ABzProjectile::IsColliding(ABzEnemy* enemy)
+bool ABzArcStone::IsColliding(ABzEnemy* enemy)
 {
 	return (Pos - enemy->GetActorLocation()).Length() < 3.f;
 }
 
-void ABzProjectile::SetPlayer(class ABzPlayerCube* _name)
+void ABzArcStone::SetPlayer(class ABzPlayerCube* _name)
 {
 	Player = _name;
 }

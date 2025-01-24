@@ -12,8 +12,8 @@
 #include <EngineCore/TimeEventComponent.h>
 #include "BzProjectile.h"
 #include "Skl_BzRockfall.h"
-#include "BzHomingProjectile.h"
 #include "BzMissile.h"
+#include "BzArcStone.h"
 
 #include "BzGameMode_Intro.h"
 #include "BzTileMap.h"
@@ -129,7 +129,9 @@ void ABzPlayerCube::BeginPlay()
 {
 	AActor::BeginPlay();
 
+	// cam setting 
 	Camera = GetWorld()->GetCamera(0).get();
+	Camera->GetCameraComponent()->SetFOV(fov);
 	FVector thisPos = GetActorLocation();
 	FVector camPos = Camera->GetActorLocation();
 	diff = camPos - thisPos;
@@ -142,40 +144,67 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	UEngineCamera* CameraP = Camera->GetCameraComponent().get();
 
+	//-----------------kEY Dash 
+	if (UEngineInput::IsPress('F'))
+	{
+		IsDash = true;
+		DashTime = 0.0f; 
+	}
 
-	CalculateMoveDirection(_DeltaTime);
-	ApplyRecoilAnimation(MoveDirection, 4.f,_DeltaTime);
+	if (!IsDash)
+	{
+		CalculateMoveDirection(_DeltaTime);
+	}
+	else
+	{
+		DashTime += _DeltaTime; 
 
-	FVector thisPos = GetActorLocation();
+		if (DashTime > 15.0f)
+		{
+			IsDash = false; 
+		}
+		else
+		{
+			CalculateMoveDirection(_DeltaTime);
+			Skl_Dash(MoveDirection, 5.f, _DeltaTime);
+		}
+	}
 
-	FireRot = RendererFront->GetTransformRef().Rotation;
-
-	if (UEngineInput::IsDown('R'))
+	// Key - Attack 
+	if (UEngineInput::IsDown('L'))
 	{
 		Skl_Rockfall();//다시해야함 
 	}
 
-	if (UEngineInput::IsDown('H'))
+	if (UEngineInput::IsDown('K'))
 	{
-		Skl_HomingProj();
+		Skl_Missile();
+	}
+	if (UEngineInput::IsDown('J'))
+	{
+		Skl_ArcStone();
+	}
+	if (UEngineInput::IsPress('F'))
+	{
+		IsDash = true;
+	}
+	if (UEngineInput::IsDown('G'))
+	{
+		Atk();
 	}
 
+
+
+
+	//----test
 	if (UEngineInput::IsPress('E'))
 	{
 		AddActorRotation(FVector{0.f,1.f,0.f});
 	}
-
-
-	//----test
-	if (UEngineInput::IsDown('F'))
-	{
-		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
-	}
-	if (UEngineInput::IsDown('T'))
-	{
-		Camera->GetCameraComponent()->SetFOV(30.f);
-	}
-
+	//if (UEngineInput::IsDown('F'))
+	//{
+	//	GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
+	//}
 
 
 	//------------지형높이따라 y값조절 테스트 
@@ -183,15 +212,16 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
-		std::shared_ptr<ABzProjectile> Proj = GetWorld()->SpawnActor<ABzProjectile>();
-		Proj->SetPlayer(this);
-		Proj->SetActorLocation(GetActorLocation());
 	}
 
-
-
-
-
+	// zoom 
+	if (UEngineWindow::GetWheelDir() != 0)
+	{
+		fov -= UEngineWindow::GetWheelDir() * 0.05f; // 조절 속도
+		Camera->GetCameraComponent()->SetFOV(fov);
+		UEngineDebug::OutPutString(std::to_string(fov));
+		UEngineWindow::SetWheelDir();
+	}
 
 }
 
@@ -269,21 +299,16 @@ void ABzPlayerCube::Skl_Rockfall()
 	RendererFront->SetRotation(OriginalRotation);
 }
 
-void ABzPlayerCube::Skl_HomingProj()
+void ABzPlayerCube::Skl_ArcStone()
 {
-	//FVector OriginalLocation = RendererFront->GetRelativeLocation();
-	//FVector OriginalRotation = RendererFront->GetTransformRef().Rotation;
+	std::shared_ptr<ABzArcStone> Proj = GetWorld()->SpawnActor<ABzArcStone>();
+	Proj->SetPlayer(this);
+	//Proj->SetActorLocation(GetActorLocation());
+	//Proj->SetActorLocation({});
+}
 
-	//FVector pos = RendererFront->GetTransformRef().Location;
-	//FVector rot = RendererFront->GetTransformRef().Rotation;
-	//FVector MoveDir = GetActorForwardVector();
-
-	//std::shared_ptr<ABzHomingProjectile> Proj = GetWorld()->SpawnActor<ABzHomingProjectile>();
-	//Proj->SetActorLocation(pos);
-	//Proj->SetActorRotation(rot);
-
-
-
+void ABzPlayerCube::Skl_Missile()
+{
 	std::shared_ptr<ABzMissile> Proj = GetWorld()->SpawnActor<ABzMissile>();
 	Proj->SetPlayer(this);
 	Proj->SetActorLocation(GetActorLocation());
@@ -332,7 +357,7 @@ void ABzPlayerCube::ApplyTilemap()
 }
 
 
-void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float _DeltaTime)
+void ABzPlayerCube::Skl_Dash(FVector _Direction, float _Speed, float _DeltaTime)
 {
 	static float Time = 0.0f;
 	Time += _DeltaTime;
@@ -347,21 +372,27 @@ void ABzPlayerCube::ApplyRecoilAnimation(FVector _Direction, float _Speed, float
 	float dirLength = _Direction.NormalizeReturn().Length() * dynamicspeed;
 
 	float Amplitude = BaseAmplitude * Speed;
-	FVector Offset = _Direction * (Amplitude* dirLength * fabs(sin(Frequency * Time)));
+	FVector Offset = _Direction * (Amplitude * dirLength * fabs(sin(Frequency * Time)));
 	Offset.ABSVectorReturn();
 	AddActorLocation(Offset);
 
-	FVector TargetScale = FVector(UEngineMath::Clamp((OrgScale.X + OrgScale.X * dirLength),0.9f,1.0f), OrgScale.Y, OrgScale.Z );
-	//UEngineDebug::OutPutString("dirLength" + std::to_string(dirLength));
+	FVector TargetScale = FVector(UEngineMath::Clamp((OrgScale.X + OrgScale.X * dirLength), 0.9f, 1.0f), OrgScale.Y, OrgScale.Z);
 
 	if (1.0f <= dirLength)
 	{
 		AddActorScale3D({ TargetScale.X * 0.01f,0.f,0.f });
-		//SetActorRelativeScale3D(OrgScale + FVector( TargetScale.X * 0.8f,0.f,0.f ));
 	}
 	else
 	{
 		SetActorRelativeScale3D(OrgScale);
 	}
-
+	
 }
+
+void ABzPlayerCube::Atk()
+{
+	std::shared_ptr<ABzProjectile> Proj = GetWorld()->SpawnActor<ABzProjectile>();
+	Proj->SetPlayer(this);
+	Proj->SetActorLocation(GetActorLocation());
+}
+

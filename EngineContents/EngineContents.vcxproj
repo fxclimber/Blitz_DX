@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AMon.h" />
+    <ClInclude Include="BzArcStone.h" />
     <ClInclude Include="BzBottom.h" />
     <ClInclude Include="BzBottomTmp.h" />
     <ClInclude Include="BzClassManager.h" />
@@ -158,7 +159,6 @@
     <ClInclude Include="BzFSMManager.h" />
     <ClInclude Include="BzGameMode_Intro.h" />
     <ClInclude Include="BzCore.h" />
-    <ClInclude Include="BzHomingProjectile.h" />
     <ClInclude Include="BzHUD.h" />
     <ClInclude Include="BzMissile.h" />
     <ClInclude Include="BzPlayerCube.h" />
@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AMon.cpp" />
+    <ClCompile Include="BzArcStone.cpp" />
     <ClCompile Include="BzBottom.cpp" />
     <ClCompile Include="BzBottomTmp.cpp" />
     <ClCompile Include="BzClassManager.cpp" />
@@ -203,7 +204,6 @@
     <ClCompile Include="BzFSMManager.cpp" />
     <ClCompile Include="BzGameMode_Intro.cpp" />
     <ClCompile Include="BzCore.cpp" />
-    <ClCompile Include="BzHomingProjectile.cpp" />
     <ClCompile Include="BzHUD.cpp" />
     <ClCompile Include="BzMissile.cpp" />
     <ClCompile Include="BzPlayerCube.cpp" />

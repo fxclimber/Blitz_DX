@@ -43,19 +43,20 @@ void ABzMissile::BeginPlay()
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 
 	{
-		MoveDirection = Player->GetActorTransform().GetLocalFoward();
+		MoveDirection = Player->GetActorTransform().Rotation;
 
 		auto fire = Player->GetFire();
 		const auto& pos = fire->GetTransformRef().WorldLocation;
 		const auto& scale = fire->GetTransformRef().WorldScale;
 		const auto& rotRender = fire->GetTransformRef().Rotation;
 		FVector rot = Player->GetActorTransform().Rotation;
-		//rot -= rotRender;
+		rot -= rotRender;
 
 		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
 		FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
 
 		fire->GetTransformRef().Location;
+		SetActorRotation(rot);
 		SetActorLocation(SpawnPos);
 		ForwardDir = GetActorForwardVector();
 	}

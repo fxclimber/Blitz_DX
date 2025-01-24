@@ -74,6 +74,7 @@ ABzGameMode_Intro::ABzGameMode_Intro()
 	cam->SetProjectionType(EProjectionType::Perspective);
 	//-------------
 
+
 }
 
 ABzGameMode_Intro::~ABzGameMode_Intro()
@@ -137,12 +138,11 @@ void ABzGameMode_Intro::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	double fps = 1 / _DeltaTime;
-	UEngineDebug::OutPutString("fps: " + std::to_string(fps));
+	//UEngineDebug::OutPutString("fps: " + std::to_string(fps));
 
 	Camera->SetActorLocation(FVector(CamInitPos.X + PlayerCube->GetActorLocation().X, CamInitPos.Y, CamInitPos.Z + PlayerCube->GetActorLocation().Z));
 	// 몬스터갯수 확인 
 	//UEngineDebug::OutPutString("EnemyCubesList: " + std::to_string(EnemyCubesList.size()));
-
 
 }
 
