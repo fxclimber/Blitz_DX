@@ -10,7 +10,7 @@ class ABzMissile : public AActor
 {
 public:
 	ABzMissile();
-	~ABzMissile(){}
+	~ABzMissile();
 	void SetPlayer(class ABzPlayerCube* _name);
 
 	FVector Pos = FVector::ZERO;
@@ -30,6 +30,11 @@ protected:
 	void Differenciate(ABzClassManager& manager);
 	bool IsColliding(class ABzEnemy* enemy);
 
+	//     B
+	//     
+
+	// L
+
 private:
 	class ABzPlayerCube* Player = nullptr;
 	class ABzEnemyCube* TargetEnemy = nullptr;
@@ -42,5 +47,7 @@ private:
 	FVector ForwardDir = {0.f,0.f,0.f};
 	FVector MoveDirection = {0.f,0.f,0.f};
 	FVector Gravity = FVector(0.0f, -3.8f, 0.0f);
+
+	int CurrentTargetIndex = 0;
 };
 

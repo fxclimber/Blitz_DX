@@ -34,7 +34,7 @@ ABzPlayerCube::ABzPlayerCube()
 	RendererFront = CreateDefaultSubObject<UBzRendererDefault>().get();
 	RendererFront->SetupAttachment(RootComponent);
 	RendererFront->SetScale3D({ 25.f,25.f,100.f });
-	RendererFront->SetRotation({30.f,-90.f,0.f});
+	RendererFront->SetRotation({10.f,-90.f,0.f});
 	RendererFront->SetRelativeLocation({80.f,140.f,0.f});
 
 	FireRot = RendererFront->GetTransformRef().WorldRotation;
@@ -217,7 +217,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	// zoom 
 	if (UEngineWindow::GetWheelDir() != 0)
 	{
-		fov -= UEngineWindow::GetWheelDir() * 0.05f; // 조절 속도
+		fov -= UEngineWindow::GetWheelDir() * 0.03f; // 조절 속도
 		Camera->GetCameraComponent()->SetFOV(fov);
 		UEngineDebug::OutPutString(std::to_string(fov));
 		UEngineWindow::SetWheelDir();

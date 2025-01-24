@@ -41,7 +41,7 @@ private:
 	FVector forwardVector = GetActorForwardVector();
 	class ACameraActor* Camera ;
 	FVector diff = { 0.f,0.f,0.f };
-	int fov = 70.f;
+	int fov = 55.f;
 
 
 	FVector OrgScale = { 0.f,0.f,0.f };

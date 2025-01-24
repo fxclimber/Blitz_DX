@@ -67,8 +67,8 @@ void ABzProjectile::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	//CalculateMoveAcceleration(_DeltaTime);
-	//ForwardDir += Gravity *_DeltaTime;
-	ForwardDir = GetActorForwardVector().NormalizeReturn();
+	ForwardDir += Gravity *_DeltaTime;
+	ForwardDir += GetActorForwardVector().NormalizeReturn();
 	AddActorLocation(ForwardDir * _DeltaTime * Speed);
 
 	//-------------------------------------

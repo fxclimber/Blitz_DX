@@ -32,7 +32,7 @@ private:
 
 	class UCollision* Collision;
 
-	float Speed = 800.f;
+	float Speed = 200.f;
 	FVector ForwardDir = {0.f,0.f,0.f};
 	FVector MoveDirection = {0.f,0.f,0.f};
 	FVector Gravity = FVector(0.0f, -3.8f, 0.0f);

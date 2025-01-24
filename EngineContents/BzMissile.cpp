@@ -33,7 +33,11 @@ ABzMissile::ABzMissile()
 	Collision->SetupAttachment(Renderer);
 	Collision->SetCollisionProfileName("Proj");
 	Collision->SetCollisionType(ECollisionType::OBB);
+}
 
+ABzMissile::~ABzMissile()
+{
+	TargetEnemy = nullptr;
 }
 
 void ABzMissile::BeginPlay()
@@ -71,14 +75,12 @@ void ABzMissile::Tick(float _DeltaTime)
 
 	MoveDirection = GetActorForwardVector();
 
-
 	if (nullptr == TargetEnemy)
 	{
 		return;
 	}
 	else
 	{
-		TargetEnemy = FindTarget();
 		ComputeHomingRotation(_DeltaTime);
 	}
 
@@ -174,12 +176,22 @@ ABzEnemyCube* ABzMissile::FindTarget()
 	ABzGameMode_Intro* GM = dynamic_cast<ABzGameMode_Intro*>(GetWorld()->GetGameMode());
 	std::vector<class ABzEnemyCube*> enemiesList = GM->GetEnemyCubesList();
 	return enemiesList[0];
+
+
+
 }
 
 
 void ABzMissile::ComputeHomingRotation(float DeltaTime)
 {
+
 	{
+		if (true == TargetEnemy->IsDestroy())
+		{
+			TargetEnemy = nullptr;
+			Destroy();
+			return;
+		}
 
 		FVector TargetPosF = TargetEnemy->GetActorLocation();
 		TargetPosF += {0.f, 200.f, 0.f};

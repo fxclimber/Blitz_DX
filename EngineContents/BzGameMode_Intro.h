@@ -39,7 +39,7 @@ protected:
 
 private:
 	int Count = 0;
-	int MaxCount = 1;
+	int MaxCount = 50;
 	class ABzPlayerCube* PlayerCube;
 	class ABzBottom* Bottom;
 	std::vector<class ABzEnemyCube*> EnemyCubesList;
