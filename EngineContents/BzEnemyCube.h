@@ -10,19 +10,27 @@ public:
 	~ABzEnemyCube();
 	void SetPlayer(std::shared_ptr<class ABzPlayerCube> _name);
 	void SetPath(const std::list<FVector>& NewPath)	{		AStarPath = NewPath;	}
+	// 몬스터 데미지줄 예정.
 	void TakeDamage();
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+
 	void Ani_Idle(float _DeltaTime);
-
-	void Physics(float _DeltaTime);
-	bool CheckAttackDistance(float _DeltaTime , float _speed);
-	void AvoidWall(float _DeltaTime);
 	float GetRandom(float _x);
+	void Physics(float _DeltaTime);
 
+
+	// 에너미끼리도 충돌판단해야하는데
+	bool CheckAttackDistance(float _DeltaTime , float _speed);
+	// 한마리만 만들고, 피하는지 디버깅 필요 
+	void AvoidWall(float _DeltaTime);
+	// 타일 높이 적용 함수 
 	void ApplyTilemap();
+
+
+	// 길찾기 함수 
 	void MoveAlongPath(float DeltaTime);
 
 

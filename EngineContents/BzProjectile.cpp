@@ -30,7 +30,7 @@ ABzProjectile::ABzProjectile()
 
 	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 		{
-			KillEnemy();
+			KillEnemy();// 개별 CollisionCheck ,중요! 
 		});
 
 }
@@ -49,7 +49,6 @@ void ABzProjectile::BeginPlay()
 		FVector rot = Player->GetActorTransform().Rotation;
 		rot -= rotRender;
 
-
 		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
 		FVector SpawnScale = FVector(scale.X, scale.Y, scale.Z);
 
@@ -61,7 +60,6 @@ void ABzProjectile::BeginPlay()
 	}
 	//Velocity = ForwardDir * Speed;
 }
-
 
 
 void ABzProjectile::Tick(float _DeltaTime)

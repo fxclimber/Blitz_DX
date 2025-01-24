@@ -2,6 +2,10 @@
 #include <EngineCore/Actor.h>
 #include "BzClassManager.h"
 
+
+#include <DirectXMath.h>
+using namespace DirectX;
+
 class ABzMissile : public AActor
 {
 public:
@@ -23,8 +27,8 @@ protected:
 	void UpdatePositionAndOrientation(float _DeltaTime);
 	ABzEnemyCube* SetTargetEnemy();
 
-
-
+	//XMMATRIX ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime);
+	FVector ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime);
 
 	void Differenciate(ABzClassManager& manager);
 	bool IsColliding(class ABzEnemy* enemy);

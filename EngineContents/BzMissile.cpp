@@ -14,6 +14,8 @@
 #include "BzGameMode_Intro.h"
 #include "BzClassManager.h"
 
+#include <DirectXMath.h>
+using namespace DirectX;
 
 ABzMissile::ABzMissile()
 {
@@ -22,8 +24,8 @@ ABzMissile::ABzMissile()
 
 	Renderer = CreateDefaultSubObject<UBzRendererDefault>();
 	Renderer->SetupAttachment(RootComponent);
-	Renderer->SetScale3D({ 10.f,10.f,55.f });
-	//Renderer->SetScale3D({ 35.f,35.f,85.f });
+	//Renderer->SetScale3D({ 10.f,10.f,55.f });
+	Renderer->SetScale3D({ 35.f,35.f,85.f });
 	Renderer->GetRenderUnit().SetTexture("bz_texture0", "bulletTest.jpg");
 
 	//----collision
@@ -51,14 +53,14 @@ void ABzMissile::BeginPlay()
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
 
 	{
-		MoveDirection = Player->GetActorTransform().Rotation;
+		MoveDirection = Player->GetActorTransform().GetLocalFoward();
 
 		auto fire = Player->GetFire();
 		const auto& pos = fire->GetTransformRef().WorldLocation;
 		const auto& scale = fire->GetTransformRef().WorldScale;
 		const auto& rotRender = fire->GetTransformRef().Rotation;
 		FVector rot = Player->GetActorTransform().Rotation;
-		rot -= rotRender;
+		//rot -= rotRender;
 
 
 		FVector SpawnPos = FVector(pos.X, pos.Y, pos.Z);
@@ -83,8 +85,32 @@ void ABzMissile::Tick(float _DeltaTime)
 	//AddActorLocation(ForwardDir * _DeltaTime * Speed);
 	//------------
 	TargetEnemy = SetTargetEnemy();
-	UpdatePositionAndOrientation(_DeltaTime);
+	//UpdatePositionAndOrientation(_DeltaTime);
 
+	float RotationSpeed = 500.f;
+	
+
+	XMVECTOR Velocity = GetActorForwardVector().NormalizeReturn().DirectVector;
+	XMVECTOR ProjectilePos = GetActorLocation().DirectVector;
+	//XMVECTOR TargetPos = Player->GetActorLocation().DirectVector;
+	XMVECTOR TargetPos =FVector(0.f,1300.f,0.f).DirectVector;
+
+	XMVECTOR CurrentDir = XMVector3Normalize(Velocity);
+	XMVECTOR TargetDir = XMVectorSubtract(TargetPos, ProjectilePos);
+	TargetDir = XMVector3Normalize(TargetDir);
+	FVector HomingRotation = ComputeHomingRotation(CurrentDir, TargetDir, RotationSpeed, _DeltaTime);
+
+	//FVector TargetPosF = Player->GetActorLocation();
+	FVector TargetPosF = FVector(0.f, 1300.f, 0.f);
+	FVector  TargetDirF = (TargetPosF - GetActorLocation()).NormalizeReturn();
+	FVector move = TargetDirF * _DeltaTime * RotationSpeed;
+	AddActorLocation(move);
+	AddActorRotation(HomingRotation);
+
+	if (TargetPosF == GetActorLocation())
+	{
+		AddActorLocation(FVector::ZERO);
+	}
 
 }
 
@@ -191,8 +217,6 @@ void ABzMissile::UpdatePositionAndOrientation(float _DeltaTime)
 		AddActorRotation(rotationAxis* turnAngle);
 	}
 
-
-
 }
 
 ABzEnemyCube* ABzMissile::SetTargetEnemy()
@@ -205,4 +229,59 @@ ABzEnemyCube* ABzMissile::SetTargetEnemy()
 	{
 		return list[0];
 	}
+}
+
+//XMMATRIX ABzMissile::ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime)
+//{
+//	// 벡터 정규화
+//	//CurrentDir = XMVector3Normalize(CurrentDir);
+//	//TargetDir = XMVector3Normalize(TargetDir);
+//
+//	// 회전 축 계산 (Cross Product)
+//	XMVECTOR RotationAxis = XMVector3Cross(CurrentDir, TargetDir);
+//	float Dot = XMVectorGetX(XMVector3Dot(CurrentDir, TargetDir));
+//
+//	// 클램핑하여 안정화
+//	Dot = max(-1.0f, min(1.0f, Dot));
+//
+//	// 두 벡터 사이의 회전 각도 (Arc Cosine)
+//	float Angle = acosf(Dot);
+//	Angle *= RotationSpeed * DeltaTime; // 회전 속도 조절
+//
+//	// 회전 Quaternion 생성
+//	XMVECTOR RotationQuat = XMQuaternionRotationAxis(RotationAxis, Angle);
+//
+//	// 회전 행렬 반환
+//	return XMMatrixRotationQuaternion(RotationQuat);
+//}
+
+
+FVector ABzMissile::ComputeHomingRotation(XMVECTOR CurrentDir, XMVECTOR TargetDir, float RotationSpeed, float DeltaTime)
+{
+	// 벡터 정규화
+	CurrentDir = XMVector3Normalize(CurrentDir);
+	TargetDir = XMVector3Normalize(TargetDir);
+
+	// 회전 축 계산 (Cross Product)
+	XMVECTOR RotationAxis = XMVector3Cross(CurrentDir, TargetDir);
+	float Dot = XMVectorGetX(XMVector3Dot(CurrentDir, TargetDir));
+
+	// 안정화
+	Dot = max(-1.0f, min(1.0f, Dot));
+
+	// 두 벡터 사이의 회전 각도
+	float Angle = acosf(Dot);
+	Angle *= RotationSpeed * DeltaTime; // 회전 속도 적용
+
+	// 회전 Quaternion 생성
+	XMVECTOR RotationQuat = XMQuaternionRotationAxis(RotationAxis, Angle);
+
+	// 회전 적용된 벡터 반환
+	XMVECTOR NewDir = XMVector3Rotate(CurrentDir, RotationQuat);
+
+	// XMVECTOR → FVector 변환
+	FVector Result;
+	XMStoreFloat3(&Result.DirectFloat3, NewDir);
+
+	return Result;
 }

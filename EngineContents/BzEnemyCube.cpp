@@ -38,15 +38,15 @@ ABzEnemyCube::ABzEnemyCube()
 	Collision->SetCollisionType(ECollisionType::OBB);
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
-			//FVector otherLocation = _Other->GetActor()->GetActorLocation();
-			//FVector thisLocation = _This->GetActor()->GetActorLocation();
-			//FVector reflectDir = otherLocation - thisLocation;
-			//float length = reflectDir.Length();
+			FVector otherLocation = _Other->GetActor()->GetActorLocation();
+			FVector thisLocation = _This->GetActor()->GetActorLocation();
+			FVector reflectDir = otherLocation - thisLocation;
+			float length = reflectDir.Length();
 
-			//if (length < 170.f)
-			//{
-			//	_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*5.f);
-			//}
+			if (length < 250.f)
+			{
+				_Other->GetActor()->AddActorLocation(reflectDir.NormalizeReturn()*15.f);
+			}
 		});
 	
 	Player = dynamic_cast<ABzPlayerCube*>(GetWorld()->GetMainPawn());
@@ -165,7 +165,8 @@ void ABzEnemyCube::SetPlayer(std::shared_ptr<class ABzPlayerCube> _name)
 }
 
 bool ABzEnemyCube::CheckAttackDistance(float _DeltaTime, float _speed)
-{
+{ // 플레이어 vs 에너미
+
 	if (nullptr == Player) return false;
 
 	// 플레이어 위치, 방향 계산
@@ -180,7 +181,7 @@ bool ABzEnemyCube::CheckAttackDistance(float _DeltaTime, float _speed)
 	bool collisionYes = Collision->CollisionCheck("Enemy", AttackPlayerPos, collisionList);
 	bool isFrontMost = true; 
 
-		// 적들 간 거리 유지 검사
+	// 적들 간 거리 유지 검사
 	for (UCollision* other : collisionList)
 	{
 		FVector otherLocation = other->GetActor()->GetActorLocation();
