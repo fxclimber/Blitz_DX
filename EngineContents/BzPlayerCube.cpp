@@ -145,7 +145,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	UEngineCamera* CameraP = Camera->GetCameraComponent().get();
 
 	//-----------------kEY Dash 
-	if (UEngineInput::IsPress('F'))
+	if (UEngineInput::IsPress(VK_SPACE))
 	{
 		IsDash = true;
 		DashTime = 0.0f; 
@@ -159,7 +159,7 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	{
 		DashTime += _DeltaTime; 
 
-		if (DashTime > 15.0f)
+		if (DashTime > 8.0f)
 		{
 			IsDash = false; 
 		}
@@ -173,22 +173,22 @@ void ABzPlayerCube::Tick(float _DeltaTime)
 	// Key - Attack 
 	if (UEngineInput::IsDown('L'))
 	{
-		Skl_Rockfall();//다시해야함 
+		//Skl_Rockfall();//다시해야함 
 	}
 
 	if (UEngineInput::IsDown('K'))
 	{
-		Skl_Missile();
+		//Skl_Missile();
 	}
 	if (UEngineInput::IsDown('J'))
 	{
-		Skl_ArcStone();
+		//Skl_ArcStone();
 	}
 	if (UEngineInput::IsPress('F'))
 	{
 		IsDash = true;
 	}
-	if (UEngineInput::IsDown('G'))
+	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
 		Atk();
 	}

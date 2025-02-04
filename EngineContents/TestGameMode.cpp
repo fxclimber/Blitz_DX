@@ -55,7 +55,7 @@ void ATestGameMode::Tick(float _DeltaTime)
 	if (true == LoadingEnd)
 	{
 		// 이미지를 변환 
-		UEngineCore::CreateLevel<ATitleGameMode, APawn, ATitleHUD>("Titlelevel");
+		//UEngineCore::CreateLevel<ATitleGameMode, APawn, ATitleHUD>("Titlelevel");
 		UEngineCore::CreateLevel<ATileMapGameMode, APawn, AHUD>("TileMapEditor");
 		UEngineCore::OpenLevel("Titlelevel");
 	}

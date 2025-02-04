@@ -21,7 +21,6 @@
 #include "BzHUD.h"
 
 
-// 어떤 코어 쓸거니?
 CreateContentsCoreDefine(UBzCore);
 
 UBzCore::UBzCore()
